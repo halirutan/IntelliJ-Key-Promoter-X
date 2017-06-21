@@ -1,7 +1,6 @@
 language: java
 jdk: oraclejdk8
-sudo: required
-before_install: gradle --stacktrace --debug assemble
+sudo: false
 #deploy:
 #  provider: releases
 #  skip_cleanup: true
