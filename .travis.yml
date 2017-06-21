@@ -1,6 +1,7 @@
 language: java
 jdk: oraclejdk8
-script: gradle buildPlugin
+sudo: required
+script: gradle buildPlugin --stacktrace
 #deploy:
 #  provider: releases
 #  skip_cleanup: true
