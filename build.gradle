@@ -1,0 +1,23 @@
+plugins {
+    id "org.jetbrains.intellij" version "0.2.13"
+}
+
+apply plugin: 'org.jetbrains.intellij'
+apply plugin: 'java'
+
+intellij {
+    version = '2017.1.4'
+    updateSinceUntilBuild = false
+    pluginName = 'Key-PromoterX'
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java.srcDir 'src'
+        resources.srcDir 'resources'
+    }
+}

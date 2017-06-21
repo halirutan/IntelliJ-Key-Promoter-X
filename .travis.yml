@@ -1,0 +1,20 @@
+language: java
+jdk: oraclejdk8
+script: gradle buildPlugin
+#deploy:
+#  provider: releases
+#  skip_cleanup: true
+#  api_key:
+#    secure: UEIzl5zfiXtr4C1TsPM7HYtANWonDo1zib0tJPpr+Iz9qKnSfKbT3m6bhkoT/WvbCueyfjzMdSkyWA9GIRC3swzR+FqaJe99Lc2LJB5s6KszLELxXButZC9SCZS5UvuzcxFqL3M6vu7btfR/Rrafx7aKnWFBkSg4qILJTKb/MF0=
+#  file: $CI_HOME/target/Mathematica-IntelliJ-Plugin-bin.zip
+#  on:
+#    repo: halirutan/Mathematica-IntelliJ-Plugin
+#    tags: true
+#    all_branches: true
+env:
+  global:
+  - GH_PROJECT_NAME: IntelliJ-Key-Promoter
+  - GIT_AUTHOR_NAME: TravisCI
+  - GIT_AUTHOR_EMAIL: noreply@travis-ci.org
+  - CI_HOME=`pwd`
+
