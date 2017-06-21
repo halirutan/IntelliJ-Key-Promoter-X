@@ -3,6 +3,7 @@ jdk: oraclejdk8
 sudo: false
 before_install:
  - chmod +x gradlew
+ - ./gradlew assemble
 #deploy:
 #  provider: releases
 #  skip_cleanup: true
