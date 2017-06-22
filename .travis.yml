@@ -19,6 +19,6 @@ deploy:
     secure: UEIzl5zfiXtr4C1TsPM7HYtANWonDo1zib0tJPpr+Iz9qKnSfKbT3m6bhkoT/WvbCueyfjzMdSkyWA9GIRC3swzR+FqaJe99Lc2LJB5s6KszLELxXButZC9SCZS5UvuzcxFqL3M6vu7btfR/Rrafx7aKnWFBkSg4qILJTKb/MF0=
   file: $CI_HOME/build/distributions/Key-Promoter.zip
   on:
-    repo: /halirutan/IntelliJ-Key-Promoter
+    repo: halirutan/IntelliJ-Key-Promoter
     tags: true
     all_branches: true
