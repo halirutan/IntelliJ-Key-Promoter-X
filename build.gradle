@@ -8,7 +8,7 @@ apply plugin: 'java'
 intellij {
     version = '2017.1.4'
     updateSinceUntilBuild = false
-    pluginName = 'Key-PromoterX'
+    pluginName = 'Key-Promoter'
 }
 
 repositories {
