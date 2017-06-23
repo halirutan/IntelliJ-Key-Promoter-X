@@ -62,6 +62,6 @@
         <toolWindow id="Key Promoter" anchor="right"
                     factoryClass="org.jetbrains.contest.keypromoter.KeyPromoterToolWindowFactory"/>
         <applicationConfigurable id="keyPromoterConfiguration" displayName="Key Promoter"
-                                 instance="org.jetbrains.contest.keypromoter.KeyPromoterConfiguration" groupId="other"/>
+                                 instance="org.jetbrains.contest.keypromoter.KeyPromoterConfiguration" groupId="tools"/>
     </extensions>
 </idea-plugin>

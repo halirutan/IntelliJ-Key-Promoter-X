@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class KeyPromoterToolWindowBuilder {
 
-    private KeyPromoterPersistentStats statsService = ServiceManager.getService(KeyPromoterPersistentStats
+    private final KeyPromoterPersistentStats statsService = ServiceManager.getService(KeyPromoterPersistentStats
             .class);
 
     private JButton refreshButton;
@@ -51,12 +51,13 @@ public class KeyPromoterToolWindowBuilder {
 
             int i = 0;
             for (Map.Entry entry : sortedEntries) {
-                topTen[i] = "[" + (i + 1) + "] " + entry.getValue() + " times: " + entry.getKey();
+                topTen[i] = "[" + (i + 1) + "] " + entry.getKey() + " (used " + entry.getValue() + " times)";
                 i++;
                 if (i == 10) break;
             }
         } else {
             topTen = new String[10];
+            topTen[0] = "Currently empty";
         }
         list1.setListData(topTen);
     }
@@ -67,9 +68,7 @@ public class KeyPromoterToolWindowBuilder {
 
         List<Map.Entry<K, V>> sortedEntries = new ArrayList<>(map.entrySet());
 
-        Collections.sort(sortedEntries,
-                (e1, e2) -> e2.getValue().compareTo(e1.getValue())
-        );
+        sortedEntries.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue()));
 
         return sortedEntries;
     }
