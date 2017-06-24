@@ -1,7 +1,7 @@
 .idea/
 *.iml
-key-promoter.jar
 out/
 gradle.properties
 .gradle/
 build/
+/IntelliJ-Key-Promoter-X.jar

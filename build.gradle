@@ -4,11 +4,16 @@ plugins {
 
 apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
+apply from: "gradle.properties"
 
 intellij {
     version = '2017.1.4'
     updateSinceUntilBuild = false
     pluginName = 'Key-Promoter-X'
+    publish {
+        pluginId '9792-key-promoter-x'
+    }
+
 }
 
 repositories {
@@ -25,3 +30,5 @@ sourceSets {
 task wrapper(type: Wrapper) {
     gradleVersion = '3.5'
 }
+
+version '4.1'
