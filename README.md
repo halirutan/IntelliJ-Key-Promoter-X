@@ -1,4 +1,4 @@
-# Key Promoter Plugin
+# Key Promoter X Plugin
 
 The Key Promoter Plugin is intended to show hints when using the mouse for
 something that can be done with a keyboard shortcut.

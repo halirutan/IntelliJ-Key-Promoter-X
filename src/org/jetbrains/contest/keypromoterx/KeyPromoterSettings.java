@@ -1,4 +1,4 @@
-package org.jetbrains.contest.keypromoter;
+package org.jetbrains.contest.keypromoterx;
 
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;

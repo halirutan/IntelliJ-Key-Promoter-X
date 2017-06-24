@@ -1,67 +1,49 @@
 <idea-plugin>
-    <name>Key promoter</name>
-    <description>Shows to user how easy he can make same action using only keyboard(menus and toolbar button mouse
-        clicks initiates
-        shortcut display)
+    <name>Key Promoter X</name>
+    <description><![CDATA[
+    <strong>Improved version of the original Key Promoter</strong>
+    <br/>
+    <br/>
+    <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin">GitHub</a> |
+    <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin/issues">Bug Tracker</a> |
+    <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=876XDFGUQHKH6">Donate</a>
+    <br/>
+    <br/>
+    Shows the user the keyboard short-cuts when a button is pressed with the mouse. This provides an easy way to learn how
+     to replace tedious mouse work with keyboard keys and helps to transition to a faster, mouse free development.
+     Currently, it supports toolbar buttons, menu buttons, and tool windows and the actions therein.
+     <br />
+     <br />
+     The plugin was initially implemented by Dmitry Kashin and further improved by athiele.
+     The version here removes the custom pop-up window with IntelliJ internal message balloons.
+     It, therefore, integrates much better into the IDE, fixes glitches and provides a more non-disruptive
+     way of learning shortcut bindings.
+      ]]>
     </description>
-    <version>3.0.1</version>
+    <version>4</version>
     <vendor>Patrick Scheibe (originally Dmitry Kashin, former maintainer athiele)</vendor>
     <change-notes><![CDATA[<ul>
+    <li>Better visualization of the statistics tool-window</li>
+    <li>Fixed bug to catch tool-window buttons successfully</li>
+    <li>Re-implemented the algorithm that catches button clicks and extracts their information</li>
+    <li>Change to internal notification system instead of an custom AWT window</li>
     <li>Built for IntelliJ 2017.1.4</li>
-    <li>Stop confusing Alt and Cmd on MacOs for toolbar menus</li>
-    <li>Unify displaying shortcuts</li>
-    <li>Compatibility with IntelliJ 2016.2 and newer builds (e.g. 2016.3 EAP)</li>
-    <li>Compatibility with IntelliJ 2016.2</li>
-    <li>Fix persisting color settings</li>
-    <li>Make settings work again for 2016.1 - https://github.com/athiele/key-promoter-fork/issues/12</li>
-    <li>Known issue: Color settings cannot be saved</li>
-    <li>Make settings window display in IntelliJ 2016.1 - https://github.com/athiele/key-promoter-fork/issues/12</li>
-    <li>Add option to reset your statistics</li>
-    <li>First "key-promoter-fork" version with persistent statistics and a tool window</li>
-    <li>Fixed "Plugin settings are reset to initial state on restart" - http://code.google.com/p/key-promoter/issues/detail?id=11 (thanks to Joakim Erelt)</li>
-    <li>Menus support for Windows fixed(probably for all platforms except Mac) - http://code.google.com/p/key-promoter/issues/detail?id=8</li>
-    <li>Multiple shortcuts supported(all of the rendered) - http://code.google.com/p/key-promoter/issues/detail?id=3</li>
-    <li>Idea 10.5 and 11 supported now</li>
-    <li>Position of popup in case of dual monitor configuration fixed</li>
-    <li>Popup appeared always on top now(for example over dialogs)</li>
-    <li> Maia and RubyMine (since 8000) compatible version. (RubyMine repack)</li>
-    <li> Selena (since 6767) compatible version. </li>
-    <li> NPE fixed. </li>
-    <li> Popup text template configurable now. </li>
-    <li> Possible to set number of uncshortcutted action invocation (or even turn off this feature by 0 value). </li>
-    <li> Minor improvements and bugfixes. </li>
-    <li> Popup redraw issues fixed. </li>
-    <li> Right click now ignored. </li>
-    <li> Refactored and source bundled with plugin (<a href="http://plugins.intellij.net/plugin/?id=1017">PluginPacker plugin</a> used for packaging). </li>
-    <li> Bugfixes. </li>
-    <li> Keyboard shortcut association suggested each 3 actio invocations by mouse(not possible to turn off be design :) ). </li>
-    <li> Popup UI impoved. </li>
-    <li> Fixed dialogs overlapping issue. </li>
-    <li> Popup follow the mouse possible now. </li>
-    <li> Per shortcut stats for invocations (count displayed in tip popup). </li>
-    <li> Previous shortcuts hiding once new appeared. </li>
-    <li> Alpha channel transparency for background added. </li>
-    <li> Added configuration </li>
-    <li> Added support for buttons that has mnemonics (disabled by default)(Known issue: For Mac Alt displayed as mnemonic trigger) </li>
-    <li> Tool window button click added </li>
-    <li> Animation changed </li>
-    <li> Mac menus clicks now supported (thanks to Yegor Yarko and Dmitry Jemerov) </li>
     </ul>]]>
     </change-notes>
     <idea-version since-build="162"/>
     <application-components>
         <component>
-            <implementation-class>org.jetbrains.contest.keypromoter.KeyPromoter</implementation-class>
+            <implementation-class>org.jetbrains.contest.keypromoterx.KeyPromoter</implementation-class>
         </component>
     </application-components>
     <!-- Mark the plugin as compatible with RubyMine and other products based on the IntelliJ platform -->
     <depends>com.intellij.modules.lang</depends>
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="org.jetbrains.contest.keypromoter.KeyPromoterPersistentStats"/>
-        <applicationService serviceImplementation="org.jetbrains.contest.keypromoter.KeyPromoterSettings"/>
+        <applicationService serviceImplementation="org.jetbrains.contest.keypromoterx.KeyPromoterPersistentStats"/>
+        <applicationService serviceImplementation="org.jetbrains.contest.keypromoterx.KeyPromoterSettings"/>
         <toolWindow id="Key Promoter" anchor="right"
-                    factoryClass="org.jetbrains.contest.keypromoter.KeyPromoterToolWindowFactory"/>
+                    factoryClass="org.jetbrains.contest.keypromoterx.KeyPromoterToolWindowFactory"/>
         <applicationConfigurable id="keyPromoterConfiguration" displayName="Key Promoter"
-                                 instance="org.jetbrains.contest.keypromoter.KeyPromoterConfiguration" groupId="tools"/>
+                                 instance="org.jetbrains.contest.keypromoterx.KeyPromoterConfiguration" groupId="tools"/>
     </extensions>
 </idea-plugin>

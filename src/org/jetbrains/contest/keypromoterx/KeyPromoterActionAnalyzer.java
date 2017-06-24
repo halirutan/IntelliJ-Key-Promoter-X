@@ -1,4 +1,4 @@
-package org.jetbrains.contest.keypromoter;
+package org.jetbrains.contest.keypromoterx;
 
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Provides a way to extract the idea action from an AWT event.
  * @author patrick (22.06.17).
  */
 public class KeyPromoterActionAnalyzer {
@@ -121,7 +122,7 @@ public class KeyPromoterActionAnalyzer {
         return myDescription;
     }
 
-    public String getIdeaActionID() {
+    String getIdeaActionID() {
         return myIdeaActionID;
     }
 

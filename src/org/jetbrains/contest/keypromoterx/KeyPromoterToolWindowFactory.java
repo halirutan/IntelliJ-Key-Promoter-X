@@ -1,4 +1,4 @@
-package org.jetbrains.contest.keypromoter;
+package org.jetbrains.contest.keypromoterx;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
