@@ -14,17 +14,17 @@ import java.text.MessageFormat;
 class KeyPromoterNotification {
 
     private static final NotificationGroup GROUP = new NotificationGroup(
-            "Key Promoter",
+            KeyPromoterBundle.message("kp.notification.group"),
             NotificationDisplayType.BALLOON,
             false,
-            "Key Promoter",
+            KeyPromoterBundle.message("kp.tool.window.name"),
             IconUtil.getEditIcon()
             );
 
     static void showTip(String description, String shortcut, int count) {
         String template = "{0}<br>(pressed {1} time(s))";
         final String message = MessageFormat.format(template, shortcut, count);
-        GROUP.createNotification("Key Promoter", StringUtil.wrapWithDoubleQuote(description), message, NotificationType.INFORMATION).notify(null);
+        GROUP.createNotification(KeyPromoterBundle.message("kp.notification.group"), StringUtil.wrapWithDoubleQuote(description), message, NotificationType.INFORMATION).notify(null);
     }
 
 }

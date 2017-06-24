@@ -41,7 +41,7 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener {
 
     @NotNull
     public String getComponentName() {
-        return "KeyPromoter";
+        return KeyPromoterBundle.message("component.name");
     }
 
     // AWT magic
@@ -93,8 +93,8 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener {
             withoutShortcutStats.putIfAbsent(ideaActionID, 0);
             withoutShortcutStats.put(ideaActionID, withoutShortcutStats.get(ideaActionID) + 1);
             if (keyPromoterSettings.getProposeToCreateShortcutCount() > 0 && withoutShortcutStats.get(ideaActionID) % keyPromoterSettings.getProposeToCreateShortcutCount() == 0) {
-                if (Messages.showYesNoDialog("Would you like to assign shortcut to '" + description + "' action cause we noticed it was used " + withoutShortcutStats.get(ideaActionID) + " time(s) by mouse?",
-                        "[KeyPromoter Said]: Keyboard Usage More Productive!", Messages.getQuestionIcon()) == 0) {
+                if (Messages.showYesNoDialog(KeyPromoterBundle.message("kp.propose.message", description, withoutShortcutStats.get(ideaActionID)),
+                        KeyPromoterBundle.message("kp.propose.title"), Messages.getQuestionIcon()) == 0) {
                     EditKeymapsDialog dialog = new EditKeymapsDialog(null, ideaActionID);
                     dialog.show();
                 }

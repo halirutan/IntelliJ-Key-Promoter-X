@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public class KeyPromoterActionAnalyzer {
 
-    private static final String metaKey = System.getProperty("os.name").contains("OS X") ? "⌘" : "Alt+";
+    private static final String metaKey = System.getProperty("os.name").contains("OS X") ? KeyPromoterBundle.message("kp.meta.osx") : KeyPromoterBundle.message("kp.meta.default");
     // Fields with actions of supported classes
     private final Map<Class, Field> myClassFields = new HashMap<>(5);
     private ActionSource mySource = ActionSource.INVALID;
@@ -74,7 +74,7 @@ public class KeyPromoterActionAnalyzer {
         myDescription = source.getText();
         myMnemonic = source.getMnemonic2();
         // This is a hack, but I don't see a way how to get the IDEA Id of the action from a stripe button
-        myIdeaActionID = "Activate" + StringUtils.replace(myDescription, " ", "") + "ToolWindow";
+        myIdeaActionID = KeyPromoterBundle.message("kp.stripe.actionID", StringUtils.replace(myDescription, " ", ""));
     }
 
     private void analyzeJButton(JButton source) {
