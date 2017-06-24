@@ -4,7 +4,10 @@ plugins {
 
 apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
-apply from: "gradle.properties"
+
+if (project.file('gradle.properties').exists()) {
+    apply from: "gradle.properties"
+}
 
 intellij {
     version = '2017.1.4'
