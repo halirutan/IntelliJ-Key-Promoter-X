@@ -23,7 +23,7 @@ public class KeyPromoterToolWindowFactory implements ToolWindowFactory {
   public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
 
     JPanel toolWindowContent = toolWindowBuilder.createToolWindowPanel();
-    Content content = contentFactory.createContent(toolWindowContent, "Top Ten", false);
+    Content content = contentFactory.createContent(toolWindowContent, "Hit-list of missed shortcuts", false);
     toolWindow.getContentManager().addContent(content);
 
   }

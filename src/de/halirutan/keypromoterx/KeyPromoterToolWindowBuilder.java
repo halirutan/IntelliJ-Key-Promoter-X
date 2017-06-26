@@ -34,6 +34,7 @@ public class KeyPromoterToolWindowBuilder {
         }
     }
 
+
     private void createUIComponents() {
         StatisticsListModel model = new StatisticsListModel();
         statisticsList = new StatisticsList(model);

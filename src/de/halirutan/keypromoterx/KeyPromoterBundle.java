@@ -24,9 +24,9 @@ import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 import java.util.ResourceBundle;
 
-class KeyPromoterBundle {
+public class KeyPromoterBundle {
 
-    static String message(@NotNull @PropertyKey(resourceBundle = "messages.KeyPromoterBundle") String key, @NotNull Object... params) {
+    public static String message(@NotNull @PropertyKey(resourceBundle = "messages.KeyPromoterBundle") String key, @NotNull Object... params) {
         return CommonBundle.message(getBundle(), key, params);
     }
 

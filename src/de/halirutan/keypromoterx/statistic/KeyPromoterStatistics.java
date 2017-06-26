@@ -57,6 +57,7 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
     @Transient
     public void resetStatistic() {
         statistics.clear();
+        myChangeSupport.firePropertyChange("stats", null, null);
     }
 
     @Transient

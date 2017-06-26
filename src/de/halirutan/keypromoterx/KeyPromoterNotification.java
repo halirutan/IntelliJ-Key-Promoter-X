@@ -7,6 +7,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.keymap.impl.ui.EditKeymapsDialog;
 import com.intellij.util.IconUtil;
+import de.halirutan.KeyPromoterIcons;
 
 /**
  * @author patrick (22.06.17).
@@ -18,7 +19,7 @@ class KeyPromoterNotification {
             NotificationDisplayType.BALLOON,
             false,
             KeyPromoterBundle.message("kp.tool.window.name"),
-            IconUtil.getEditIcon()
+            KeyPromoterIcons.LOGO
             );
 
     static void showTip(KeyPromoterAction action, int count) {
@@ -26,7 +27,7 @@ class KeyPromoterNotification {
         GROUP.createNotification(KeyPromoterBundle.message(
                 "kp.notification.group"),
                 message,
-                NotificationType.INFORMATION,null)
+                NotificationType.INFORMATION,null).setIcon(KeyPromoterIcons.LOGO)
                 .addAction(new EditKeymapAction(action, action.getShortcut()))
                 .notify(null);
 
@@ -39,7 +40,7 @@ class KeyPromoterNotification {
                 KeyPromoterBundle.message("kp.notification.ask.new.shortcut", action.getDescription()),
                 NotificationType.INFORMATION,
                 null
-        ).addAction(new EditKeymapAction(action)).notify(null);
+        ).setIcon(KeyPromoterIcons.LOGO).addAction(new EditKeymapAction(action)).notify(null);
 
     }
 

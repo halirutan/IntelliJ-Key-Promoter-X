@@ -1,9 +1,12 @@
 package de.halirutan.keypromoterx.statistic;
 
 import com.intellij.ui.components.JBList;
+import de.halirutan.keypromoterx.KeyPromoterBundle;
+import de.halirutan.keypromoterx.KeyPromoterToolWindowBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -34,12 +37,15 @@ public class StatisticsList extends JBList<StatisticsItem> implements PropertyCh
         updateUI();
     }
 
+
+
     static class StatisticsItemCellRenderer extends JLabel implements ListCellRenderer<StatisticsItem> {
 
 
         @Override
         public JLabel getListCellRendererComponent(JList<? extends StatisticsItem> list, StatisticsItem value, int index, boolean isSelected, boolean cellHasFocus) {
-            setText(value.getShortcut());
+            final String message = KeyPromoterBundle.message("kp.list.item", value.count, value.getShortcut(), value.description);
+            setText(message);
             return this;
         }
     }
