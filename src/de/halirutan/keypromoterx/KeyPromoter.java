@@ -1,11 +1,10 @@
-package org.jetbrains.contest.keypromoterx;
+package de.halirutan.keypromoterx;
 
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.keymap.impl.ui.EditKeymapsDialog;
-import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.annotations.NotNull;
+import de.halirutan.keypromoterx.statistic.KeyPromoterStatistics;
 
 import java.awt.*;
 import java.awt.event.AWTEventListener;
@@ -21,17 +20,12 @@ import java.util.Map;
 public class KeyPromoter implements ApplicationComponent, AWTEventListener {
 
 
-    // Presentation and stats fields.
-    private Map<String, Integer> stats = Collections.synchronizedMap(new HashMap<String, Integer>());
     private final Map<String, Integer> withoutShortcutStats = Collections.synchronizedMap(new HashMap<String, Integer>());
-
-    private final KeyPromoterPersistentStats statsService = ServiceManager.getService(KeyPromoterPersistentStats
-            .class);
-
+    private final KeyPromoterStatistics statsService = ServiceManager.getService(KeyPromoterStatistics.class);
     private final KeyPromoterSettings keyPromoterSettings = ServiceManager.getService(KeyPromoterSettings.class);
+    // Presentation and stats fields.
 
     public void initComponent() {
-        stats = statsService.getStats();
         Toolkit.getDefaultToolkit().addAWTEventListener(this, AWTEvent.MOUSE_EVENT_MASK | AWTEvent.WINDOW_EVENT_MASK | AWTEvent.WINDOW_STATE_EVENT_MASK/* | AWTEvent.KEY_EVENT_MASK*/);
     }
 
@@ -53,7 +47,7 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener {
 
 
     private void handleMouseEvent(AWTEvent e) {
-        KeyPromoterActionAnalyzer action = new KeyPromoterActionAnalyzer(e);
+        KeyPromoterAction action = new KeyPromoterAction(e);
         switch (action.getSource()) {
             case TOOLWINDOW_BUTTON:
                 if (!keyPromoterSettings.isToolWindowButtonsEnabled()) {
@@ -81,10 +75,9 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener {
         final String shortcut = action.getShortcut();
         final String description = action.getDescription();
         if (!StringUtil.isEmpty(shortcut)) {
-            final String statText = shortcut + " for " + description;
-            stats.putIfAbsent(statText, 0);
-            stats.put(statText, stats.get(statText) + 1);
-            KeyPromoterNotification.showTip(description, shortcut, stats.get(statText));
+            statsService.registerAction(action);
+            KeyPromoterNotification.showTip(action, statsService.get(action).getCount());
+
         } else {
             final String ideaActionID = action.getIdeaActionID();
             if (StringUtil.isEmpty(ideaActionID)) {
@@ -93,13 +86,10 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener {
             withoutShortcutStats.putIfAbsent(ideaActionID, 0);
             withoutShortcutStats.put(ideaActionID, withoutShortcutStats.get(ideaActionID) + 1);
             if (keyPromoterSettings.getProposeToCreateShortcutCount() > 0 && withoutShortcutStats.get(ideaActionID) % keyPromoterSettings.getProposeToCreateShortcutCount() == 0) {
-                if (Messages.showYesNoDialog(KeyPromoterBundle.message("kp.propose.message", description, withoutShortcutStats.get(ideaActionID)),
-                        KeyPromoterBundle.message("kp.propose.title"), Messages.getQuestionIcon()) == 0) {
-                    EditKeymapsDialog dialog = new EditKeymapsDialog(null, ideaActionID);
-                    dialog.show();
-                }
+                KeyPromoterNotification.askToCreateShortcut(action);
 
             }
         }
     }
+
 }

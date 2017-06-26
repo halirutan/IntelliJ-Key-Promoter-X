@@ -1,4 +1,4 @@
-package org.jetbrains.contest.keypromoterx;
+package de.halirutan.keypromoterx;
 
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -18,7 +18,7 @@ import java.util.Map;
  * Provides a way to extract the idea action from an AWT event.
  * @author patrick (22.06.17).
  */
-public class KeyPromoterActionAnalyzer {
+public class KeyPromoterAction {
 
     private static final String metaKey = System.getProperty("os.name").contains("OS X") ? KeyPromoterBundle.message("kp.meta.osx") : KeyPromoterBundle.message("kp.meta.default");
     // Fields with actions of supported classes
@@ -29,7 +29,7 @@ public class KeyPromoterActionAnalyzer {
     private String myDescription = "";
     private String myIdeaActionID = "";
 
-    KeyPromoterActionAnalyzer(AWTEvent event) {
+    KeyPromoterAction(AWTEvent event) {
         final Object source = event.getSource();
         if (source instanceof ActionButton) {
             analyzeActionButton((ActionButton) source);
@@ -73,6 +73,9 @@ public class KeyPromoterActionAnalyzer {
         mySource = ActionSource.TOOLWINDOW_BUTTON;
         myDescription = source.getText();
         myMnemonic = source.getMnemonic2();
+        if (myMnemonic > 0) {
+            myDescription = myDescription.replaceFirst("\\d: ","");
+        }
         // This is a hack, but I don't see a way how to get the IDEA Id of the action from a stripe button
         myIdeaActionID = KeyPromoterBundle.message("kp.stripe.actionID", StringUtils.replace(myDescription, " ", ""));
     }
@@ -111,18 +114,18 @@ public class KeyPromoterActionAnalyzer {
         return myMnemonic;
     }
 
-    String getShortcut() {
+    public String getShortcut() {
         if (myMnemonic > 0) {
             myShortcut = "\'" + metaKey + (char) myMnemonic + "\'";
         }
         return myShortcut;
     }
 
-    String getDescription() {
+    public String getDescription() {
         return myDescription;
     }
 
-    String getIdeaActionID() {
+    public String getIdeaActionID() {
         return myIdeaActionID;
     }
 

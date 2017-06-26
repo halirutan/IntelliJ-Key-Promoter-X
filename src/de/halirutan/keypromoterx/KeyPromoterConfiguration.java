@@ -1,4 +1,4 @@
-package org.jetbrains.contest.keypromoterx;
+package de.halirutan.keypromoterx;
 
 import com.intellij.openapi.components.*;
 import com.intellij.openapi.options.BaseConfigurable;

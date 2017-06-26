@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="org.jetbrains.contest.keypromoterx.KeyPromoterToolWindowBuilder">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="de.halirutan.keypromoterx.KeyPromoterToolWindowBuilder">
   <grid id="27dc6" binding="panel" layout-manager="GridLayoutManager" row-count="6" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="5" left="5" bottom="5" right="5"/>
     <constraints>
@@ -16,7 +16,7 @@
           <text value="Your personal top ten missed shortcuts:"/>
         </properties>
       </component>
-      <grid id="f3178" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="f3178" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -24,26 +24,18 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="b23e3" class="javax.swing.JButton" binding="refreshButton" default-binding="true">
+          <component id="48222" class="javax.swing.JButton" binding="resetStatisticsButton" default-binding="true">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Refresh"/>
-              <verticalAlignment value="1"/>
-            </properties>
-          </component>
-          <component id="48222" class="javax.swing.JButton" binding="resetStatisticsButton" default-binding="true">
-            <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Reset Statistics"/>
+              <label value="Reset Statistics"/>
+              <text value="&amp;Reset Statistics"/>
             </properties>
           </component>
           <hspacer id="a267c">
             <constraints>
-              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
           </hspacer>
         </children>
@@ -77,7 +69,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="d1c2d" class="javax.swing.JList" binding="list1" default-binding="true">
+          <component id="d1c2d" class="de.halirutan.keypromoterx.statistic.StatisticsList" binding="statisticsList" custom-create="true" default-binding="true">
             <constraints/>
             <properties>
               <model/>

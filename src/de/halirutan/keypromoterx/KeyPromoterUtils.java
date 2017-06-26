@@ -1,4 +1,4 @@
-package org.jetbrains.contest.keypromoterx;
+package de.halirutan.keypromoterx;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.Shortcut;

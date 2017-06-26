@@ -1,4 +1,4 @@
-package org.jetbrains.contest.keypromoterx;
+package de.halirutan.keypromoterx;
 
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
@@ -32,7 +32,6 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
     private boolean allButtonsEnabled = false;
 
     private int proposeToCreateShortcutCount = 3;
-    /** Popup position fixed or folow the mouse clicks. */
 
     boolean isMenusEnabled() {
         return menusEnabled;
