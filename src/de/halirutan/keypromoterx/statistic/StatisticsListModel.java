@@ -7,6 +7,12 @@ import javax.swing.event.ListDataListener;
 import javax.swing.event.SwingPropertyChangeSupport;
 import java.util.ArrayList;
 
+/**
+ * Provides the underlying model for the JBList that is displayed in the Key Promoter X tool window.
+ * This model is synchronized with the underlying persistent state data that stores all information.
+ *
+ * @author Patrick Scheibe
+ */
 public class StatisticsListModel implements ListModel<StatisticsItem> {
 
     private SwingPropertyChangeSupport propertyChangeSupport;
@@ -15,7 +21,7 @@ public class StatisticsListModel implements ListModel<StatisticsItem> {
 
     public StatisticsListModel() {
         propertyChangeSupport = new SwingPropertyChangeSupport(this);
-        myStats.registerProperteryChangeSupport(propertyChangeSupport);
+        myStats.registerPropertyChangeSupport(propertyChangeSupport);
         updateStats();
     }
 
@@ -39,13 +45,9 @@ public class StatisticsListModel implements ListModel<StatisticsItem> {
     }
 
     @Override
-    public void addListDataListener(ListDataListener l) {
-
-    }
+    public void addListDataListener(ListDataListener l) { }
 
     @Override
-    public void removeListDataListener(ListDataListener l) {
-
-    }
+    public void removeListDataListener(ListDataListener l) { }
 
 }

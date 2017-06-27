@@ -8,7 +8,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Settings for KeyPromoter plugin.
- * @author Dmitry Kashin
+ *
+ * @author Dmitry Kashin, Patrick Scheibe
  */
 @State(
         name = "KeyPromoterSettings",
@@ -21,14 +22,21 @@ import org.jetbrains.annotations.Nullable;
 public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoterSettings> {
 
 
-
-    /** Whether popup enabled or disabled on menus clicks. */
+    /**
+     * Whether popup enabled or disabled on menus clicks.
+     */
     private boolean menusEnabled = true;
-    /** Whether popup enabled or disabled on toolbar buttons clicks. */
+    /**
+     * Whether popup enabled or disabled on toolbar buttons clicks.
+     */
     private boolean toolbarButtonsEnabled = true;
-    /** Whether popup enabled or disabled on toolwindow buttons clicks. */
+    /**
+     * Whether popup enabled or disabled on tool-window buttons clicks.
+     */
     private boolean toolWindowButtonsEnabled = true;
-    /** Whether popup enabled or disabled on all buttons with mnemonics clicks. */
+    /**
+     * Whether popup enabled or disabled on all buttons with mnemonics clicks.
+     */
     private boolean allButtonsEnabled = false;
 
     private int proposeToCreateShortcutCount = 3;

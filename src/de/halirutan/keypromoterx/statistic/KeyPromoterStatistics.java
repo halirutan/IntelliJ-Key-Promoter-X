@@ -12,8 +12,17 @@ import java.beans.PropertyChangeSupport;
 import java.util.*;
 
 /**
- * Provides storing the statistics persistently
- * @author patrick
+ * Provides storing the statistics persistently. Note that the only thing we store persistently is the list of
+ * {@link StatisticsItem}. All other functionality that is used e.g. to communicate changes in the statistic to the UI
+ * or methods to register new button-presses are marked as @Transient meaning they are ignored by the persistent state
+ * framework.
+ * </br>
+ * The @MapAnnotation defines how the statistics map is laid out as xml file on disk. This is pure cosmetics in our case.
+ * </br>
+ * Furthermore, since we use {@link StatisticsItem} as underlying data-structure, it is very easy to add further features.
+ * One could for instance include the times when buttons are pressed to create a graph that shows if the user really
+ * progresses in replacing mouse actions with shortcuts.
+ * @author Patrick Scheibe
  */
 @State(
         name = "KeyPromoterStatistic",
@@ -43,7 +52,7 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
     }
 
     @Transient
-    void registerProperteryChangeSupport(PropertyChangeSupport support) {
+    void registerPropertyChangeSupport(PropertyChangeSupport support) {
         myChangeSupport = support;
     }
 

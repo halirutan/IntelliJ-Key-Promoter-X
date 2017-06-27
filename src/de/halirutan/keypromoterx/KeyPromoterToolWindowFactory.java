@@ -7,27 +7,22 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 /**
- * Created by athiele on 05.01.2015.
+ * Core class to create the Key Promoter X tool-window. Nothing interesting here except of template code.
  *
+ * @author athiele, Patrick Scheibe
  */
 public class KeyPromoterToolWindowFactory implements ToolWindowFactory {
 
+    private KeyPromoterToolWindowBuilder toolWindowBuilder = new KeyPromoterToolWindowBuilder();
+    private ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
 
-  private KeyPromoterToolWindowBuilder toolWindowBuilder = new KeyPromoterToolWindowBuilder();
-  private ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-
-  @Override
-  public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
-
-    JPanel toolWindowContent = toolWindowBuilder.createToolWindowPanel();
-    Content content = contentFactory.createContent(toolWindowContent, "Hit-list of missed shortcuts", false);
-    toolWindow.getContentManager().addContent(content);
-
-  }
-
-
-
+    @Override
+    public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
+        JPanel toolWindowContent = toolWindowBuilder.createToolWindowPanel();
+        Content content = contentFactory.createContent(toolWindowContent, KeyPromoterBundle.message("kp.tool.window.title"), false);
+        toolWindow.getContentManager().addContent(content);
+    }
 }

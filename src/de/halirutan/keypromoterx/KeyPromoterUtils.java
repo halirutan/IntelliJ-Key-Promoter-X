@@ -8,12 +8,11 @@ import com.intellij.openapi.keymap.KeymapUtil;
 import java.lang.reflect.Field;
 
 /**
- * Date: 05.10.2006
- * Time: 15:01:47
+ * Provides some utility functions.
+ *
+ * @author Dmitry Kashin, Patrick Scheibe
  */
 class KeyPromoterUtils {
-
-    private static KeyPromoterSettings keyPromoterSettings = ServiceManager.getService(KeyPromoterSettings.class);
 
     /**
      * Get first field of class with target type to use during click source handling.
@@ -35,8 +34,6 @@ class KeyPromoterUtils {
         return null;
     }
 
-
-
     static String getKeyboardShortcutsText(AnAction anAction) {
         Shortcut[] shortcuts = anAction.getShortcutSet().getShortcuts();
         if (shortcuts.length == 0) {
@@ -52,6 +49,5 @@ class KeyPromoterUtils {
         }
         return buffer.toString();
     }
-
 
 }

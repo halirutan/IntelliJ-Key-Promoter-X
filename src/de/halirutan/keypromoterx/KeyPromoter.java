@@ -14,8 +14,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Date: 04.09.2006
- * Time: 14:11:03
+ * The main {@link ApplicationComponent} that is registered in plugin.xml. It will take care of catching UI events
+ * and transfers the them to {@link KeyPromoterAction} for inspection. Depending on the type of action (tool-window button,
+ * menu entry, etc.) a balloon is shown and the statistic is updated.
+ *
+ * @author Patrick Scheibe, Dmitry Kashin
  */
 public class KeyPromoter implements ApplicationComponent, AWTEventListener {
 
@@ -38,7 +41,11 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener {
         return KeyPromoterBundle.message("component.name");
     }
 
-    // AWT magic
+    /**
+     * Catches all UI events from the main IDEA AWT making it possible to inspect all mouse-clicks.
+     * Note that on OSX this will not catch clicks on the (detached) menu bar.
+     * @param e event that is caught
+     */
     public void eventDispatched(AWTEvent e) {
         if (e.getID() == MouseEvent.MOUSE_RELEASED && ((MouseEvent) e).getButton() == MouseEvent.BUTTON1) {
             handleMouseEvent(e);
@@ -46,10 +53,15 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener {
     }
 
 
+    /**
+     * Transfers the event to {@link KeyPromoterAction} and inspects the results. Then, depending on the result and the
+     * Key Promoter X settings, a balloon is shown with the shortcut tip and the statistic is updated.
+     * @param e event that is handled
+     */
     private void handleMouseEvent(AWTEvent e) {
         KeyPromoterAction action = new KeyPromoterAction(e);
         switch (action.getSource()) {
-            case TOOLWINDOW_BUTTON:
+            case TOOL_WINDOW_BUTTON:
                 if (!keyPromoterSettings.isToolWindowButtonsEnabled()) {
                     return;
                 }
@@ -73,7 +85,6 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener {
         }
 
         final String shortcut = action.getShortcut();
-        final String description = action.getDescription();
         if (!StringUtil.isEmpty(shortcut)) {
             statsService.registerAction(action);
             KeyPromoterNotification.showTip(action, statsService.get(action).getCount());

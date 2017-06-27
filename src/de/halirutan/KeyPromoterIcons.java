@@ -5,8 +5,12 @@ import com.intellij.openapi.util.IconLoader;
 import javax.swing.*;
 
 /**
- * @author patrick (26.06.17).
+ * Icons for the Key Promoter X in several resolutions and for default and dark theme
+ *
+ * @author Patrick Scheibe.
  */
 public interface KeyPromoterIcons {
-    Icon LOGO = IconLoader.getIcon("/icons/icon.png");
+    Icon KP_ICON = IconLoader.getIcon("/icons/tip.png");
+    @SuppressWarnings("unused")
+    Icon KP_TOOL_WINDOW = IconLoader.getIcon("/icons/toolwindow.png");
 }

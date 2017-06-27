@@ -24,6 +24,11 @@ import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 import java.util.ResourceBundle;
 
+/**
+ * Bundle that provides us with all messages, strings, etc. that are used in the plugin.
+ *
+ * @author Patrick Scheibe
+ */
 public class KeyPromoterBundle {
 
     public static String message(@NotNull @PropertyKey(resourceBundle = "messages.KeyPromoterBundle") String key, @NotNull Object... params) {

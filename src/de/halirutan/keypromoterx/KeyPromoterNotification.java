@@ -6,11 +6,12 @@ import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.keymap.impl.ui.EditKeymapsDialog;
-import com.intellij.util.IconUtil;
 import de.halirutan.KeyPromoterIcons;
 
 /**
- * @author patrick (22.06.17).
+ * A custom notification class that allows for creating 1. tips if a short cut was missed and 2. a balloon asking if
+ * the user wants to create a shortcut for an action that doesn't have one.
+ * @author Patrick Scheibe.
  */
 class KeyPromoterNotification {
 
@@ -19,7 +20,7 @@ class KeyPromoterNotification {
             NotificationDisplayType.BALLOON,
             false,
             KeyPromoterBundle.message("kp.tool.window.name"),
-            KeyPromoterIcons.LOGO
+            KeyPromoterIcons.KP_ICON
             );
 
     static void showTip(KeyPromoterAction action, int count) {
@@ -27,11 +28,9 @@ class KeyPromoterNotification {
         GROUP.createNotification(KeyPromoterBundle.message(
                 "kp.notification.group"),
                 message,
-                NotificationType.INFORMATION,null).setIcon(KeyPromoterIcons.LOGO)
+                NotificationType.INFORMATION,null).setIcon(KeyPromoterIcons.KP_ICON)
                 .addAction(new EditKeymapAction(action, action.getShortcut()))
                 .notify(null);
-
-//                StringUtil.wrapWithDoubleQuote(description), message, NotificationType.INFORMATION).notify(null);
     }
 
     static void askToCreateShortcut(KeyPromoterAction action) {
@@ -40,11 +39,15 @@ class KeyPromoterNotification {
                 KeyPromoterBundle.message("kp.notification.ask.new.shortcut", action.getDescription()),
                 NotificationType.INFORMATION,
                 null
-        ).setIcon(KeyPromoterIcons.LOGO).addAction(new EditKeymapAction(action)).notify(null);
+        ).setIcon(KeyPromoterIcons.KP_ICON).addAction(new EditKeymapAction(action)).notify(null);
 
     }
 
 
+    /**
+     * Provides click-able links to IDEA actions. On click, the keymap editor is opened showing the exact line where
+     * the shortcut of an action can be edited/created.
+     */
     private static class EditKeymapAction extends AnAction {
         private KeyPromoterAction myAction;
 

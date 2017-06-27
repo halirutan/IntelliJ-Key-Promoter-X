@@ -15,14 +15,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Provides a way to extract the idea action from an AWT event.
+ * Provides a way to extract the idea action from an AWT event. This is the class where the magic happens. We try hard
+ * to extract the IDEA action that was invoked from an AWT event. On our way, we need to extract private fields of
+ * IDEA classes and still, there are cases when we won't be able to extract the action that was invoked.
  * @author patrick (22.06.17).
  */
 public class KeyPromoterAction {
 
     private static final String metaKey = System.getProperty("os.name").contains("OS X") ? KeyPromoterBundle.message("kp.meta.osx") : KeyPromoterBundle.message("kp.meta.default");
     // Fields with actions of supported classes
-    private final Map<Class, Field> myClassFields = new HashMap<>(5);
+    private static final Map<Class, Field> myClassFields = new HashMap<>(5);
     private ActionSource mySource = ActionSource.INVALID;
     private int myMnemonic = 0;
     private String myShortcut = "";
@@ -43,6 +45,10 @@ public class KeyPromoterAction {
 
     }
 
+    /**
+     * Information extraction for buttons on the toolbar
+     * @param source source of the action
+     */
     private void analyzeActionButton(ActionButton source) {
         final AnAction action = source.getAction();
         if (action != null) {
@@ -50,7 +56,10 @@ public class KeyPromoterAction {
         }
         mySource = ActionSource.TOOLBAR_BUTTON;
     }
-
+    /**
+     * Information extraction for entries in the menu
+     * @param source source of the action
+     */
     private void analyzeActionMenuItem(ActionMenuItem source) {
         mySource = ActionSource.MENU_ENTRY;
         myDescription = source.getText();
@@ -69,23 +78,40 @@ public class KeyPromoterAction {
         }
     }
 
+    /**
+     * Information extraction for buttons of tool-windows
+     * @param source source of the action
+     */
     private void analyzeStripeButton(StripeButton source) {
-        mySource = ActionSource.TOOLWINDOW_BUTTON;
+        mySource = ActionSource.TOOL_WINDOW_BUTTON;
         myDescription = source.getText();
         myMnemonic = source.getMnemonic2();
         if (myMnemonic > 0) {
             myDescription = myDescription.replaceFirst("\\d: ","");
         }
-        // This is a hack, but I don't see a way how to get the IDEA Id of the action from a stripe button
+        // This is hack, but for IDEA stripe buttons it doesn't seem possible to extract the IdeaActionID.
+        // We turn e.g. "9: Version Control" to "ActivateVersionControlToolWindow" which seems to work for all tool windows
+        // in a similar way.
         myIdeaActionID = KeyPromoterBundle.message("kp.stripe.actionID", StringUtils.replace(myDescription, " ", ""));
     }
 
+    /**
+     * Information extraction for all other buttons
+     * TODO: This needs to be tested. I couldn't find a button that wasn't inspected with this fallback.
+     * @param source source of the action
+     */
     private void analyzeJButton(JButton source) {
         mySource = ActionSource.OTHER;
         myMnemonic = source.getMnemonic();
         myDescription = source.getText();
     }
 
+    /**
+     * Extracts a private field from a class so that we can access it for getting information
+     * @param source Object that contains the field we are interested in
+     * @param target Class of the field we try to extract
+     * @return The field that was found
+     */
     private Field findActionField(Object source, Class<?> target) {
         Field field;
         if (!myClassFields.containsKey(source.getClass())) {
@@ -100,6 +126,10 @@ public class KeyPromoterAction {
         return field;
     }
 
+    /**
+     * This method can be used at several places to update shortcut, description and ideaAction from an {@link AnAction}
+     * @param anAction action to extract values from
+     */
     private void fixValuesFromAction(AnAction anAction) {
         myShortcut = anAction.getShortcutSet() != null ? KeyPromoterUtils.getKeyboardShortcutsText(anAction) : "";
         myDescription = anAction.getTemplatePresentation().getText();
@@ -108,10 +138,6 @@ public class KeyPromoterAction {
 
     ActionSource getSource() {
         return mySource;
-    }
-
-    public int getMnemonic() {
-        return myMnemonic;
     }
 
     public String getShortcut() {
@@ -131,7 +157,7 @@ public class KeyPromoterAction {
 
     enum ActionSource {
         TOOLBAR_BUTTON,
-        TOOLWINDOW_BUTTON,
+        TOOL_WINDOW_BUTTON,
         MENU_ENTRY,
         OTHER,
         INVALID

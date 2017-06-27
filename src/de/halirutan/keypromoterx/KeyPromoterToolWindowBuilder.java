@@ -9,7 +9,9 @@ import de.halirutan.keypromoterx.statistic.StatisticsListModel;
 import javax.swing.*;
 
 /**
- * Created by athiele on 10.01.2015.
+ * Controlling class of the tool-window
+ *
+ * @author athiele, Patrick Scheibe
  *
  */
 public class KeyPromoterToolWindowBuilder {
@@ -33,7 +35,6 @@ public class KeyPromoterToolWindowBuilder {
             statService.resetStatistic();
         }
     }
-
 
     private void createUIComponents() {
         StatisticsListModel model = new StatisticsListModel();
