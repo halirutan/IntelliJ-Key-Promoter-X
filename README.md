@@ -21,18 +21,18 @@ The Key Promoter X comes with built in tool-window on the left side that gives y
 
 ## ![dev image][dev-image] Development  [![Build Status](https://travis-ci.org/halirutan/IntelliJ-Key-Promoter.svg?branch=KeyPromoterX)](https://travis-ci.org/halirutan/IntelliJ-Key-Promoter)
 
-The plugin is written in Java using IntelliJ's plugin framework. The code-base is extremely small and contains only a handful of well documented classes. The code is hosted on GitHub and has an [Travis-CI](https://travis-ci.org/) integration for automatic building. Compilation is done with Gradle using the IntelliJ Gradle plugin and should work out of the box with a recent (v3.5) version.
+The plugin is written in Java using IntelliJ's plugin framework. The code-base is extremely small and contains only a handful of well documented classes. The code is hosted on GitHub and has a [Travis-CI](https://travis-ci.org/) integration for automatic building. Compilation is done with Gradle using the IntelliJ Gradle plugin and should work out of the box with a recent (v3.5) version.
 
 ## ![bug image][issues-image] Reporting issues
 
 If you experience bugs or weird behavior please create an issue [on the bug tracker](https://github.com/halirutan/IntelliJ-Key-Promoter/issues).
 
-## Known issues
+### Known issues
 
 - On OSX it is currently not possible to catch menu mouse clicks 
 
 
-## ![contact image][contact-image] Credits, Contact and Licensing
+## ![contact image][contact-image] Credits
 
 The initial version was [implemented by
 Dmitry Kashin](https://code.google.com/p/key-promoter/)
