@@ -5,6 +5,7 @@ plugins {
 apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
 
+// On travis, we don't want to deploy to Jetbrains that requires credentials
 if (project.file('gradle.properties').exists()) {
     apply from: "gradle.properties"
 }
@@ -34,4 +35,4 @@ task wrapper(type: Wrapper) {
     gradleVersion = '3.5'
 }
 
-version '4.2'
+version '5.0'

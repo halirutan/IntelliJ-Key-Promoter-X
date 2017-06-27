@@ -31,7 +31,10 @@ public class KeyPromoterToolWindowBuilder {
     }
 
     private void resetStats() {
-        if (Messages.showYesNoDialog("Do you really want to reset your Key Promoter statistics? This cannot be undone!", "Reset Statistics", Messages.getQuestionIcon()) == 0) {
+        if (Messages.showYesNoDialog(
+                KeyPromoterBundle.message("kp.dialog.reset.statistic.text"),
+                KeyPromoterBundle.message("kp.dialog.reset.statistic.title"),
+                Messages.getQuestionIcon()) == 0) {
             statService.resetStatistic();
         }
     }

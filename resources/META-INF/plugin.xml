@@ -1,7 +1,8 @@
 <idea-plugin>
     <name>Key Promoter X</name>
+    <version>5.0</version>
     <description><![CDATA[
-    <strong>Improved version of the original Key Promoter</strong>
+    <strong>This is a completely rewritten version of the original Key Promoter</strong>
     <br/>
     <br/>
     <a href="https://github.com/halirutan/IntelliJ-Key-Promoter/tree/KeyPromoterX">GitHub</a> |
@@ -15,14 +16,16 @@
      <br />
      <br />
      The plugin was initially implemented by Dmitry Kashin and further improved by athiele.
-     The version here is  removes the custom pop-up window with IntelliJ internal message balloons.
+     The version here is removes the custom pop-up window with IntelliJ internal message balloons.
      It, therefore, integrates much better into the IDE, fixes glitches and provides a more non-disruptive
      way of learning shortcut bindings.
       ]]>
     </description>
-    <version>4</version>
-    <vendor>Patrick Scheibe (originally Dmitry Kashin, former maintainer athiele)</vendor>
+    <vendor>Patrick Scheibe (originally Dmitry Kashin and later athiele)</vendor>
     <change-notes><![CDATA[<ul>
+    <li>Tool-window updates automatically</li>
+    <li>Icons for the Key Promoter X</li>
+    <li>Tool-window shows now icons of the actions that were called</li>
     <li>Better visualization of the statistics tool-window</li>
     <li>Fixed bug to catch tool-window buttons successfully</li>
     <li>Re-implemented the algorithm that catches button clicks and extracts their information</li>
