@@ -10,56 +10,19 @@
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package de.halirutan.keypromoterx.statistic;
+package de.halirutan.keypromoterx;
 
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.util.IconLoader;
 
 import javax.swing.*;
-import javax.swing.event.ListDataListener;
-import javax.swing.event.SwingPropertyChangeSupport;
-import java.util.ArrayList;
 
 /**
- * Provides the underlying model for the JBList that is displayed in the Key Promoter X tool window.
- * This model is synchronized with the underlying persistent state data that stores all information.
+ * Icons for the Key Promoter X in several resolutions and for default and dark theme
  *
- * @author Patrick Scheibe
+ * @author Patrick Scheibe.
  */
-public class StatisticsListModel implements ListModel<StatisticsItem> {
-
-    private SwingPropertyChangeSupport propertyChangeSupport;
-    private ArrayList<StatisticsItem> myData = new ArrayList<>();
-    private KeyPromoterStatistics myStats = ServiceManager.getService(KeyPromoterStatistics.class);
-
-    public StatisticsListModel() {
-        propertyChangeSupport = new SwingPropertyChangeSupport(this);
-        myStats.registerPropertyChangeSupport(propertyChangeSupport);
-        updateStats();
-    }
-
-    void updateStats() {
-        myData.clear();
-        myData.addAll(myStats.getStatisticItems());
-    }
-
-    public SwingPropertyChangeSupport getPropertyChangeSupport() {
-        return propertyChangeSupport;
-    }
-
-    @Override
-    public int getSize() {
-        return myData.size();
-    }
-
-    @Override
-    public StatisticsItem getElementAt(int index) {
-        return myData.get(index);
-    }
-
-    @Override
-    public void addListDataListener(ListDataListener l) { }
-
-    @Override
-    public void removeListDataListener(ListDataListener l) { }
-
+public interface KeyPromoterIcons {
+    Icon KP_ICON = IconLoader.getIcon("/de/halirutan/keypromoterx/icons/tip.png");
+    @SuppressWarnings("unused")
+    Icon KP_TOOL_WINDOW = IconLoader.getIcon("/de/halirutan/keypromoterx/icons/toolwindow.png");
 }
