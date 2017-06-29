@@ -47,6 +47,7 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
     private ColorPanel myBackgroundColor;
     private ColorPanel myBorderColor;
     private JSpinner myProposeToCreateShortcutCount;
+    private JSpinner myNumberOfTipsShown;
     private JTextPane myPopupTemplate;
 
     private KeyPromoterSettings keyPromoterSettings = ServiceManager.getService(KeyPromoterSettings.class);
@@ -86,6 +87,7 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
         if (myAllButtons.isSelected() != keyPromoterSettings.isAllButtonsEnabled()) return true;
         if (!myProposeToCreateShortcutCount.getValue().equals(keyPromoterSettings.getProposeToCreateShortcutCount()))
             return true;
+        if (!myNumberOfTipsShown.getValue().equals(keyPromoterSettings.getMaxNumberOfTips())) return true;
         return false;
     }
 
@@ -95,6 +97,7 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
         keyPromoterSettings.setToolWindowButtonsEnabled(myToolWindowButtons.isSelected());
         keyPromoterSettings.setAllButtonsEnabled(myAllButtons.isSelected());
         keyPromoterSettings.setProposeToCreateShortcutCount(new Integer(myProposeToCreateShortcutCount.getValue().toString()));
+        keyPromoterSettings.setMaxNumberOfTips(new Integer(myNumberOfTipsShown.getValue().toString()));
     }
 
     public void reset() {
@@ -103,6 +106,7 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
         myToolWindowButtons.setSelected(keyPromoterSettings.isToolWindowButtonsEnabled());
         myAllButtons.setSelected(keyPromoterSettings.isAllButtonsEnabled());
         myProposeToCreateShortcutCount.setValue(keyPromoterSettings.getProposeToCreateShortcutCount());
+        myNumberOfTipsShown.setValue(keyPromoterSettings.getMaxNumberOfTips());
     }
 
     public void disposeUIResources() {

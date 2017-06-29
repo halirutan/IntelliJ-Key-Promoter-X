@@ -53,6 +53,11 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
 
     private int proposeToCreateShortcutCount = 3;
 
+    /**
+     * Restrict the number of tips that a simultaneously shown
+     */
+    private int maxNumberOfTips = 3;
+
     boolean isMenusEnabled() {
         return menusEnabled;
     }
@@ -93,6 +98,14 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
         this.proposeToCreateShortcutCount = proposeToCreateShortcutCount;
     }
 
+    int getMaxNumberOfTips() {
+        return maxNumberOfTips;
+    }
+
+    void setMaxNumberOfTips(int maxNumberOfTips) {
+        this.maxNumberOfTips = maxNumberOfTips;
+    }
+
     @SuppressWarnings("RedundantIfStatement")
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -105,6 +118,7 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
         if (proposeToCreateShortcutCount != that.proposeToCreateShortcutCount) return false;
         if (toolWindowButtonsEnabled != that.toolWindowButtonsEnabled) return false;
         if (toolbarButtonsEnabled != that.toolbarButtonsEnabled) return false;
+        if (maxNumberOfTips != that.maxNumberOfTips) return false;
         return true;
     }
 
@@ -115,6 +129,7 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
         result = 31 * result + (toolWindowButtonsEnabled ? 1 : 0);
         result = 31 * result + (allButtonsEnabled ? 1 : 0);
         result = 31 * result + proposeToCreateShortcutCount;
+        result = 31 * result + maxNumberOfTips;
         return result;
     }
 

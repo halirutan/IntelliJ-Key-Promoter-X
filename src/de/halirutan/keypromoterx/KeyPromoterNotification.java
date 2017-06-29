@@ -12,12 +12,16 @@
 
 package de.halirutan.keypromoterx;
 
+import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationDisplayType;
 import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.keymap.impl.ui.EditKeymapsDialog;
+
+import java.util.LinkedList;
 
 /**
  * A custom notification class that allows for creating 1. tips if a short cut was missed and 2. a balloon asking if
@@ -25,6 +29,9 @@ import com.intellij.openapi.keymap.impl.ui.EditKeymapsDialog;
  * @author Patrick Scheibe.
  */
 class KeyPromoterNotification {
+
+    private final static LinkedList<Notification> NOTIFICATION_LIST = new LinkedList<>();
+    private static KeyPromoterSettings settings = ServiceManager.getService(KeyPromoterSettings.class);
 
     private static final NotificationGroup GROUP = new NotificationGroup(
             KeyPromoterBundle.message("kp.notification.group"),
@@ -36,12 +43,18 @@ class KeyPromoterNotification {
 
     static void showTip(KeyPromoterAction action, int count) {
         String message = KeyPromoterBundle.message("kp.notification.tip", action.getDescription(), count);
-        GROUP.createNotification(KeyPromoterBundle.message(
+        final int maxTips = settings.getMaxNumberOfTips();
+        if (maxTips != 0 && NOTIFICATION_LIST.size() >= maxTips) {
+            final Notification notification = NOTIFICATION_LIST.removeFirst();
+            notification.expire();
+        }
+        final Notification notification = GROUP.createNotification(KeyPromoterBundle.message(
                 "kp.notification.group"),
                 message,
-                NotificationType.INFORMATION,null).setIcon(KeyPromoterIcons.KP_ICON)
-                .addAction(new EditKeymapAction(action, action.getShortcut()))
-                .notify(null);
+                NotificationType.INFORMATION, null).setIcon(KeyPromoterIcons.KP_ICON)
+                .addAction(new EditKeymapAction(action, action.getShortcut()));
+        NOTIFICATION_LIST.addLast(notification);
+        notification.notify(null);
     }
 
     static void askToCreateShortcut(KeyPromoterAction action) {
