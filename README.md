@@ -1,5 +1,7 @@
 # Key Promoter X Plugin - For ![logo][logo-image] development
 
+[![Join the chat at https://gitter.im/IntelliJ-Key-Promoter-X/Lobby](https://badges.gitter.im/IntelliJ-Key-Promoter-X/Lobby.svg)](https://gitter.im/IntelliJ-Key-Promoter-X/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ![Teaser](http://i.imgur.com/2zBdMT8.gif)
 
 This is an almost completely rewritten version of the original Key Promoter plugin by Dmitry Kashin. 
