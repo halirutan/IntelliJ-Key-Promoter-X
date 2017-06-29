@@ -10,16 +10,18 @@ The *Key Promoter X Plugin* is intended to show hints when using the mouse for s
 
 ## ![Docs][doc-image] Features and Documentation
 
-The plugin can be installed with *Settings* -> *Plugins* -> *Browse Repositories* and no further set up is required. When a button is clicked with the mouse, a notification pops up that shows the shortcut which can be used instead. If a button has no shortcut and is pressed several times, a notification is shown that lets you easily create a shortcut for this action.
-
-The Key Promoter X comes with built in tool-window on the left side that gives you access to your hit-list of missed shortcuts. Settings for the plugin can be found under *Settings* -> *Tools* -> *Key Promoter X*.
-
 ### Features
 
 - non-intrusive notifications about shortcuts using IDEA's built-in message framework
 - easy shortcut customization for buttons by active links in the notification
 - easy creation of shortcuts for buttons that don't have one
 - a persistent hit-list of missed shortcuts as IDEA tool-window
+
+The plugin can be installed with *Settings* -> *Plugins* -> *Browse Repositories* and no further set up is required. When a button is clicked with the mouse, a notification pops up that shows the shortcut which can be used instead. If a button has no shortcut and is pressed several times, a notification is shown that lets you easily create a shortcut for this action.
+
+The Key Promoter X comes with built in tool-window on the left side that gives you access to your hit-list of missed shortcuts. Settings for the plugin can be found under *Settings* -> *Tools* -> *Key Promoter X*.
+
+![Settings Panel](http://i.imgur.com/Xr60t14.png)
 
 
 ## ![dev image][dev-image] Development  [![Build Status](https://travis-ci.org/halirutan/IntelliJ-Key-Promoter.svg?branch=KeyPromoterX)](https://travis-ci.org/halirutan/IntelliJ-Key-Promoter)
