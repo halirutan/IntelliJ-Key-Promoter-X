@@ -12,12 +12,17 @@ if (project.file('gradle.properties').exists()) {
 
 intellij {
     version = '2017.1.4'
-    updateSinceUntilBuild = false
+    updateSinceUntilBuild = true
     pluginName = 'Key-Promoter-X'
-    publish {
-        pluginId '9792-key-promoter-x'
-    }
+}
 
+String myChangeNotes = file('resources/META-INF/change-notes.html').text
+String myDescription = file('resources/META-INF/description.html').text
+
+patchPluginXml {
+    changeNotes = myChangeNotes
+    pluginDescription = myDescription
+    sinceBuild = '162'
 }
 
 repositories {
@@ -35,4 +40,4 @@ task wrapper(type: Wrapper) {
     gradleVersion = '3.5'
 }
 
-version '5.1'
+version '5.2'
