@@ -25,11 +25,11 @@ import de.halirutan.keypromoterx.KeyPromoterAction;
 @Tag("Item")
 public class StatisticsItem implements Comparable<StatisticsItem>{
     @Tag("IdeaActionID")
-    public String ideaActionID;
+    public final String ideaActionID;
     @Tag("ShortCut")
-    public String shortCut;
+    public final String shortCut;
     @Tag("Description")
-    public String description;
+    public final String description;
     @Tag("Count")
     public int count;
 

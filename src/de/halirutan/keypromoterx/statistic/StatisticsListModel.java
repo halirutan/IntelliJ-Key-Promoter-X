@@ -27,9 +27,9 @@ import java.util.ArrayList;
  */
 public class StatisticsListModel implements ListModel<StatisticsItem> {
 
-    private SwingPropertyChangeSupport propertyChangeSupport;
-    private ArrayList<StatisticsItem> myData = new ArrayList<>();
-    private KeyPromoterStatistics myStats = ServiceManager.getService(KeyPromoterStatistics.class);
+    private final SwingPropertyChangeSupport propertyChangeSupport;
+    private final ArrayList<StatisticsItem> myData = new ArrayList<>();
+    private final KeyPromoterStatistics myStats = ServiceManager.getService(KeyPromoterStatistics.class);
 
     public StatisticsListModel() {
         propertyChangeSupport = new SwingPropertyChangeSupport(this);

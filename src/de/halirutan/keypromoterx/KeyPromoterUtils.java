@@ -14,7 +14,6 @@ package de.halirutan.keypromoterx;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.Shortcut;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.keymap.KeymapUtil;
 
 import java.lang.reflect.Field;

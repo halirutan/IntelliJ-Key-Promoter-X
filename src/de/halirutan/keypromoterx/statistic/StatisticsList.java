@@ -31,7 +31,7 @@ import java.beans.PropertyChangeListener;
  * @author Patrick Scheibe
  */
 public class StatisticsList extends JBList<StatisticsItem> implements PropertyChangeListener {
-    private StatisticsListModel myModel;
+    private final StatisticsListModel myModel;
     public StatisticsList(@NotNull StatisticsListModel dataModel) {
         myModel = dataModel;
         setModel(myModel);
@@ -77,11 +77,13 @@ public class StatisticsList extends JBList<StatisticsItem> implements PropertyCh
             setText(message);
             setForeground(foreground);
             setBorder(new EmptyBorder(2,10,2,10));
-            final AnAction action = ActionManager.getInstance().getAction(value.ideaActionID);
-            if (action != null) {
-                final Icon icon = action.getTemplatePresentation().getIcon();
-                if (icon != null) {
-                    setIcon(icon);
+            if (value.ideaActionID != null && !"".equals(value.ideaActionID)) {
+                final AnAction action = ActionManager.getInstance().getAction(value.ideaActionID);
+                if (action != null) {
+                    final Icon icon = action.getTemplatePresentation().getIcon();
+                    if (icon != null) {
+                        setIcon(icon);
+                    }
                 }
             }
             return this;

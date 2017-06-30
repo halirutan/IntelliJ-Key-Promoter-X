@@ -40,7 +40,7 @@ class KeyPromoterNotification {
             KeyPromoterBundle.message("kp.tool.window.name"),
             KeyPromoterIcons.KP_ICON
     );
-    private static KeyPromoterSettings settings = ServiceManager.getService(KeyPromoterSettings.class);
+    private static final KeyPromoterSettings settings = ServiceManager.getService(KeyPromoterSettings.class);
 
     static void showTip(KeyPromoterAction action, int count) {
         String message = KeyPromoterBundle.message("kp.notification.tip", action.getDescription(), count);
@@ -83,7 +83,7 @@ class KeyPromoterNotification {
      * the shortcut of an action can be edited/created.
      */
     private static class EditKeymapAction extends AnAction {
-        private KeyPromoterAction myAction;
+        private final KeyPromoterAction myAction;
 
         EditKeymapAction(KeyPromoterAction action) {
             super(action.getDescription());
@@ -103,9 +103,9 @@ class KeyPromoterNotification {
     }
 
     private static class SuppressTipAction extends AnAction {
-        private KeyPromoterStatistics statistics = ServiceManager.getService(KeyPromoterStatistics.class);
-        private KeyPromoterAction myAction;
-        private Notification myNotification;
+        private final KeyPromoterStatistics statistics = ServiceManager.getService(KeyPromoterStatistics.class);
+        private final KeyPromoterAction myAction;
+        private final Notification myNotification;
 
         SuppressTipAction(KeyPromoterAction action, Notification notification) {
             super("(Don't show again)");

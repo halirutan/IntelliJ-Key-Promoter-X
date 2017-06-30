@@ -20,6 +20,7 @@ import com.intellij.openapi.actionSystem.ex.AnActionListener;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.wm.impl.StripeButton;
 import org.jetbrains.annotations.NotNull;
 import de.halirutan.keypromoterx.statistic.KeyPromoterStatistics;
 
@@ -78,43 +79,32 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnAc
      * @param e event that is handled
      */
     private void handleMouseEvent(AWTEvent e) {
-        KeyPromoterAction action = new KeyPromoterAction(e);
-        if (statsService.isSuppressed(action)) {
-            return;
-        }
-        switch (action.getSource()) {
-            case TOOL_WINDOW_BUTTON:
-                if (!keyPromoterSettings.isToolWindowButtonsEnabled()) {
-                    return;
-                }
-                break;
-            case TOOLBAR_BUTTON:
-                if (!keyPromoterSettings.isToolbarButtonsEnabled()) {
-                    return;
-                }
-                break;
-            case MENU_ENTRY:
-                if (!keyPromoterSettings.isMenusEnabled()) {
-                    return;
-                }
-                break;
-            case OTHER:
-                if (!keyPromoterSettings.isAllButtonsEnabled()) {
-                    return;
-                }
-            case INVALID:
+        if (e.getSource() instanceof StripeButton && keyPromoterSettings.isToolWindowButtonsEnabled()) {
+            KeyPromoterAction action = new KeyPromoterAction(e);
+            if (statsService.isSuppressed(action)) {
                 return;
+            }
+            showTip(action);
         }
-        showTip(action);
     }
 
     @Override
     public void beforeActionPerformed(AnAction action, DataContext dataContext, AnActionEvent event) {
         final InputEvent input = event.getInputEvent();
         if (input instanceof MouseEvent) {
-            System.out.println(ActionManager.getInstance().getId(action));
+            final String place = event.getPlace();
+            KeyPromoterAction kpAction;
+            if ("MainMenu".equals(place) && keyPromoterSettings.isMenusEnabled()) {
+                kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.MENU_ENTRY);
+                showTip(kpAction);
+            } else if ("MainToolbar".equals(place) && keyPromoterSettings.isToolbarButtonsEnabled()) {
+                kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.MAIN_TOOLBAR);
+                showTip(kpAction);
+            } else if (keyPromoterSettings.isAllButtonsEnabled()) {
+                kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.OTHER);
+                showTip(kpAction);
+            }
         }
-
     }
 
     private void showTip(KeyPromoterAction action) {

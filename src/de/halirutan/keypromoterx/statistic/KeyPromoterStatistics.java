@@ -52,10 +52,10 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
     public static final String SUPRESS = "suppress";
 
     @MapAnnotation(surroundKeyWithTag = false, surroundValueWithTag = false, surroundWithTag = false, entryTagName = "Statistic", keyAttributeName = "Action")
-    private Map<String , StatisticsItem> statistics = Collections.synchronizedMap(new HashMap<String, StatisticsItem>());
+    private final Map<String , StatisticsItem> statistics = Collections.synchronizedMap(new HashMap<String, StatisticsItem>());
 
     @MapAnnotation(surroundKeyWithTag = false, surroundValueWithTag = false, surroundWithTag = false, entryTagName = "Statistic", keyAttributeName = "Action")
-    private Map<String , StatisticsItem> suppressed = Collections.synchronizedMap(new HashMap<String, StatisticsItem>());
+    private final Map<String , StatisticsItem> suppressed = Collections.synchronizedMap(new HashMap<String, StatisticsItem>());
 
     @Transient
     private PropertyChangeSupport myChangeSupport;

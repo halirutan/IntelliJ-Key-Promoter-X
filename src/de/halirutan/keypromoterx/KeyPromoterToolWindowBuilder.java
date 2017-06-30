@@ -24,13 +24,13 @@ import javax.swing.*;
  * @author athiele, Patrick Scheibe
  *
  */
-public class KeyPromoterToolWindowBuilder {
+class KeyPromoterToolWindowBuilder {
 
     private JPanel panel;
     private StatisticsList statisticsList;
     private JButton resetStatisticsButton;
     private SuppressedList suppressedList;
-    private KeyPromoterStatistics statService = ServiceManager.getService(KeyPromoterStatistics.class);
+    private final KeyPromoterStatistics statService = ServiceManager.getService(KeyPromoterStatistics.class);
 
 
     KeyPromoterToolWindowBuilder() {

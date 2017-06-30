@@ -14,6 +14,7 @@ package de.halirutan.keypromoterx;
 
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.impl.ActionButton;
 import com.intellij.openapi.actionSystem.impl.ActionMenuItem;
 import com.intellij.openapi.actionSystem.impl.actionholder.ActionRef;
@@ -57,6 +58,14 @@ public class KeyPromoterAction {
 
     }
 
+    KeyPromoterAction(AnAction action, AnActionEvent event, ActionSource source) {
+        myMnemonic = event.getPresentation().getMnemonic();
+        myIdeaActionID = ActionManager.getInstance().getId(action);
+        myDescription = event.getPresentation().getText();
+        mySource = source;
+        myShortcut = KeyPromoterUtils.getKeyboardShortcutsText(action);
+    }
+
     /**
      * Information extraction for buttons on the toolbar
      * @param source source of the action
@@ -66,7 +75,7 @@ public class KeyPromoterAction {
         if (action != null) {
             fixValuesFromAction(action);
         }
-        mySource = ActionSource.TOOLBAR_BUTTON;
+        mySource = ActionSource.MAIN_TOOLBAR;
     }
     /**
      * Information extraction for entries in the menu
@@ -153,8 +162,11 @@ public class KeyPromoterAction {
     }
 
     public String getShortcut() {
-        if (myMnemonic > 0) {
-            myShortcut = "\'" + metaKey + (char) myMnemonic + "\'";
+        if (myShortcut.length() > 0) {
+            return myShortcut;
+        }
+        if ((mySource.equals(ActionSource.TOOL_WINDOW_BUTTON)) || mySource.equals(ActionSource.OTHER) && myMnemonic > 0) {
+            myShortcut = "<html>" + metaKey + (char) myMnemonic + "</html>";
         }
         return myShortcut;
     }
@@ -168,7 +180,7 @@ public class KeyPromoterAction {
     }
 
     enum ActionSource {
-        TOOLBAR_BUTTON,
+        MAIN_TOOLBAR,
         TOOL_WINDOW_BUTTON,
         MENU_ENTRY,
         OTHER,

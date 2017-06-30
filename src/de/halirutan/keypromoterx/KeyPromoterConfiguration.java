@@ -66,7 +66,7 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
     }
 
     public Icon getIcon() {
-        return null;
+        return KeyPromoterIcons.KP_ICON;
     }
 
     @Nullable

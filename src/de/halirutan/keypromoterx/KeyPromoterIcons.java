@@ -21,7 +21,7 @@ import javax.swing.*;
  *
  * @author Patrick Scheibe.
  */
-public interface KeyPromoterIcons {
+interface KeyPromoterIcons {
     Icon KP_ICON = IconLoader.getIcon("/de/halirutan/keypromoterx/icons/tip.png");
     @SuppressWarnings("unused")
     Icon KP_TOOL_WINDOW = IconLoader.getIcon("/de/halirutan/keypromoterx/icons/toolwindow.png");

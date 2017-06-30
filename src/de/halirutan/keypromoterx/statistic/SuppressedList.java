@@ -15,9 +15,9 @@ package de.halirutan.keypromoterx.statistic;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBList;
 import de.halirutan.keypromoterx.KeyPromoterBundle;
-import de.halirutan.keypromoterx.KeyPromoterSettings;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -33,10 +33,12 @@ import java.util.EventListener;
  * Provides a custom JBList for displaying how often a button was pressed that could have been replaced by a shortcut.
  * The list is backed by {@link StatisticsListModel} that allows for automatic updating of the values and synchronization
  * with {@link KeyPromoterStatistics} that keeps the values persistent through restarts.
+ *
  * @author Patrick Scheibe
  */
 public class SuppressedList extends JBList<StatisticsItem> implements PropertyChangeListener, EventListener {
-    private SuppressedListModel myModel;
+    private final SuppressedListModel myModel;
+
     public SuppressedList(@NotNull SuppressedListModel dataModel) {
         myModel = dataModel;
         setModel(myModel);
@@ -52,34 +54,22 @@ public class SuppressedList extends JBList<StatisticsItem> implements PropertyCh
             }
 
             @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
+            public void mousePressed(MouseEvent e) { }
 
             @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
+            public void mouseReleased(MouseEvent e) { }
 
             @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
+            public void mouseEntered(MouseEvent e) { }
 
             @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
+            public void mouseExited(MouseEvent e) { }
 
             @Override
-            public void mouseDragged(MouseEvent e) {
-
-            }
+            public void mouseDragged(MouseEvent e) { }
 
             @Override
-            public void mouseMoved(MouseEvent e) {
-
-            }
+            public void mouseMoved(MouseEvent e) { }
         });
     }
 
@@ -91,6 +81,7 @@ public class SuppressedList extends JBList<StatisticsItem> implements PropertyCh
     /**
      * Catches events to keep the Key Promoter tool-window up-to-date with the underlying statistic that is updated
      * each time a shortcut was missed.
+     *
      * @param evt The event indicating a change in the model
      */
     @Override
@@ -102,7 +93,7 @@ public class SuppressedList extends JBList<StatisticsItem> implements PropertyCh
     }
 
 
-    public void unsuppressItem() {
+    private void unsuppressItem() {
         final StatisticsItem selectedValue = getSelectedValue();
         if (selectedValue != null) {
             final KeyPromoterStatistics service = ServiceManager.getService(KeyPromoterStatistics.class);
@@ -127,27 +118,29 @@ public class SuppressedList extends JBList<StatisticsItem> implements PropertyCh
                     "kp.list.suppressed.item",
                     value.getShortcut(),
                     value.description
-                    );
+            );
             if (isSelected) {
-                setBackground(Color.GRAY);
-            }else{
+                setBackground(JBColor.GRAY);
+            } else {
                 setBackground(background);
             }
 
             setText(message);
             setForeground(foreground);
-            setBorder(new EmptyBorder(2,10,2,10));
-            final AnAction action = ActionManager.getInstance().getAction(value.ideaActionID);
-            if (action != null) {
-                final Icon icon = action.getTemplatePresentation().getIcon();
-                if (icon != null) {
-                    setIcon(icon);
+            setBorder(new EmptyBorder(2, 10, 2, 10));
+            if (value.ideaActionID != null && !"".equals(value.ideaActionID)) {
+                final AnAction action = ActionManager.getInstance().getAction(value.ideaActionID);
+
+                if (action != null) {
+                    final Icon icon = action.getTemplatePresentation().getIcon();
+                    if (icon != null) {
+                        setIcon(icon);
+                    }
                 }
             }
             return this;
         }
     }
-
 
 
 }
