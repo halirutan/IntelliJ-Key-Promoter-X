@@ -14,13 +14,17 @@ package de.halirutan.keypromoterx.statistic;
 
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.ui.components.JBList;
 import de.halirutan.keypromoterx.KeyPromoterBundle;
+import de.halirutan.keypromoterx.KeyPromoterSettings;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.MouseInputListener;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.EventListener;
@@ -39,7 +43,44 @@ public class SuppressedList extends JBList<StatisticsItem> implements PropertyCh
         myModel.getPropertyChangeSupport().addPropertyChangeListener(this);
         setCellRenderer(new SuppressedItemCellRenderer());
         myModel.updateSuppressed();
-        //TODO: Add mouse listener
+        addMouseListener(new MouseInputListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() > 1) {
+                    unsuppressItem();
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseDragged(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+
+            }
+        });
     }
 
     @Override
@@ -61,7 +102,13 @@ public class SuppressedList extends JBList<StatisticsItem> implements PropertyCh
     }
 
 
-
+    public void unsuppressItem() {
+        final StatisticsItem selectedValue = getSelectedValue();
+        if (selectedValue != null) {
+            final KeyPromoterStatistics service = ServiceManager.getService(KeyPromoterStatistics.class);
+            service.unsuppressItem(selectedValue);
+        }
+    }
 
     /**
      * Provides custom rendering of items in the Key Promoter X statistic tool-window.

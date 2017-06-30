@@ -33,9 +33,6 @@ import java.util.LinkedList;
 class KeyPromoterNotification {
 
     private final static LinkedList<Notification> NOTIFICATION_LIST = new LinkedList<>();
-    private static KeyPromoterSettings settings = ServiceManager.getService(KeyPromoterSettings.class);
-
-
     private static final NotificationGroup GROUP = new NotificationGroup(
             KeyPromoterBundle.message("kp.notification.group"),
             NotificationDisplayType.BALLOON,
@@ -43,6 +40,7 @@ class KeyPromoterNotification {
             KeyPromoterBundle.message("kp.tool.window.name"),
             KeyPromoterIcons.KP_ICON
     );
+    private static KeyPromoterSettings settings = ServiceManager.getService(KeyPromoterSettings.class);
 
     static void showTip(KeyPromoterAction action, int count) {
         String message = KeyPromoterBundle.message("kp.notification.tip", action.getDescription(), count);
@@ -55,8 +53,8 @@ class KeyPromoterNotification {
                 "kp.notification.group"),
                 message,
                 NotificationType.INFORMATION, null).setIcon(KeyPromoterIcons.KP_ICON)
-                .addAction(new EditKeymapAction(action, action.getShortcut()))
-                .addAction(new SupressTipAction(action));
+                .addAction(new EditKeymapAction(action, action.getShortcut()));
+        notification.addAction(new SuppressTipAction(action, notification));
         NOTIFICATION_LIST.addLast(notification);
         notification.notify(null);
     }
@@ -73,8 +71,8 @@ class KeyPromoterNotification {
                 NotificationType.INFORMATION,
                 null
         ).setIcon(KeyPromoterIcons.KP_ICON)
-                .addAction(new EditKeymapAction(action))
-                .addAction(new SupressTipAction(action));
+                .addAction(new EditKeymapAction(action));
+        notification.addAction(new SuppressTipAction(action, notification));
         NOTIFICATION_LIST.addLast(notification);
         notification.notify(null);
     }
@@ -104,18 +102,21 @@ class KeyPromoterNotification {
         }
     }
 
-    private static class SupressTipAction extends AnAction {
+    private static class SuppressTipAction extends AnAction {
         private KeyPromoterStatistics statistics = ServiceManager.getService(KeyPromoterStatistics.class);
         private KeyPromoterAction myAction;
+        private Notification myNotification;
 
-        SupressTipAction(KeyPromoterAction action) {
+        SuppressTipAction(KeyPromoterAction action, Notification notification) {
             super("(Don't show again)");
             myAction = action;
+            myNotification = notification;
         }
 
         @Override
         public void actionPerformed(AnActionEvent e) {
             statistics.suppressItem(myAction);
+            myNotification.expire();
         }
     }
 

@@ -105,7 +105,19 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnAc
             case INVALID:
                 return;
         }
+        showTip(action);
+    }
 
+    @Override
+    public void beforeActionPerformed(AnAction action, DataContext dataContext, AnActionEvent event) {
+        final InputEvent input = event.getInputEvent();
+        if (input instanceof MouseEvent) {
+            System.out.println(ActionManager.getInstance().getId(action));
+        }
+
+    }
+
+    private void showTip(KeyPromoterAction action) {
         final String shortcut = action.getShortcut();
         if (!StringUtil.isEmpty(shortcut) ) {
             statsService.registerAction(action);
@@ -123,15 +135,6 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnAc
 
             }
         }
-    }
-
-    @Override
-    public void beforeActionPerformed(AnAction action, DataContext dataContext, AnActionEvent event) {
-        final InputEvent input = event.getInputEvent();
-        if (input instanceof MouseEvent) {
-            System.out.println(ActionManager.getInstance().getId(action));
-        }
-
     }
 
     @Override

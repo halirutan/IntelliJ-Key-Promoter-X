@@ -122,11 +122,24 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
         return items;
     }
 
-    public ArrayList<StatisticsItem> getSuppressedItems() {
+    ArrayList<StatisticsItem> getSuppressedItems() {
         return new ArrayList<>(suppressed.values());
     }
 
     public boolean isSuppressed(KeyPromoterAction action) {
         return suppressed.containsKey(action.getDescription());
+    }
+
+    /**
+     * Puts an item from the suppress list back into the statistics.
+     * @param item Item to unsuppress
+     */
+    void unsuppressItem(StatisticsItem item) {
+        final StatisticsItem statisticsItem = suppressed.remove(item.getDescription());
+        if (statisticsItem != null && statisticsItem.count > 0) {
+            statistics.putIfAbsent(statisticsItem.getDescription(), statisticsItem);
+        }
+        myChangeSupport.firePropertyChange(SUPRESS, null, null);
+        myChangeSupport.firePropertyChange(STATISTIC, null, null);
     }
 }

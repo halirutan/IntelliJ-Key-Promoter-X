@@ -77,4 +77,8 @@ public class StatisticsItem implements Comparable<StatisticsItem>{
     public String getShortcut() {
         return shortCut;
     }
+
+    public String getDescription() {
+        return description;
+    }
 }
