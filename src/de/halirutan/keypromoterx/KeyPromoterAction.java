@@ -165,8 +165,8 @@ public class KeyPromoterAction {
         if (myShortcut.length() > 0) {
             return myShortcut;
         }
-        if ((mySource.equals(ActionSource.TOOL_WINDOW_BUTTON)) || mySource.equals(ActionSource.OTHER) && myMnemonic > 0) {
-            myShortcut = "<html>" + metaKey + (char) myMnemonic + "</html>";
+        if ((mySource.equals(ActionSource.TOOL_WINDOW_BUTTON) || mySource.equals(ActionSource.OTHER)) && myMnemonic > 0) {
+            myShortcut = "\'" + metaKey + (char) myMnemonic + "\'";
         }
         return myShortcut;
     }
