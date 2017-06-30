@@ -20,12 +20,14 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.keymap.impl.ui.EditKeymapsDialog;
+import de.halirutan.keypromoterx.statistic.KeyPromoterStatistics;
 
 import java.util.LinkedList;
 
 /**
  * A custom notification class that allows for creating 1. tips if a short cut was missed and 2. a balloon asking if
  * the user wants to create a shortcut for an action that doesn't have one.
+ *
  * @author Patrick Scheibe.
  */
 class KeyPromoterNotification {
@@ -33,13 +35,14 @@ class KeyPromoterNotification {
     private final static LinkedList<Notification> NOTIFICATION_LIST = new LinkedList<>();
     private static KeyPromoterSettings settings = ServiceManager.getService(KeyPromoterSettings.class);
 
+
     private static final NotificationGroup GROUP = new NotificationGroup(
             KeyPromoterBundle.message("kp.notification.group"),
             NotificationDisplayType.BALLOON,
             false,
             KeyPromoterBundle.message("kp.tool.window.name"),
             KeyPromoterIcons.KP_ICON
-            );
+    );
 
     static void showTip(KeyPromoterAction action, int count) {
         String message = KeyPromoterBundle.message("kp.notification.tip", action.getDescription(), count);
@@ -52,19 +55,28 @@ class KeyPromoterNotification {
                 "kp.notification.group"),
                 message,
                 NotificationType.INFORMATION, null).setIcon(KeyPromoterIcons.KP_ICON)
-                .addAction(new EditKeymapAction(action, action.getShortcut()));
+                .addAction(new EditKeymapAction(action, action.getShortcut()))
+                .addAction(new SupressTipAction(action));
         NOTIFICATION_LIST.addLast(notification);
         notification.notify(null);
     }
 
     static void askToCreateShortcut(KeyPromoterAction action) {
-        GROUP.createNotification(
+        final int maxTips = settings.getMaxNumberOfTips();
+        if (maxTips != 0 && NOTIFICATION_LIST.size() >= maxTips) {
+            final Notification notification = NOTIFICATION_LIST.removeFirst();
+            notification.expire();
+        }
+        Notification notification = GROUP.createNotification(
                 KeyPromoterBundle.message("kp.notification.group"),
                 KeyPromoterBundle.message("kp.notification.ask.new.shortcut", action.getDescription()),
                 NotificationType.INFORMATION,
                 null
-        ).setIcon(KeyPromoterIcons.KP_ICON).addAction(new EditKeymapAction(action)).notify(null);
-
+        ).setIcon(KeyPromoterIcons.KP_ICON)
+                .addAction(new EditKeymapAction(action))
+                .addAction(new SupressTipAction(action));
+        NOTIFICATION_LIST.addLast(notification);
+        notification.notify(null);
     }
 
 
@@ -89,6 +101,21 @@ class KeyPromoterNotification {
         public void actionPerformed(AnActionEvent e) {
             EditKeymapsDialog dialog = new EditKeymapsDialog(null, myAction.getIdeaActionID());
             dialog.show();
+        }
+    }
+
+    private static class SupressTipAction extends AnAction {
+        private KeyPromoterStatistics statistics = ServiceManager.getService(KeyPromoterStatistics.class);
+        private KeyPromoterAction myAction;
+
+        SupressTipAction(KeyPromoterAction action) {
+            super("(Don't show again)");
+            myAction = action;
+        }
+
+        @Override
+        public void actionPerformed(AnActionEvent e) {
+            statistics.suppressItem(myAction);
         }
     }
 

@@ -5,6 +5,8 @@ plugins {
 apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
 
+tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
+
 // On travis, we don't want to deploy to Jetbrains that requires credentials
 if (project.file('gradle.properties').exists()) {
     apply from: "gradle.properties"
@@ -16,12 +18,12 @@ intellij {
     pluginName = 'Key-Promoter-X'
 }
 
-String myChangeNotes = file('resources/META-INF/change-notes.html').text
-String myDescription = file('resources/META-INF/description.html').text
+// Simple function to load change-notes.html and description.html into valid text for plugin.xml
+def htmlFixer = {f -> file(f).text.replace('<html>', '').replace('</html>', '')}
 
 patchPluginXml {
-    changeNotes = myChangeNotes
-    pluginDescription = myDescription
+    changeNotes = htmlFixer('resources/META-INF/change-notes.html')
+    pluginDescription = htmlFixer('resources/META-INF/description.html')
     sinceBuild = '162'
 }
 

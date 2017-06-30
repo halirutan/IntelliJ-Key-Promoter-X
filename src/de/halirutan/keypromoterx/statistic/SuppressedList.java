@@ -23,6 +23,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.EventListener;
 
 /**
  * Provides a custom JBList for displaying how often a button was pressed that could have been replaced by a shortcut.
@@ -30,14 +31,15 @@ import java.beans.PropertyChangeListener;
  * with {@link KeyPromoterStatistics} that keeps the values persistent through restarts.
  * @author Patrick Scheibe
  */
-public class StatisticsList extends JBList<StatisticsItem> implements PropertyChangeListener {
-    private StatisticsListModel myModel;
-    public StatisticsList(@NotNull StatisticsListModel dataModel) {
+public class SuppressedList extends JBList<StatisticsItem> implements PropertyChangeListener, EventListener {
+    private SuppressedListModel myModel;
+    public SuppressedList(@NotNull SuppressedListModel dataModel) {
         myModel = dataModel;
         setModel(myModel);
         myModel.getPropertyChangeSupport().addPropertyChangeListener(this);
-        setCellRenderer(new StatisticsItemCellRenderer());
-        myModel.updateStats();
+        setCellRenderer(new SuppressedItemCellRenderer());
+        myModel.updateSuppressed();
+        //TODO: Add mouse listener
     }
 
     @Override
@@ -52,28 +54,39 @@ public class StatisticsList extends JBList<StatisticsItem> implements PropertyCh
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(KeyPromoterStatistics.STATISTIC)) {
-            myModel.updateStats();
+        if (evt.getPropertyName().equals(KeyPromoterStatistics.SUPRESS)) {
+            myModel.updateSuppressed();
         }
         updateUI();
     }
 
 
+
+
     /**
      * Provides custom rendering of items in the Key Promoter X statistic tool-window.
      */
-    static class StatisticsItemCellRenderer extends JLabel implements ListCellRenderer<StatisticsItem> {
+    class SuppressedItemCellRenderer extends JLabel implements ListCellRenderer<StatisticsItem> {
+
+        public SuppressedItemCellRenderer() {
+            setOpaque(true);
+        }
 
         @Override
-        public JLabel getListCellRendererComponent(JList<? extends StatisticsItem> list, StatisticsItem value, int index, boolean isSelected, boolean cellHasFocus) {
+        public Component getListCellRendererComponent(JList<? extends StatisticsItem> list, StatisticsItem value, int index, boolean isSelected, boolean cellHasFocus) {
             final Color foreground = list.getForeground();
+            final Color background = list.getBackground();
             final String message = KeyPromoterBundle.message(
-                    "kp.list.item",
+                    "kp.list.suppressed.item",
                     value.getShortcut(),
-                    value.description,
-                    value.count,
-                    value.count == 1 ? "time" : "times"
+                    value.description
                     );
+            if (isSelected) {
+                setBackground(Color.GRAY);
+            }else{
+                setBackground(background);
+            }
+
             setText(message);
             setForeground(foreground);
             setBorder(new EmptyBorder(2,10,2,10));

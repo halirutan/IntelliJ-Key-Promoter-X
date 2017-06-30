@@ -12,6 +12,11 @@
 
 package de.halirutan.keypromoterx;
 
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.ex.AnActionListener;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.util.text.StringUtil;
@@ -20,6 +25,7 @@ import de.halirutan.keypromoterx.statistic.KeyPromoterStatistics;
 
 import java.awt.*;
 import java.awt.event.AWTEventListener;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,7 +38,7 @@ import java.util.Map;
  *
  * @author Patrick Scheibe, Dmitry Kashin
  */
-public class KeyPromoter implements ApplicationComponent, AWTEventListener {
+public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnActionListener {
 
 
     private final Map<String, Integer> withoutShortcutStats = Collections.synchronizedMap(new HashMap<String, Integer>());
@@ -41,6 +47,7 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener {
     // Presentation and stats fields.
 
     public void initComponent() {
+        ActionManager.getInstance().addAnActionListener(this);
         Toolkit.getDefaultToolkit().addAWTEventListener(this, AWTEvent.MOUSE_EVENT_MASK | AWTEvent.WINDOW_EVENT_MASK | AWTEvent.WINDOW_STATE_EVENT_MASK/* | AWTEvent.KEY_EVENT_MASK*/);
     }
 
@@ -72,6 +79,9 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener {
      */
     private void handleMouseEvent(AWTEvent e) {
         KeyPromoterAction action = new KeyPromoterAction(e);
+        if (statsService.isSuppressed(action)) {
+            return;
+        }
         switch (action.getSource()) {
             case TOOL_WINDOW_BUTTON:
                 if (!keyPromoterSettings.isToolWindowButtonsEnabled()) {
@@ -97,7 +107,7 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener {
         }
 
         final String shortcut = action.getShortcut();
-        if (!StringUtil.isEmpty(shortcut)) {
+        if (!StringUtil.isEmpty(shortcut) ) {
             statsService.registerAction(action);
             KeyPromoterNotification.showTip(action, statsService.get(action).getCount());
 
@@ -115,4 +125,22 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener {
         }
     }
 
+    @Override
+    public void beforeActionPerformed(AnAction action, DataContext dataContext, AnActionEvent event) {
+        final InputEvent input = event.getInputEvent();
+        if (input instanceof MouseEvent) {
+            System.out.println(ActionManager.getInstance().getId(action));
+        }
+
+    }
+
+    @Override
+    public void afterActionPerformed(AnAction action, DataContext dataContext, AnActionEvent event) {
+
+    }
+
+    @Override
+    public void beforeEditorTyping(char c, DataContext dataContext) {
+
+    }
 }

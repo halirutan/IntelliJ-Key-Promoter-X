@@ -46,8 +46,16 @@ import java.util.*;
 )
 public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromoterStatistics> {
 
+    @Transient
+    public static final String STATISTIC = "add";
+    @Transient
+    public static final String SUPRESS = "suppress";
+
     @MapAnnotation(surroundKeyWithTag = false, surroundValueWithTag = false, surroundWithTag = false, entryTagName = "Statistic", keyAttributeName = "Action")
     private Map<String , StatisticsItem> statistics = Collections.synchronizedMap(new HashMap<String, StatisticsItem>());
+
+    @MapAnnotation(surroundKeyWithTag = false, surroundValueWithTag = false, surroundWithTag = false, entryTagName = "Statistic", keyAttributeName = "Action")
+    private Map<String , StatisticsItem> suppressed = Collections.synchronizedMap(new HashMap<String, StatisticsItem>());
 
     @Transient
     private PropertyChangeSupport myChangeSupport;
@@ -72,13 +80,34 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
     public void registerAction(KeyPromoterAction action) {
         statistics.putIfAbsent(action.getDescription(), new StatisticsItem(action));
         statistics.get(action.getDescription()).registerEvent();
-        myChangeSupport.firePropertyChange("stats", null, null);
+        myChangeSupport.firePropertyChange(STATISTIC, null, null);
     }
 
     @Transient
     public void resetStatistic() {
         statistics.clear();
-        myChangeSupport.firePropertyChange("stats", null, null);
+        myChangeSupport.firePropertyChange(STATISTIC, null, null);
+    }
+
+    @Transient
+    public void suppressItem(KeyPromoterAction action) {
+        StatisticsItem removed = statistics.remove(action.getDescription());
+        removed = removed == null ? new StatisticsItem(action) : removed;
+        suppressed.putIfAbsent(action.getDescription(), removed);
+        myChangeSupport.firePropertyChange(SUPRESS, null, null);
+        myChangeSupport.firePropertyChange(STATISTIC, null, null);
+    }
+
+    @Transient
+    public void resetSuppressed() {
+        suppressed.clear();
+        myChangeSupport.firePropertyChange(SUPRESS, null, null);
+    }
+
+    @Transient
+    public void removeSuppressedItem(String name) {
+        suppressed.remove(name);
+        myChangeSupport.firePropertyChange(SUPRESS, null, null);
     }
 
     @Transient
@@ -91,5 +120,13 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
         final ArrayList<StatisticsItem> items = new ArrayList<>(statistics.values());
         Collections.sort(items);
         return items;
+    }
+
+    public ArrayList<StatisticsItem> getSuppressedItems() {
+        return new ArrayList<>(suppressed.values());
+    }
+
+    public boolean isSuppressed(KeyPromoterAction action) {
+        return suppressed.containsKey(action.getDescription());
     }
 }
