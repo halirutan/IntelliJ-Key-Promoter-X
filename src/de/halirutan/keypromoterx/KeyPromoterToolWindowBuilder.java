@@ -17,6 +17,7 @@ import com.intellij.openapi.ui.Messages;
 import de.halirutan.keypromoterx.statistic.*;
 
 import javax.swing.*;
+import java.beans.PropertyChangeListener;
 
 /**
  * Controlling class of the tool-window
@@ -27,9 +28,9 @@ import javax.swing.*;
 class KeyPromoterToolWindowBuilder {
 
     private JPanel panel;
-    private StatisticsList statisticsList;
+    private JList statisticsList;
     private JButton resetStatisticsButton;
-    private SuppressedList suppressedList;
+    private JList suppressedList;
     private final KeyPromoterStatistics statService = ServiceManager.getService(KeyPromoterStatistics.class);
 
 
@@ -53,12 +54,12 @@ class KeyPromoterToolWindowBuilder {
     private void createUIComponents() {
         StatisticsListModel statisticsListModel = new StatisticsListModel();
         statisticsList = new StatisticsList(statisticsListModel);
-        statisticsListModel.getPropertyChangeSupport().addPropertyChangeListener(statisticsList);
+        statisticsListModel.getPropertyChangeSupport().addPropertyChangeListener((PropertyChangeListener) statisticsList);
 
         SuppressedListModel suppressedListModel = new SuppressedListModel();
         suppressedList = new SuppressedList(suppressedListModel);
-        suppressedListModel.getPropertyChangeSupport().addPropertyChangeListener(suppressedList);
-        suppressedListModel.getPropertyChangeSupport().addPropertyChangeListener(statisticsList);
+        suppressedListModel.getPropertyChangeSupport().addPropertyChangeListener((PropertyChangeListener) suppressedList);
+        suppressedListModel.getPropertyChangeSupport().addPropertyChangeListener((PropertyChangeListener) statisticsList);
 
 
     }

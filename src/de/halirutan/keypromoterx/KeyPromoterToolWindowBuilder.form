@@ -44,7 +44,7 @@
         <properties/>
         <border type="etched" title="Your missed shortcut hitlist" title-justification="2"/>
         <children>
-          <component id="7a297" class="de.halirutan.keypromoterx.statistic.StatisticsList" binding="statisticsList" custom-create="true" default-binding="true">
+          <component id="ce5e5" class="javax.swing.JList" binding="statisticsList" custom-create="true" default-binding="true">
             <constraints/>
             <properties/>
           </component>
@@ -57,7 +57,7 @@
         <properties/>
         <border type="etched" title="Suppress tips for these shortcuts" title-justification="2"/>
         <children>
-          <component id="bc734" class="de.halirutan.keypromoterx.statistic.SuppressedList" binding="suppressedList" custom-create="true">
+          <component id="91fb2" class="javax.swing.JList" binding="suppressedList" custom-create="true">
             <constraints/>
             <properties/>
           </component>
