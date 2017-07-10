@@ -13,7 +13,7 @@ if (project.file('gradle.properties').exists()) {
 }
 
 intellij {
-    version = '2017.1.4'
+    version = '2017.1.5'
     updateSinceUntilBuild = true
     pluginName = 'Key-Promoter-X'
 }
@@ -25,6 +25,7 @@ patchPluginXml {
     changeNotes = htmlFixer('resources/META-INF/change-notes.html')
     pluginDescription = htmlFixer('resources/META-INF/description.html')
     sinceBuild = '162'
+    untilBuild = '172.*'
 }
 
 repositories {
@@ -42,4 +43,4 @@ task wrapper(type: Wrapper) {
     gradleVersion = '3.5'
 }
 
-version '5.3'
+version '5.4'
