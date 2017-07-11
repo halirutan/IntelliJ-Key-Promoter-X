@@ -49,7 +49,7 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
     /**
      * Whether popup enabled or disabled on all buttons with mnemonics clicks.
      */
-    private boolean allButtonsEnabled = false;
+    private boolean allButtonsEnabled = true;
 
     private int proposeToCreateShortcutCount = 3;
 

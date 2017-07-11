@@ -21,8 +21,8 @@ import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.wm.impl.StripeButton;
-import org.jetbrains.annotations.NotNull;
 import de.halirutan.keypromoterx.statistic.KeyPromoterStatistics;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.awt.event.AWTEventListener;
@@ -64,6 +64,7 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnAc
     /**
      * Catches all UI events from the main IDEA AWT making it possible to inspect all mouse-clicks.
      * Note that on OSX this will not catch clicks on the (detached) menu bar.
+     *
      * @param e event that is caught
      */
     public void eventDispatched(AWTEvent e) {
@@ -76,14 +77,12 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnAc
     /**
      * Transfers the event to {@link KeyPromoterAction} and inspects the results. Then, depending on the result and the
      * Key Promoter X settings, a balloon is shown with the shortcut tip and the statistic is updated.
+     *
      * @param e event that is handled
      */
     private void handleMouseEvent(AWTEvent e) {
         if (e.getSource() instanceof StripeButton && keyPromoterSettings.isToolWindowButtonsEnabled()) {
             KeyPromoterAction action = new KeyPromoterAction(e);
-            if (statsService.isSuppressed(action)) {
-                return;
-            }
             showTip(action);
         }
     }
@@ -108,8 +107,12 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnAc
     }
 
     private void showTip(KeyPromoterAction action) {
+        if (statsService.isSuppressed(action)) {
+            return;
+        }
+
         final String shortcut = action.getShortcut();
-        if (!StringUtil.isEmpty(shortcut) ) {
+        if (!StringUtil.isEmpty(shortcut)) {
             statsService.registerAction(action);
             KeyPromoterNotification.showTip(action, statsService.get(action).getCount());
 
