@@ -24,12 +24,8 @@ import org.jetbrains.annotations.Nullable;
  * @author Dmitry Kashin, Patrick Scheibe
  */
 @State(
-        name = "KeyPromoterSettings",
-        storages = {
-                @Storage(
-                        file = "$APP_CONFIG$/KeyPromoterSettings.xml",
-                        id = "KeyPromoterSettings"
-                )}
+        name = "KeyPromoterXSettings",
+        storages = {@Storage("KeyPromoterXSettings.xml")}
 )
 public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoterSettings> {
 

@@ -37,12 +37,8 @@ import java.util.*;
  * @author Patrick Scheibe
  */
 @State(
-        name = "KeyPromoterStatistic",
-        storages = {
-                @Storage(
-                        file = "$APP_CONFIG$/KeyPromoterStatistic.xml",
-                        id = "KeyPromoterStatistic"
-                )}
+        name = "KeyPromoterXStatistic",
+        storages = {@Storage("KeyPromoterXStatistic.xml")}
 )
 public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromoterStatistics> {
 
