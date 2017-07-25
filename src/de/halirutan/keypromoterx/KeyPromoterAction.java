@@ -183,6 +183,7 @@ public class KeyPromoterAction {
         MAIN_TOOLBAR,
         TOOL_WINDOW_BUTTON,
         MENU_ENTRY,
+        EDITOR_POPUP,
         OTHER,
         INVALID
     }

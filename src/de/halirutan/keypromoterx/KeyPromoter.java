@@ -47,6 +47,8 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnAc
     private final KeyPromoterSettings keyPromoterSettings = ServiceManager.getService(KeyPromoterSettings.class);
     // Presentation and stats fields.
 
+    private static volatile boolean wasMouseClick = false;
+
     public void initComponent() {
         ActionManager.getInstance().addAnActionListener(this);
         Toolkit.getDefaultToolkit().addAWTEventListener(this, AWTEvent.MOUSE_EVENT_MASK | AWTEvent.WINDOW_EVENT_MASK | AWTEvent.WINDOW_STATE_EVENT_MASK/* | AWTEvent.KEY_EVENT_MASK*/);
@@ -81,6 +83,7 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnAc
      * @param e event that is handled
      */
     private void handleMouseEvent(AWTEvent e) {
+        wasMouseClick = true;
         if (e.getSource() instanceof StripeButton && keyPromoterSettings.isToolWindowButtonsEnabled()) {
             KeyPromoterAction action = new KeyPromoterAction(e);
             showTip(action);
@@ -90,20 +93,30 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnAc
     @Override
     public void beforeActionPerformed(AnAction action, DataContext dataContext, AnActionEvent event) {
         final InputEvent input = event.getInputEvent();
-        if (input instanceof MouseEvent) {
+        if (input instanceof MouseEvent && wasMouseClick) {
             final String place = event.getPlace();
             KeyPromoterAction kpAction;
-            if ("MainMenu".equals(place) && keyPromoterSettings.isMenusEnabled()) {
-                kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.MENU_ENTRY);
-                showTip(kpAction);
-            } else if ("MainToolbar".equals(place) && keyPromoterSettings.isToolbarButtonsEnabled()) {
-                kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.MAIN_TOOLBAR);
-                showTip(kpAction);
+            if ("MainMenu".equals(place)) {
+                if (keyPromoterSettings.isMenusEnabled()) {
+                    kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.MENU_ENTRY);
+                    showTip(kpAction);
+                }
+            } else if ("MainToolbar".equals(place)) {
+                if (keyPromoterSettings.isToolbarButtonsEnabled()) {
+                    kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.MAIN_TOOLBAR);
+                    showTip(kpAction);
+                }
+            } else if ("EditorPopup".equals(place)) {
+                if (keyPromoterSettings.isEditorPopupEnabled()) {
+                    kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.EDITOR_POPUP);
+                    showTip(kpAction);
+                }
             } else if (keyPromoterSettings.isAllButtonsEnabled()) {
                 kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.OTHER);
                 showTip(kpAction);
             }
         }
+        wasMouseClick = false;
     }
 
     private void showTip(KeyPromoterAction action) {

@@ -43,6 +43,10 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
      */
     private boolean toolWindowButtonsEnabled = true;
     /**
+     * Editor popups are the context menu that can be opened with right-click on the mouse
+     */
+    private boolean editorPopupEnabled = true;
+    /**
      * Whether popup enabled or disabled on all buttons with mnemonics clicks.
      */
     private boolean allButtonsEnabled = true;
@@ -76,6 +80,12 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
 
     void setToolWindowButtonsEnabled(boolean toolWindowButtonsEnabled) {
         this.toolWindowButtonsEnabled = toolWindowButtonsEnabled;
+    }
+
+    boolean isEditorPopupEnabled() { return editorPopupEnabled; }
+
+    void setEditorPopupEnabled(boolean editorPopupEnabled) {
+        this.editorPopupEnabled = editorPopupEnabled;
     }
 
     boolean isAllButtonsEnabled() {
@@ -114,6 +124,7 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
         if (proposeToCreateShortcutCount != that.proposeToCreateShortcutCount) return false;
         if (toolWindowButtonsEnabled != that.toolWindowButtonsEnabled) return false;
         if (toolbarButtonsEnabled != that.toolbarButtonsEnabled) return false;
+        if (editorPopupEnabled != that.editorPopupEnabled) return false;
         if (maxNumberOfTips != that.maxNumberOfTips) return false;
         return true;
     }
@@ -123,6 +134,7 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
         result = (menusEnabled ? 1 : 0);
         result = 31 * result + (toolbarButtonsEnabled ? 1 : 0);
         result = 31 * result + (toolWindowButtonsEnabled ? 1 : 0);
+        result = 31 * result + (editorPopupEnabled ? 1 : 0);
         result = 31 * result + (allButtonsEnabled ? 1 : 0);
         result = 31 * result + proposeToCreateShortcutCount;
         result = 31 * result + maxNumberOfTips;
@@ -139,4 +151,5 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
     public void loadState(KeyPromoterSettings keyPromoterSettings) {
         XmlSerializerUtil.copyBean(keyPromoterSettings, this);
     }
+
 }

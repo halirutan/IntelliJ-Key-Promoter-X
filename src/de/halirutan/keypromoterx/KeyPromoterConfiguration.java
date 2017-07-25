@@ -48,6 +48,7 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
     private ColorPanel myBorderColor;
     private JSpinner myProposeToCreateShortcutCount;
     private JSpinner myNumberOfTipsShown;
+    private JCheckBox myEditorPopupButtons;
     private JTextPane myPopupTemplate;
 
     private KeyPromoterSettings keyPromoterSettings = ServiceManager.getService(KeyPromoterSettings.class);
@@ -84,6 +85,7 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
         if (myMenus.isSelected() != keyPromoterSettings.isMenusEnabled()) return true;
         if (myToolbarButtons.isSelected() != keyPromoterSettings.isToolbarButtonsEnabled()) return true;
         if (myToolWindowButtons.isSelected() != keyPromoterSettings.isToolWindowButtonsEnabled()) return true;
+        if (myEditorPopupButtons.isSelected() != keyPromoterSettings.isEditorPopupEnabled()) return true;
         if (myAllButtons.isSelected() != keyPromoterSettings.isAllButtonsEnabled()) return true;
         if (!myProposeToCreateShortcutCount.getValue().equals(keyPromoterSettings.getProposeToCreateShortcutCount()))
             return true;
@@ -95,6 +97,7 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
         keyPromoterSettings.setMenusEnabled(myMenus.isSelected());
         keyPromoterSettings.setToolbarButtonsEnabled(myToolbarButtons.isSelected());
         keyPromoterSettings.setToolWindowButtonsEnabled(myToolWindowButtons.isSelected());
+        keyPromoterSettings.setEditorPopupEnabled(myEditorPopupButtons.isSelected());
         keyPromoterSettings.setAllButtonsEnabled(myAllButtons.isSelected());
         keyPromoterSettings.setProposeToCreateShortcutCount(new Integer(myProposeToCreateShortcutCount.getValue().toString()));
         keyPromoterSettings.setMaxNumberOfTips(new Integer(myNumberOfTipsShown.getValue().toString()));
@@ -104,6 +107,7 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
         myMenus.setSelected(keyPromoterSettings.isMenusEnabled());
         myToolbarButtons.setSelected(keyPromoterSettings.isToolbarButtonsEnabled());
         myToolWindowButtons.setSelected(keyPromoterSettings.isToolWindowButtonsEnabled());
+        myEditorPopupButtons.setSelected(keyPromoterSettings.isEditorPopupEnabled());
         myAllButtons.setSelected(keyPromoterSettings.isAllButtonsEnabled());
         myProposeToCreateShortcutCount.setValue(keyPromoterSettings.getProposeToCreateShortcutCount());
         myNumberOfTipsShown.setValue(keyPromoterSettings.getMaxNumberOfTips());
