@@ -106,9 +106,9 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnAc
                     kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.MAIN_TOOLBAR);
                     showTip(kpAction);
                 }
-            } else if ("EditorPopup".equals(place)) {
+            } else if (place.matches(".*Popup")) {
                 if (keyPromoterSettings.isEditorPopupEnabled()) {
-                    kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.EDITOR_POPUP);
+                    kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.POPUP);
                     showTip(kpAction);
                 }
             } else if (keyPromoterSettings.isAllButtonsEnabled()) {
