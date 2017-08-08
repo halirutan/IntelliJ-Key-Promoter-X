@@ -12,7 +12,7 @@
 
 <idea-plugin>
     <name>Key Promoter X</name>
-    <vendor>Patrick Scheibe (originally Dmitry Kashin and later athiele)</vendor>
+    <vendor>Patrick Scheibe</vendor>
     <application-components>
         <component>
             <implementation-class>de.halirutan.keypromoterx.KeyPromoter</implementation-class>
