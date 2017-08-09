@@ -13,7 +13,7 @@ if (project.file('gradle.properties').exists()) {
 }
 
 intellij {
-    version = '2017.1.5'
+    version = '2017.2.1'
     updateSinceUntilBuild = true
     pluginName = 'Key-Promoter-X'
 }
