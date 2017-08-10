@@ -1,3 +1,5 @@
+import org.jetbrains.intellij.tasks.RunIdeaTask
+
 plugins {
     id "org.jetbrains.intellij" version "0.2.16"
 }
@@ -19,7 +21,11 @@ intellij {
     version = '2017.2.1'
     updateSinceUntilBuild = true
     pluginName = 'Key-Promoter-X'
+    intellij.alternativeIdePath = '/Applications/Development/Android Studio.app'
+
 }
+
+
 
 // Simple function to load change-notes.html and description.html into valid text for plugin.xml
 def htmlFixer = {f -> file(f).text.replace('<html>', '').replace('</html>', '')}

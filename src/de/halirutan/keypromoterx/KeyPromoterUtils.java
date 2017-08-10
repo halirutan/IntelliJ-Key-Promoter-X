@@ -55,9 +55,6 @@ class KeyPromoterUtils {
      */
     static String getKeyboardShortcutsText(String myIdeaActionID) {
         final Keymap activeKeymap = keyMapManager.getActiveKeymap();
-        if (myIdeaActionID == null || !(activeKeymap.getActionIdList().contains(myIdeaActionID))) {
-            return "";
-        }
         Shortcut[] shortcuts = activeKeymap.getShortcuts(myIdeaActionID);
         if (shortcuts.length == 0) {
             return "";
