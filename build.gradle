@@ -1,9 +1,12 @@
 plugins {
-    id "org.jetbrains.intellij" version "0.2.13"
+    id "org.jetbrains.intellij" version "0.2.16"
 }
 
 apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
 
@@ -43,4 +46,4 @@ task wrapper(type: Wrapper) {
     gradleVersion = '3.5'
 }
 
-version '5.7.3'
+version '5.8rc1'

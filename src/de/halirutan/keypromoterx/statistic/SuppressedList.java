@@ -86,7 +86,7 @@ public class SuppressedList extends JBList<StatisticsItem> implements PropertyCh
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(KeyPromoterStatistics.SUPRESS)) {
+        if (evt.getPropertyName().equals(KeyPromoterStatistics.SUPPRESS)) {
             myModel.updateSuppressed();
         }
         updateUI();
@@ -106,7 +106,7 @@ public class SuppressedList extends JBList<StatisticsItem> implements PropertyCh
      */
     class SuppressedItemCellRenderer extends JLabel implements ListCellRenderer<StatisticsItem> {
 
-        public SuppressedItemCellRenderer() {
+        SuppressedItemCellRenderer() {
             setOpaque(true);
         }
 

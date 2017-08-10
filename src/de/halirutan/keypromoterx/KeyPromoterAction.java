@@ -44,6 +44,11 @@ public class KeyPromoterAction {
     private String myDescription = "";
     private String myIdeaActionID = "";
 
+    /**
+     * Constructor used when have to fall back to inspect an AWT event instead of actions that are directly provided
+     * by IDEA. Tool-window stripe buttons are such a case where I'm not notified by IDEA if one is pressed
+     * @param event mouse event that happened
+     */
     KeyPromoterAction(AWTEvent event) {
         final Object source = event.getSource();
         if (source instanceof ActionButton) {
@@ -58,12 +63,18 @@ public class KeyPromoterAction {
 
     }
 
+    /**
+     * Constructor used when we get notified by IDEA through {@link com.intellij.openapi.actionSystem.ex.AnActionListener}
+     * @param action action that was performed
+     * @param event event that fired the action
+     * @param source the source of the action
+     */
     KeyPromoterAction(AnAction action, AnActionEvent event, ActionSource source) {
         myMnemonic = event.getPresentation().getMnemonic();
         myIdeaActionID = ActionManager.getInstance().getId(action);
         myDescription = event.getPresentation().getText();
         mySource = source;
-        myShortcut = KeyPromoterUtils.getKeyboardShortcutsText(action);
+        myShortcut = KeyPromoterUtils.getKeyboardShortcutsText(myIdeaActionID);
     }
 
     /**
@@ -114,6 +125,7 @@ public class KeyPromoterAction {
         // We turn e.g. "9: Version Control" to "ActivateVersionControlToolWindow" which seems to work for all tool windows
         // in a similar way.
         myIdeaActionID = KeyPromoterBundle.message("kp.stripe.actionID", StringUtils.replace(myDescription, " ", ""));
+        myShortcut = KeyPromoterUtils.getKeyboardShortcutsText(myIdeaActionID);
     }
 
     /**
@@ -152,9 +164,10 @@ public class KeyPromoterAction {
      * @param anAction action to extract values from
      */
     private void fixValuesFromAction(AnAction anAction) {
-        myShortcut = anAction.getShortcutSet() != null ? KeyPromoterUtils.getKeyboardShortcutsText(anAction) : "";
         myDescription = anAction.getTemplatePresentation().getText();
         myIdeaActionID = ActionManager.getInstance().getId(anAction);
+        myShortcut = KeyPromoterUtils.getKeyboardShortcutsText(myIdeaActionID);
+
     }
 
     ActionSource getSource() {

@@ -43,9 +43,9 @@ import java.util.*;
 public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromoterStatistics> {
 
     @Transient
-    public static final String STATISTIC = "add";
+    static final String STATISTIC = "add";
     @Transient
-    public static final String SUPRESS = "suppress";
+    static final String SUPPRESS = "suppress";
 
     @MapAnnotation(surroundKeyWithTag = false, surroundValueWithTag = false, surroundWithTag = false, entryTagName = "Statistic", keyAttributeName = "Action")
     private final Map<String , StatisticsItem> statistics = Collections.synchronizedMap(new HashMap<String, StatisticsItem>());
@@ -90,20 +90,8 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
         StatisticsItem removed = statistics.remove(action.getDescription());
         removed = removed == null ? new StatisticsItem(action) : removed;
         suppressed.putIfAbsent(action.getDescription(), removed);
-        myChangeSupport.firePropertyChange(SUPRESS, null, null);
+        myChangeSupport.firePropertyChange(SUPPRESS, null, null);
         myChangeSupport.firePropertyChange(STATISTIC, null, null);
-    }
-
-    @Transient
-    public void resetSuppressed() {
-        suppressed.clear();
-        myChangeSupport.firePropertyChange(SUPRESS, null, null);
-    }
-
-    @Transient
-    public void removeSuppressedItem(String name) {
-        suppressed.remove(name);
-        myChangeSupport.firePropertyChange(SUPRESS, null, null);
     }
 
     @Transient
@@ -135,7 +123,7 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
         if (statisticsItem != null && statisticsItem.count > 0) {
             statistics.putIfAbsent(statisticsItem.getDescription(), statisticsItem);
         }
-        myChangeSupport.firePropertyChange(SUPRESS, null, null);
+        myChangeSupport.firePropertyChange(SUPPRESS, null, null);
         myChangeSupport.firePropertyChange(STATISTIC, null, null);
     }
 }

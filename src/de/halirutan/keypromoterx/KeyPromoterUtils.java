@@ -12,8 +12,9 @@
 
 package de.halirutan.keypromoterx;
 
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.Shortcut;
+import com.intellij.openapi.keymap.Keymap;
+import com.intellij.openapi.keymap.KeymapManager;
 import com.intellij.openapi.keymap.KeymapUtil;
 
 import java.lang.reflect.Field;
@@ -24,6 +25,8 @@ import java.lang.reflect.Field;
  * @author Dmitry Kashin, Patrick Scheibe
  */
 class KeyPromoterUtils {
+
+    private static final KeymapManager keyMapManager = KeymapManager.getInstance();
 
     /**
      * Get first field of class with target type to use during click source handling.
@@ -45,8 +48,17 @@ class KeyPromoterUtils {
         return null;
     }
 
-    static String getKeyboardShortcutsText(AnAction anAction) {
-        Shortcut[] shortcuts = anAction.getShortcutSet().getShortcuts();
+    /**
+     * Uses an actionID to access the key-map of IDEA and find possible short-cuts
+     * @param myIdeaActionID ActionID to look the shortcut up
+     * @return a string combining one or more shortcuts
+     */
+    static String getKeyboardShortcutsText(String myIdeaActionID) {
+        final Keymap activeKeymap = keyMapManager.getActiveKeymap();
+        if (myIdeaActionID == null || !(activeKeymap.getActionIdList().contains(myIdeaActionID))) {
+            return "";
+        }
+        Shortcut[] shortcuts = activeKeymap.getShortcuts(myIdeaActionID);
         if (shortcuts.length == 0) {
             return "";
         }
