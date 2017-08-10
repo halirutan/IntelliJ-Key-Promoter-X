@@ -12,10 +12,11 @@ before_script:
 - chmod +x gradlew
 deploy:
   provider: releases
+  skip_cleanup: true
   api_key:
     secure: lWFeErtahHDLWSaLxDUHWivsXM5Qqwzw3ZX0doDvKQEwPCQ/C2LAAkykwRkuiAfjc1UtGL3xbavAr1YyTwpZqYd/mBbnZj94VecIPhVpw38yM/zVpJ0enc9HA0UUtMlR3X1cAjAei/ybRX4hooSMU5HKceoCWub1w2uJCYKdQPsjGIHObR2lWmgrIr64t8B+n5ZRaa6I9COsew/HIiL0/15qDZ5+IXZ94MmWkrSDm/rqOIntVlNqov8HF6Cf0T6PmQIoeNeWyx74iIrIcmLwMQ0VjMI/rLLGkmCGVQGWCERL7JPb50HVR3cneaqnJp+TZyKbO7nRwGkl1sKIfVzWi6hbXLNhMEmBOW34Fp+QiK9LNQ1zlP081JwG+4X7Z01+uEonaB1O0iwu5U+5bMaJQZdSMd8jwvBNTSrMD3Ycy2Zd6Ykc82ca16ptHo1NBmuoqeNLGSnJFz9ykS8KtWOa6/wLenSz22uB7MZBD8MNxykNINrEKP4V1jPDxt2NgUJKPoTC9zS+IOA51ELkMyFwqAU+zyulBeonGqSIDaYRF8e+Wc6VXAMDAEuuP4zxDjd2n8P+MajxoXPHPYtm6El5QLps+Tyaer8+XSxxi8yIpiZbP7jPAmJaulMokoyIOGj2kA4DrqhCSXnIeKEsjIa8UscZwyrTAja2F5fQfBOirXQ=
   file_glob: true
-  file: "$CI_HOME/build/distributions/Key-Promoter-X*.zip"
+  file: $CI_HOME/build/distributions/Key-Promoter-X*.zip
   on:
     repo: halirutan/IntelliJ-Key-Promoter-X
     all_branches: true
