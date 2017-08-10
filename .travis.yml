@@ -3,7 +3,7 @@ jdk: oraclejdk8
 sudo: required
 env:
   global:
-  - GH_PROJECT_NAME: IntelliJ-Key-Promoter
+  - GH_PROJECT_NAME: IntelliJ-Key-Promoter-X
   - GIT_AUTHOR_NAME: TravisCI
   - GIT_AUTHOR_EMAIL: noreply@travis-ci.org
   - CI_HOME=`pwd`
@@ -20,6 +20,6 @@ deploy:
   file_glob: true
   file: $CI_HOME/build/distributions/Key-Promoter-X*.zip
   on:
-    repo: halirutan/IntelliJ-Key-Promoter
+    repo: halirutan/IntelliJ-Key-Promoter-X
     tags: true
     all_branches: true
