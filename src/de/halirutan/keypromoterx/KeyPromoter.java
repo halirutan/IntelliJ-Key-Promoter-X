@@ -120,7 +120,7 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnAc
     }
 
     private void showTip(KeyPromoterAction action) {
-        if (statsService.isSuppressed(action)) {
+        if (action == null || statsService.isSuppressed(action)) {
             return;
         }
 
