@@ -26,6 +26,7 @@ import java.awt.*;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Provides a way to extract the idea action from an AWT event. This is the class where the magic happens. We try hard
@@ -178,7 +179,7 @@ public class KeyPromoterAction {
         if (myShortcut.length() > 0) {
             return myShortcut;
         }
-        if ((mySource.equals(ActionSource.TOOL_WINDOW_BUTTON) || mySource.equals(ActionSource.OTHER)) && myMnemonic > 0) {
+        if (mySource.equals(ActionSource.TOOL_WINDOW_BUTTON) && myMnemonic > 0) {
             myShortcut = "\'" + metaKey + (char) myMnemonic + "\'";
         }
         return myShortcut;
@@ -190,6 +191,16 @@ public class KeyPromoterAction {
 
     public String getIdeaActionID() {
         return myIdeaActionID;
+    }
+
+    /**
+     * Checks if we have all necessary information about an action that was invoked
+     *
+     * @return true if it has a description, an actionID and a shortcut
+     */
+    boolean isValid() {
+        return !Objects.equals(myDescription, "") &&
+                !Objects.equals(myIdeaActionID, "");
     }
 
     enum ActionSource {

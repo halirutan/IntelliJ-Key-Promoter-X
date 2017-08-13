@@ -120,7 +120,7 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnAc
     }
 
     private void showTip(KeyPromoterAction action) {
-        if (action == null || statsService.isSuppressed(action)) {
+        if (action == null || !action.isValid() || statsService.isSuppressed(action)) {
             return;
         }
 
@@ -131,9 +131,6 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnAc
 
         } else {
             final String ideaActionID = action.getIdeaActionID();
-            if (StringUtil.isEmpty(ideaActionID)) {
-                return;
-            }
             withoutShortcutStats.putIfAbsent(ideaActionID, 0);
             withoutShortcutStats.put(ideaActionID, withoutShortcutStats.get(ideaActionID) + 1);
             if (keyPromoterSettings.getProposeToCreateShortcutCount() > 0 && withoutShortcutStats.get(ideaActionID) % keyPromoterSettings.getProposeToCreateShortcutCount() == 0) {

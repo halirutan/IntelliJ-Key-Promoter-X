@@ -16,12 +16,16 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
-import com.intellij.util.xmlb.annotations.*;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.util.xmlb.annotations.MapAnnotation;
+import com.intellij.util.xmlb.annotations.Transient;
 import de.halirutan.keypromoterx.KeyPromoterAction;
+import org.jetbrains.annotations.Nullable;
 
 import java.beans.PropertyChangeSupport;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Provides storing the statistics persistently. Note that the only thing we store persistently is the list of
@@ -67,6 +71,7 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
         XmlSerializerUtil.copyBean(stats, this);
     }
 
+
     @Transient
     void registerPropertyChangeSupport(PropertyChangeSupport support) {
         myChangeSupport = support;
@@ -106,10 +111,12 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
         return items;
     }
 
+    @Transient
     ArrayList<StatisticsItem> getSuppressedItems() {
         return new ArrayList<>(suppressed.values());
     }
 
+    @Transient
     public boolean isSuppressed(KeyPromoterAction action) {
         return suppressed.containsKey(action.getDescription());
     }
@@ -118,6 +125,7 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
      * Puts an item from the suppress list back into the statistics.
      * @param item Item to unsuppress
      */
+    @Transient
     void unsuppressItem(StatisticsItem item) {
         final StatisticsItem statisticsItem = suppressed.remove(item.getDescription());
         if (statisticsItem != null && statisticsItem.count > 0) {
