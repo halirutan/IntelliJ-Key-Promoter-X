@@ -41,7 +41,6 @@ import java.util.Map;
  */
 public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnActionListener {
 
-
     private final Map<String, Integer> withoutShortcutStats = Collections.synchronizedMap(new HashMap<String, Integer>());
     private final KeyPromoterStatistics statsService = ServiceManager.getService(KeyPromoterStatistics.class);
     private final KeyPromoterSettings keyPromoterSettings = ServiceManager.getService(KeyPromoterSettings.class);
@@ -49,15 +48,19 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnAc
 
     private static volatile boolean wasMouseClick = false;
 
+    @Override
     public void initComponent() {
         ActionManager.getInstance().addAnActionListener(this);
-        Toolkit.getDefaultToolkit().addAWTEventListener(this, AWTEvent.MOUSE_EVENT_MASK | AWTEvent.WINDOW_EVENT_MASK | AWTEvent.WINDOW_STATE_EVENT_MASK/* | AWTEvent.KEY_EVENT_MASK*/);
+        long eventMask = AWTEvent.MOUSE_EVENT_MASK | AWTEvent.WINDOW_EVENT_MASK | AWTEvent.WINDOW_STATE_EVENT_MASK;
+        Toolkit.getDefaultToolkit().addAWTEventListener(this, eventMask);
     }
 
+    @Override
     public void disposeComponent() {
         Toolkit.getDefaultToolkit().removeAWTEventListener(this);
     }
 
+    @Override
     @NotNull
     public String getComponentName() {
         return KeyPromoterBundle.message("component.name");
@@ -69,6 +72,7 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnAc
      *
      * @param e event that is caught
      */
+    @Override
     public void eventDispatched(AWTEvent e) {
         if (e.getID() == MouseEvent.MOUSE_RELEASED && ((MouseEvent) e).getButton() == MouseEvent.BUTTON1) {
             handleMouseEvent(e);
