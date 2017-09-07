@@ -16,10 +16,11 @@ if (project.file('gradle.properties').exists()) {
 }
 
 intellij {
-    version = '2017.2.3'
+    version = '2017.2.5'
     updateSinceUntilBuild = true
     pluginName = 'Key-Promoter-X'
 //    intellij.alternativeIdePath = '/Applications/Development/Android Studio.app'
+    intellij.alternativeIdePath = '/usr/local/IntelliJ/android-studio'
 }
 
 
@@ -30,7 +31,7 @@ patchPluginXml {
     changeNotes = htmlFixer('resources/META-INF/change-notes.html')
     pluginDescription = htmlFixer('resources/META-INF/description.html')
     sinceBuild = '162'
-    untilBuild = '172.*'
+    untilBuild = '190.*'
 }
 
 repositories {
@@ -45,7 +46,7 @@ sourceSets {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.1'
+    gradleVersion = '4.2'
 }
 
-version '5.8'
+version '5.11'
