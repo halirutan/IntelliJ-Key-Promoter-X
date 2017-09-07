@@ -32,6 +32,7 @@ import java.util.Objects;
  * Provides a way to extract the idea action from an AWT event. This is the class where the magic happens. We try hard
  * to extract the IDEA action that was invoked from an AWT event. On our way, we need to extract private fields of
  * IDEA classes and still, there are cases when we won't be able to extract the action that was invoked.
+ *
  * @author patrick (22.06.17).
  */
 public class KeyPromoterAction {
@@ -48,6 +49,7 @@ public class KeyPromoterAction {
     /**
      * Constructor used when have to fall back to inspect an AWT event instead of actions that are directly provided
      * by IDEA. Tool-window stripe buttons are such a case where I'm not notified by IDEA if one is pressed
+     *
      * @param event mouse event that happened
      */
     KeyPromoterAction(AWTEvent event) {
@@ -66,8 +68,9 @@ public class KeyPromoterAction {
 
     /**
      * Constructor used when we get notified by IDEA through {@link com.intellij.openapi.actionSystem.ex.AnActionListener}
+     *
      * @param action action that was performed
-     * @param event event that fired the action
+     * @param event  event that fired the action
      * @param source the source of the action
      */
     KeyPromoterAction(AnAction action, AnActionEvent event, ActionSource source) {
@@ -80,6 +83,7 @@ public class KeyPromoterAction {
 
     /**
      * Information extraction for buttons on the toolbar
+     *
      * @param source source of the action
      */
     private void analyzeActionButton(ActionButton source) {
@@ -89,8 +93,10 @@ public class KeyPromoterAction {
         }
         mySource = ActionSource.MAIN_TOOLBAR;
     }
+
     /**
      * Information extraction for entries in the menu
+     *
      * @param source source of the action
      */
     private void analyzeActionMenuItem(ActionMenuItem source) {
@@ -113,6 +119,7 @@ public class KeyPromoterAction {
 
     /**
      * Information extraction for buttons of tool-windows
+     *
      * @param source source of the action
      */
     private void analyzeStripeButton(StripeButton source) {
@@ -120,7 +127,7 @@ public class KeyPromoterAction {
         myDescription = source.getText();
         myMnemonic = source.getMnemonic2();
         if (myMnemonic > 0) {
-            myDescription = myDescription.replaceFirst("\\d: ","");
+            myDescription = myDescription.replaceFirst("\\d: ", "");
         }
         // This is hack, but for IDEA stripe buttons it doesn't seem possible to extract the IdeaActionID.
         // We turn e.g. "9: Version Control" to "ActivateVersionControlToolWindow" which seems to work for all tool windows
@@ -132,6 +139,7 @@ public class KeyPromoterAction {
     /**
      * Information extraction for all other buttons
      * TODO: This needs to be tested. I couldn't find a button that wasn't inspected with this fallback.
+     *
      * @param source source of the action
      */
     private void analyzeJButton(JButton source) {
@@ -142,6 +150,7 @@ public class KeyPromoterAction {
 
     /**
      * Extracts a private field from a class so that we can access it for getting information
+     *
      * @param source Object that contains the field we are interested in
      * @param target Class of the field we try to extract
      * @return The field that was found
@@ -162,6 +171,7 @@ public class KeyPromoterAction {
 
     /**
      * This method can be used at several places to update shortcut, description and ideaAction from an {@link AnAction}
+     *
      * @param anAction action to extract values from
      */
     private void fixValuesFromAction(AnAction anAction) {
@@ -199,7 +209,9 @@ public class KeyPromoterAction {
      * @return true if it has a description, an actionID and a shortcut
      */
     boolean isValid() {
-        return !Objects.equals(myDescription, "") &&
+        return myDescription != null &&
+                myIdeaActionID != null &&
+                !Objects.equals(myDescription, "") &&
                 !Objects.equals(myIdeaActionID, "");
     }
 
