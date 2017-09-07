@@ -2,6 +2,7 @@ plugins {
     id "org.jetbrains.intellij" version "0.2.17"
 }
 
+apply plugin: 'idea'
 apply plugin: 'java'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
