@@ -1,8 +1,8 @@
 plugins {
-    id "org.jetbrains.intellij" version "0.2.16"
+    id "org.jetbrains.intellij" version "0.2.17"
 }
 
-apply plugin: 'org.jetbrains.intellij'
+apply plugin: 'idea'
 apply plugin: 'java'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -16,17 +16,15 @@ if (project.file('gradle.properties').exists()) {
 }
 
 intellij {
-    version = '2017.2.1'
+    version = '2017.2.3'
     updateSinceUntilBuild = true
     pluginName = 'Key-Promoter-X'
 //    intellij.alternativeIdePath = '/Applications/Development/Android Studio.app'
-
 }
 
 
-
 // Simple function to load change-notes.html and description.html into valid text for plugin.xml
-def htmlFixer = {f -> file(f).text.replace('<html>', '').replace('</html>', '')}
+def htmlFixer = { f -> file(f).text.replace('<html>', '').replace('</html>', '') }
 
 patchPluginXml {
     changeNotes = htmlFixer('resources/META-INF/change-notes.html')
@@ -47,7 +45,7 @@ sourceSets {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.5'
+    gradleVersion = '4.1'
 }
 
 version '5.8'
