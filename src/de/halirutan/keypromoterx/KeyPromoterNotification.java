@@ -19,6 +19,7 @@ import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.keymap.impl.ui.EditKeymapsDialog;
 import de.halirutan.keypromoterx.statistic.KeyPromoterStatistics;
 
@@ -32,6 +33,8 @@ import java.util.LinkedList;
  */
 class KeyPromoterNotification {
 
+  private static final Logger LOG = Logger.getInstance("#de.halirutan.keypromoterx.KeyPromoterNotification");
+
     private final static LinkedList<Notification> NOTIFICATION_LIST = new LinkedList<>();
     private static final NotificationGroup GROUP = new NotificationGroup(
             KeyPromoterBundle.message("kp.notification.group"),
@@ -43,6 +46,7 @@ class KeyPromoterNotification {
     private static final KeyPromoterSettings settings = ServiceManager.getService(KeyPromoterSettings.class);
 
     static void showTip(KeyPromoterAction action, int count) {
+      LOG.info("Showing tooltip: " + action.getDescription());
         String message = KeyPromoterBundle.message("kp.notification.tip", action.getDescription(), count);
         final int maxTips = settings.getMaxNumberOfTips();
         if (maxTips != 0 && NOTIFICATION_LIST.size() >= maxTips) {
@@ -60,6 +64,7 @@ class KeyPromoterNotification {
     }
 
     static void askToCreateShortcut(KeyPromoterAction action) {
+      LOG.info("Show \"Want to create shortcut\".");
         final int maxTips = settings.getMaxNumberOfTips();
         if (maxTips != 0 && NOTIFICATION_LIST.size() >= maxTips) {
             final Notification notification = NOTIFICATION_LIST.removeFirst();

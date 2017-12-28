@@ -19,6 +19,7 @@ import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.ex.AnActionListener;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.wm.impl.StripeButton;
 import de.halirutan.keypromoterx.statistic.KeyPromoterStatistics;
@@ -40,6 +41,8 @@ import java.util.Map;
  * @author Patrick Scheibe, Dmitry Kashin
  */
 public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnActionListener {
+
+    private static final Logger LOG = Logger.getInstance("#de.halirutan.keypromoterx.KeyPromoter");
 
     private final Map<String, Integer> withoutShortcutStats = Collections.synchronizedMap(new HashMap<String, Integer>());
     private final KeyPromoterStatistics statsService = ServiceManager.getService(KeyPromoterStatistics.class);
@@ -75,6 +78,7 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnAc
     @Override
     public void eventDispatched(AWTEvent e) {
         if (e.getID() == MouseEvent.MOUSE_RELEASED && ((MouseEvent) e).getButton() == MouseEvent.BUTTON1) {
+            LOG.info("Found mouse event and trying to handle it");
             handleMouseEvent(e);
         }
     }
@@ -89,6 +93,7 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnAc
     private void handleMouseEvent(AWTEvent e) {
         wasMouseClick = true;
         if (e.getSource() instanceof StripeButton && keyPromoterSettings.isToolWindowButtonsEnabled()) {
+            LOG.info("Mouse click was a Stripe button for tool windows");
             KeyPromoterAction action = new KeyPromoterAction(e);
             showTip(action);
         }
@@ -101,21 +106,25 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnAc
             final String place = event.getPlace();
             KeyPromoterAction kpAction;
             if ("MainMenu".equals(place)) {
+                LOG.info("Main menu entry was pressed");
                 if (keyPromoterSettings.isMenusEnabled()) {
                     kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.MENU_ENTRY);
                     showTip(kpAction);
                 }
             } else if ("MainToolbar".equals(place)) {
+                LOG.info("Main toolbar entry was pressed");
                 if (keyPromoterSettings.isToolbarButtonsEnabled()) {
                     kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.MAIN_TOOLBAR);
                     showTip(kpAction);
                 }
             } else if (place.matches(".*Popup")) {
+                LOG.info("Popup entry was pressed");
                 if (keyPromoterSettings.isEditorPopupEnabled()) {
                     kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.POPUP);
                     showTip(kpAction);
                 }
             } else if (keyPromoterSettings.isAllButtonsEnabled()) {
+                LOG.info("Unknown button was pressed. Trying to handle it");
                 kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.OTHER);
                 showTip(kpAction);
             }
@@ -125,15 +134,19 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnAc
 
     private void showTip(KeyPromoterAction action) {
         if (action == null || !action.isValid() || statsService.isSuppressed(action)) {
+            LOG.info("Button-action is invalid or null. Cannot show anything");
             return;
         }
 
         final String shortcut = action.getShortcut();
         if (!StringUtil.isEmpty(shortcut)) {
             statsService.registerAction(action);
+            LOG.info("Found ShortCut for action: " + shortcut);
             KeyPromoterNotification.showTip(action, statsService.get(action).getCount());
 
         } else {
+            LOG.info(
+                "No ShortCut available. Registering action to ask the user after several clicks if he wants to create one.");
             final String ideaActionID = action.getIdeaActionID();
             withoutShortcutStats.putIfAbsent(ideaActionID, 0);
             withoutShortcutStats.put(ideaActionID, withoutShortcutStats.get(ideaActionID) + 1);

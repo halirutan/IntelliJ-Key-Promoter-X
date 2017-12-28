@@ -8,7 +8,7 @@ apply plugin: 'java'
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
+// tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
 
 // On travis, we don't want to deploy to Jetbrains that requires credentials
 if (project.file('gradle.properties').exists()) {
@@ -16,11 +16,12 @@ if (project.file('gradle.properties').exists()) {
 }
 
 intellij {
-    version = '2017.2.5'
+    version = '2017.3.2'
     updateSinceUntilBuild = true
     pluginName = 'Key-Promoter-X'
 //    intellij.alternativeIdePath = '/Applications/Development/Android Studio.app'
-    intellij.alternativeIdePath = '/usr/local/IntelliJ/android-studio'
+//    intellij.alternativeIdePath = '/usr/local/IntelliJ/android-studio'
+//    intellij.alternativeIdePath = '/usr/local/IntelliJ/pycharm-community-2017.3.1'
 }
 
 
