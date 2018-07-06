@@ -10,56 +10,53 @@
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package de.halirutan.keypromoterx.statistic;
+package de.halirutan.keypromoterx;
 
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.ui.Messages;
+import de.halirutan.keypromoterx.statistic.*;
 
 import javax.swing.*;
-import javax.swing.event.ListDataListener;
-import javax.swing.event.SwingPropertyChangeSupport;
-import java.util.ArrayList;
+import java.beans.PropertyChangeListener;
 
 /**
- * Provides the underlying model for the JBList that is displayed in the Key Promoter X tool window.
- * This model is synchronized with the underlying persistent state data that stores all information.
+ * Controlling class of the tool-window
  *
- * @author Patrick Scheibe
+ * @author athiele, Patrick Scheibe
+ *
  */
-public class StatisticsListModel implements ListModel<StatisticsItem> {
+class KeyPromoterToolWindowPanel {
 
-    private final SwingPropertyChangeSupport propertyChangeSupport;
-    private final ArrayList<StatisticsItem> myData = new ArrayList<>();
-    private final KeyPromoterStatistics myStats = ServiceManager.getService(KeyPromoterStatistics.class);
+    private JPanel panel;
+    private JList statisticsList;
+    private JButton resetStatisticsButton;
+    private JList suppressedList;
+    private final KeyPromoterStatistics statService = ServiceManager.getService(KeyPromoterStatistics.class);
 
-    public StatisticsListModel() {
-        propertyChangeSupport = new SwingPropertyChangeSupport(this);
-        myStats.registerPropertyChangeSupport(propertyChangeSupport);
-        updateStats();
+
+    KeyPromoterToolWindowPanel() {
+        resetStatisticsButton.addActionListener(e -> resetStats());
     }
 
-    void updateStats() {
-        myData.clear();
-        myData.addAll(myStats.getStatisticItems());
+    JPanel createToolWindowPanel() {
+       return panel;
     }
 
-    public SwingPropertyChangeSupport getPropertyChangeSupport() {
-        return propertyChangeSupport;
+    private void resetStats() {
+        if (Messages.showYesNoDialog(
+                KeyPromoterBundle.message("kp.dialog.reset.statistic.text"),
+                KeyPromoterBundle.message("kp.dialog.reset.statistic.title"),
+                Messages.getQuestionIcon()) == 0) {
+            statService.resetStatistic();
+        }
     }
 
-    @Override
-    public int getSize() {
-        return myData.size();
+    private void createUIComponents() {
+        statisticsList = new StatisticsList();
+        suppressedList = new SuppressedList();
+//        suppressedListModel.getPropertyChangeSupport().addPropertyChangeListener((PropertyChangeListener) suppressedList);
+//        suppressedListModel.getPropertyChangeSupport().addPropertyChangeListener((PropertyChangeListener) statisticsList);
     }
 
-    @Override
-    public StatisticsItem getElementAt(int index) {
-        return myData.get(index);
-    }
-
-    @Override
-    public void addListDataListener(ListDataListener l) { }
-
-    @Override
-    public void removeListDataListener(ListDataListener l) { }
 
 }

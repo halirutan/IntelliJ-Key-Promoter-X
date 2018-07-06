@@ -28,13 +28,15 @@ import javax.swing.*;
  */
 public class KeyPromoterToolWindowFactory implements ToolWindowFactory {
 
-    private final KeyPromoterToolWindowBuilder toolWindowBuilder = new KeyPromoterToolWindowBuilder();
-    private final ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
 
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
+        KeyPromoterToolWindowPanel toolWindowBuilder = new KeyPromoterToolWindowPanel();
+        ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         JPanel toolWindowContent = toolWindowBuilder.createToolWindowPanel();
         Content content = contentFactory.createContent(toolWindowContent, KeyPromoterBundle.message("kp.tool.window.title"), false);
         toolWindow.getContentManager().addContent(content);
     }
+
+
 }

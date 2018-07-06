@@ -14,30 +14,33 @@ package de.halirutan.keypromoterx.statistic;
 
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.ui.components.JBList;
+import com.intellij.util.ui.JBUI;
 import de.halirutan.keypromoterx.KeyPromoterBundle;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 /**
  * Provides a custom JBList for displaying how often a button was pressed that could have been replaced by a shortcut.
- * The list is backed by {@link StatisticsListModel} that allows for automatic updating of the values and synchronization
- * with {@link KeyPromoterStatistics} that keeps the values persistent through restarts.
+ * The list is backed by {@link KeyPromoterStatistics} that keeps the values persistent through restarts.
  * @author Patrick Scheibe
  */
-public class StatisticsList extends JBList<StatisticsItem> implements PropertyChangeListener {
-    private final StatisticsListModel myModel;
-    public StatisticsList(@NotNull StatisticsListModel dataModel) {
-        myModel = dataModel;
+public class StatisticsList extends JBList<StatisticsItem> implements PropertyChangeListener{
+    private final Logger logger = Logger.getInstance(StatisticsList.class);
+    private final DefaultListModel<StatisticsItem> myModel;
+    private final KeyPromoterStatistics myStats = ServiceManager.getService(KeyPromoterStatistics.class);
+
+    public StatisticsList() {
+        myModel = new DefaultListModel<>();
         setModel(myModel);
-        myModel.getPropertyChangeSupport().addPropertyChangeListener(this);
+        myStats.registerPropertyChangeSupport(this);
         setCellRenderer(new StatisticsItemCellRenderer());
-        myModel.updateStats();
+        updateStats();
     }
 
     @Override
@@ -52,10 +55,18 @@ public class StatisticsList extends JBList<StatisticsItem> implements PropertyCh
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        logger.info("Change Statistics");
         if (evt.getPropertyName().equals(KeyPromoterStatistics.STATISTIC)) {
-            myModel.updateStats();
+            updateStats();
         }
-        updateUI();
+    }
+
+    private void updateStats(){
+        myModel.removeAllElements();
+        for (StatisticsItem statisticsItem : myStats.getStatisticItems()) {
+            myModel.addElement(statisticsItem);
+        }
+        
     }
 
 
@@ -76,7 +87,7 @@ public class StatisticsList extends JBList<StatisticsItem> implements PropertyCh
                     );
             setText(message);
             setForeground(foreground);
-            setBorder(new EmptyBorder(2,10,2,10));
+            setBorder(JBUI.Borders.empty(2, 10));
             if (value.ideaActionID != null && !"".equals(value.ideaActionID)) {
                 final AnAction action = ActionManager.getInstance().getAction(value.ideaActionID);
                 if (action != null) {

@@ -19,8 +19,10 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
 import com.intellij.util.xmlb.annotations.MapAnnotation;
 import com.intellij.util.xmlb.annotations.Transient;
 import de.halirutan.keypromoterx.KeyPromoterAction;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,13 +54,13 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
     static final String SUPPRESS = "suppress";
 
     @MapAnnotation(surroundKeyWithTag = false, surroundValueWithTag = false, surroundWithTag = false, entryTagName = "Statistic", keyAttributeName = "Action")
-    private final Map<String , StatisticsItem> statistics = Collections.synchronizedMap(new HashMap<String, StatisticsItem>());
+    private final Map<String , StatisticsItem> statistics = Collections.synchronizedMap(new HashMap<>());
 
     @MapAnnotation(surroundKeyWithTag = false, surroundValueWithTag = false, surroundWithTag = false, entryTagName = "Statistic", keyAttributeName = "Action")
-    private final Map<String , StatisticsItem> suppressed = Collections.synchronizedMap(new HashMap<String, StatisticsItem>());
+    private final Map<String , StatisticsItem> suppressed = Collections.synchronizedMap(new HashMap<>());
 
     @Transient
-    private PropertyChangeSupport myChangeSupport;
+    private final PropertyChangeSupport myChangeSupport = new PropertyChangeSupport(this);
 
     @Nullable
     @Override
@@ -67,34 +69,43 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
     }
 
     @Override
-    public void loadState(KeyPromoterStatistics stats) {
+    public void loadState(@NotNull KeyPromoterStatistics stats) {
         XmlSerializerUtil.copyBean(stats, this);
     }
 
 
     @Transient
-    void registerPropertyChangeSupport(PropertyChangeSupport support) {
-        myChangeSupport = support;
+    void registerPropertyChangeSupport(PropertyChangeListener listener) {
+        myChangeSupport.addPropertyChangeListener(listener);
     }
 
     @Transient
     public void registerAction(KeyPromoterAction action) {
-        statistics.putIfAbsent(action.getDescription(), new StatisticsItem(action));
-        statistics.get(action.getDescription()).registerEvent();
+        synchronized (statistics) {
+            statistics.putIfAbsent(action.getDescription(), new StatisticsItem(action));
+            statistics.get(action.getDescription()).registerEvent();
+        }
         myChangeSupport.firePropertyChange(STATISTIC, null, null);
     }
 
     @Transient
     public void resetStatistic() {
-        statistics.clear();
+        synchronized (statistics) {
+            statistics.clear();
+        }
         myChangeSupport.firePropertyChange(STATISTIC, null, null);
     }
 
     @Transient
     public void suppressItem(KeyPromoterAction action) {
-        StatisticsItem removed = statistics.remove(action.getDescription());
-        removed = removed == null ? new StatisticsItem(action) : removed;
-        suppressed.putIfAbsent(action.getDescription(), removed);
+        StatisticsItem removed;
+        synchronized (statistics) {
+            removed = statistics.remove(action.getDescription());
+            removed = removed == null ? new StatisticsItem(action) : removed;
+        }
+        synchronized (suppressed) {
+            suppressed.putIfAbsent(action.getDescription(), removed);
+        }
         myChangeSupport.firePropertyChange(SUPPRESS, null, null);
         myChangeSupport.firePropertyChange(STATISTIC, null, null);
     }

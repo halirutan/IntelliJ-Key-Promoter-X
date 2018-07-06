@@ -17,11 +17,10 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBList;
+import com.intellij.util.ui.JBUI;
 import de.halirutan.keypromoterx.KeyPromoterBundle;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -31,20 +30,20 @@ import java.util.EventListener;
 
 /**
  * Provides a custom JBList for displaying how often a button was pressed that could have been replaced by a shortcut.
- * The list is backed by {@link StatisticsListModel} that allows for automatic updating of the values and synchronization
- * with {@link KeyPromoterStatistics} that keeps the values persistent through restarts.
+ * The list is backed {@link KeyPromoterStatistics} that keeps the values persistent through restarts.
  *
  * @author Patrick Scheibe
  */
 public class SuppressedList extends JBList<StatisticsItem> implements PropertyChangeListener, EventListener {
-    private final SuppressedListModel myModel;
+    private final KeyPromoterStatistics myStats = ServiceManager.getService(KeyPromoterStatistics.class);
+    private final DefaultListModel<StatisticsItem> myModel;
 
-    public SuppressedList(@NotNull SuppressedListModel dataModel) {
-        myModel = dataModel;
+    public SuppressedList() {
+        myModel = new DefaultListModel<>();
         setModel(myModel);
-        myModel.getPropertyChangeSupport().addPropertyChangeListener(this);
+        myStats.registerPropertyChangeSupport(this);
+        updateData();
         setCellRenderer(new SuppressedItemCellRenderer());
-        myModel.updateSuppressed();
         addMouseListener(new MouseInputListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -87,17 +86,21 @@ public class SuppressedList extends JBList<StatisticsItem> implements PropertyCh
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(KeyPromoterStatistics.SUPPRESS)) {
-            myModel.updateSuppressed();
+            updateData();
         }
-        updateUI();
     }
 
+    private void updateData() {
+        myModel.removeAllElements();
+        for (StatisticsItem statisticsItem : myStats.getSuppressedItems()) {
+            myModel.addElement(statisticsItem);
+        }
+    }
 
     private void unsuppressItem() {
         final StatisticsItem selectedValue = getSelectedValue();
         if (selectedValue != null) {
-            final KeyPromoterStatistics service = ServiceManager.getService(KeyPromoterStatistics.class);
-            service.unsuppressItem(selectedValue);
+            myStats.unsuppressItem(selectedValue);
         }
     }
 
@@ -127,7 +130,7 @@ public class SuppressedList extends JBList<StatisticsItem> implements PropertyCh
 
             setText(message);
             setForeground(foreground);
-            setBorder(new EmptyBorder(2, 10, 2, 10));
+            setBorder(JBUI.Borders.empty(2, 10));
             if (value.ideaActionID != null && !"".equals(value.ideaActionID)) {
                 final AnAction action = ActionManager.getInstance().getAction(value.ideaActionID);
 
