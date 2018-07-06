@@ -32,8 +32,12 @@ is pressed several times, a notification is shown that lets you easily create a 
 
 If you click something with the mouse, the plugin will try to find out if your mouse-click invoked some IDEA action. If this is the case
 and we can find a so-called `ActionID`, the plugin registers this event. If your action is already connected to a shortcut, the plugin will
-show you how the invoked action is called (e.g. Open Settings) and what the shortcut for the action is. Additionally, it will save your mouse-click
-in the statistics so that you see which actions you are using the most and which shortcuts you should learn first.
+show you how the invoked action is called (e.g. Open Settings) and what the shortcut for the action is. 
+
+![Notification](doc/img/notification.png)
+
+Additionally, it will save your mouse-click
+in the Key Promoter X statistics tool-windows so that you see which actions you are using the most and which shortcuts you should learn first.
 
 If the action is not connected to a shortcut but has an `ActionID` (which basically means we can assign a shortcut), the plugin still registers
 your click. Depending on your settings under *Settings* -> *Tools* -> *Key Promoter X*, you will get a notification every x clicks on the
@@ -47,7 +51,7 @@ to help you with those. This for instance happens for some of the buttons in the
 The Key Promoter X comes with built in tool-window on the right side that gives you access to your hit-list of missed shortcuts and to the
 the list of suppressed items.
 
-![Tool-window](http://i.imgur.com/l8euMKk.png)
+![Tool-window](doc/img/tool-window.png)
 
 Every mouse click that is connected to an action with a shortcut will be registered in the statistic. The items in this list are ordered by
  how often you missed this shortcut. There might be some mouse actions that you don't want to replace by its shortcut. For those, you can
@@ -59,13 +63,17 @@ You can re-activate a suppressed item by double-clicking on it in the suppressed
 
  Settings for the plugin can be found under *Settings* -> *Tools* -> *Key Promoter X*.
 
-![Settings Panel](http://i.imgur.com/Xr60t14.png)
+![Settings Panel](doc/img/settings.png)
 
 The first box lets you adjust how many *Key Promoter X* notifications are allowed to be shown at the same time. If you have set this to a
 number, say 3, and you are a heavy clicker, then each new notification will make the oldest disappear so that only 3 messages are shown
 at max.
 
-The second spinner lets you adjust how often you have to click a button with no shortcut before you see a message suggesting to create
+With the second spinner, you can adjust whether the Key Promoter X should display a notification each time you press
+a button with the mouse that has a key combination available.
+If you adjust this setting to 2, only every second click will show a notification, etc.
+
+The last spinner lets you adjust how often you have to click a button with no shortcut before you see a message suggesting to create
 a shortcut for it.
 
 In the *Enabled for* box it is possible to adjust which buttons are allowed to show a tip. Note that the *All Buttons* checkbox will try
@@ -87,7 +95,7 @@ If you experience bugs or weird behavior please create an issue [on the bug trac
 The initial version was [implemented by
 Dmitry Kashin](https://code.google.com/p/key-promoter/)
 who unfortunately stopped maintaining the code and pushed the
-last version in 2012, more than 5 years ago.
+last version in 2012, more than 6 years ago.
 
 [User athiele](https://github.com/athiele/key-promoter-fork/commits/master)
 took the time to fork the original code, fix issues and provide
