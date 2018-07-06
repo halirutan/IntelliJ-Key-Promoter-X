@@ -1,5 +1,5 @@
 plugins {
-    id "org.jetbrains.intellij" version "0.2.17"
+    id "org.jetbrains.intellij" version "0.3.4"
 }
 
 apply plugin: 'idea'
@@ -16,11 +16,12 @@ if (project.file('gradle.properties').exists()) {
 }
 
 intellij {
-    version = '2017.2.5'
+    version = '2018.1.5'
     updateSinceUntilBuild = true
     pluginName = 'Key-Promoter-X'
+//    intellij.alternativeIdePath = '/usr/local/IntelliJ/android-studio'
 //    intellij.alternativeIdePath = '/Applications/Development/Android Studio.app'
-    intellij.alternativeIdePath = '/usr/local/IntelliJ/android-studio'
+//    alternativeIdePath = '/Applications/Development/GoLand.app'
 }
 
 
