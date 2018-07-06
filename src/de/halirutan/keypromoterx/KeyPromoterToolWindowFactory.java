@@ -12,6 +12,7 @@
 
 package de.halirutan.keypromoterx;
 
+import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
@@ -26,7 +27,7 @@ import javax.swing.*;
  *
  * @author athiele, Patrick Scheibe
  */
-public class KeyPromoterToolWindowFactory implements ToolWindowFactory {
+public class KeyPromoterToolWindowFactory implements ToolWindowFactory, DumbAware {
 
 
     @Override

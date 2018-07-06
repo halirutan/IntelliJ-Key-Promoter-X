@@ -131,7 +131,10 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnAc
         final String shortcut = action.getShortcut();
         if (!StringUtil.isEmpty(shortcut)) {
             statsService.registerAction(action);
-            KeyPromoterNotification.showTip(action, statsService.get(action).getCount());
+            int count = statsService.get(action).count;
+            if(count % keyPromoterSettings.getShowTipsClickCount() == 0) {
+                KeyPromoterNotification.showTip(action, statsService.get(action).getCount());
+            }
 
         } else {
             final String ideaActionID = action.getIdeaActionID();

@@ -49,6 +49,7 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
     private JSpinner myProposeToCreateShortcutCount;
     private JSpinner myNumberOfTipsShown;
     private JCheckBox myEditorPopupButtons;
+    private JSpinner myShowClickCount;
     private JTextPane myPopupTemplate;
 
     private KeyPromoterSettings keyPromoterSettings = ServiceManager.getService(KeyPromoterSettings.class);
@@ -90,10 +91,11 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
         if (!myProposeToCreateShortcutCount.getValue().equals(keyPromoterSettings.getProposeToCreateShortcutCount()))
             return true;
         if (!myNumberOfTipsShown.getValue().equals(keyPromoterSettings.getMaxNumberOfTips())) return true;
+        if (!myShowClickCount.getValue().equals(keyPromoterSettings.getShowTipsClickCount())) return true;
         return false;
     }
 
-    public void apply() throws ConfigurationException {
+    public void apply() {
         keyPromoterSettings.setMenusEnabled(myMenus.isSelected());
         keyPromoterSettings.setToolbarButtonsEnabled(myToolbarButtons.isSelected());
         keyPromoterSettings.setToolWindowButtonsEnabled(myToolWindowButtons.isSelected());
@@ -101,6 +103,7 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
         keyPromoterSettings.setAllButtonsEnabled(myAllButtons.isSelected());
         keyPromoterSettings.setProposeToCreateShortcutCount(new Integer(myProposeToCreateShortcutCount.getValue().toString()));
         keyPromoterSettings.setMaxNumberOfTips(new Integer(myNumberOfTipsShown.getValue().toString()));
+        keyPromoterSettings.setShowTipsClickCount(new Integer(myShowClickCount.getValue().toString()));
     }
 
     public void reset() {
@@ -111,6 +114,7 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
         myAllButtons.setSelected(keyPromoterSettings.isAllButtonsEnabled());
         myProposeToCreateShortcutCount.setValue(keyPromoterSettings.getProposeToCreateShortcutCount());
         myNumberOfTipsShown.setValue(keyPromoterSettings.getMaxNumberOfTips());
+        myShowClickCount.setValue(keyPromoterSettings.getShowTipsClickCount());
     }
 
     public void disposeUIResources() {
@@ -130,5 +134,11 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
 
     public void loadState(KeyPromoterConfiguration state) {
         XmlSerializerUtil.copyBean(state, this);
+    }
+
+    private void createUIComponents() {
+        myNumberOfTipsShown = new JSpinner(new SpinnerNumberModel(0, 0, 9, 1));
+        myProposeToCreateShortcutCount = new JSpinner(new SpinnerNumberModel(0, 0, 9, 1));
+        myShowClickCount = new JSpinner(new SpinnerNumberModel(1, 1, 9, 1));
     }
 }

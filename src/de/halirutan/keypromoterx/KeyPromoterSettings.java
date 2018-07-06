@@ -16,6 +16,7 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -50,6 +51,12 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
      * Whether popup enabled or disabled on all buttons with mnemonics clicks.
      */
     private boolean allButtonsEnabled = true;
+
+    /**
+     * If the user clicks a button, usually each time a notification is shown (setting 1). If setting is 2, only
+     * each second click will trigger a notification, and so on.
+     */
+    private int showTipsClickCount = 1;
 
     private int proposeToCreateShortcutCount = 3;
 
@@ -112,6 +119,14 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
         this.maxNumberOfTips = maxNumberOfTips;
     }
 
+    int getShowTipsClickCount() {
+        return showTipsClickCount;
+    }
+
+    void setShowTipsClickCount(int showTipsClickCount) {
+        this.showTipsClickCount = showTipsClickCount;
+    }
+
     @SuppressWarnings("RedundantIfStatement")
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -126,6 +141,7 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
         if (toolbarButtonsEnabled != that.toolbarButtonsEnabled) return false;
         if (editorPopupEnabled != that.editorPopupEnabled) return false;
         if (maxNumberOfTips != that.maxNumberOfTips) return false;
+        if (showTipsClickCount != that.showTipsClickCount) return false;
         return true;
     }
 
@@ -138,6 +154,7 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
         result = 31 * result + (allButtonsEnabled ? 1 : 0);
         result = 31 * result + proposeToCreateShortcutCount;
         result = 31 * result + maxNumberOfTips;
+        result = 31 * result + showTipsClickCount;
         return result;
     }
 
@@ -148,7 +165,7 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
     }
 
     @Override
-    public void loadState(KeyPromoterSettings keyPromoterSettings) {
+    public void loadState(@NotNull KeyPromoterSettings keyPromoterSettings) {
         XmlSerializerUtil.copyBean(keyPromoterSettings, this);
     }
 

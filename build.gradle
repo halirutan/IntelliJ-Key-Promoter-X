@@ -50,4 +50,4 @@ task wrapper(type: Wrapper) {
     gradleVersion = '4.2'
 }
 
-version '5.11'
+version '5.12'

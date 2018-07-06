@@ -31,7 +31,6 @@ import java.beans.PropertyChangeListener;
  * @author Patrick Scheibe
  */
 public class StatisticsList extends JBList<StatisticsItem> implements PropertyChangeListener{
-    private final Logger logger = Logger.getInstance(StatisticsList.class);
     private final DefaultListModel<StatisticsItem> myModel;
     private final KeyPromoterStatistics myStats = ServiceManager.getService(KeyPromoterStatistics.class);
 
@@ -55,7 +54,6 @@ public class StatisticsList extends JBList<StatisticsItem> implements PropertyCh
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        logger.info("Change Statistics");
         if (evt.getPropertyName().equals(KeyPromoterStatistics.STATISTIC)) {
             updateStats();
         }
