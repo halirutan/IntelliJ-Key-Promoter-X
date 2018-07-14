@@ -16,7 +16,7 @@ if (project.file('gradle.properties').exists()) {
 }
 
 intellij {
-    version = '2018.1.5'
+    version = '2018.1.6'
     updateSinceUntilBuild = true
     pluginName = 'Key-Promoter-X'
 //    intellij.alternativeIdePath = '/usr/local/IntelliJ/android-studio'

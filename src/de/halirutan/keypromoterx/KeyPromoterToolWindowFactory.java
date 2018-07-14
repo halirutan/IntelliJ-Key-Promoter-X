@@ -35,7 +35,7 @@ public class KeyPromoterToolWindowFactory implements ToolWindowFactory, DumbAwar
         KeyPromoterToolWindowPanel toolWindowBuilder = new KeyPromoterToolWindowPanel();
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         JPanel toolWindowContent = toolWindowBuilder.createToolWindowPanel();
-        Content content = contentFactory.createContent(toolWindowContent, KeyPromoterBundle.message("kp.tool.window.title"), false);
+        Content content = contentFactory.createContent(toolWindowContent, null, false);
         toolWindow.getContentManager().addContent(content);
     }
 
