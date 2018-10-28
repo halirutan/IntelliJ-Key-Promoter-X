@@ -13,11 +13,13 @@
 package de.halirutan.keypromoterx;
 
 import com.intellij.openapi.actionSystem.Shortcut;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.keymap.Keymap;
 import com.intellij.openapi.keymap.KeymapManager;
 import com.intellij.openapi.keymap.KeymapUtil;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 
 /**
  * Provides some utility functions.
@@ -27,6 +29,7 @@ import java.lang.reflect.Field;
 class KeyPromoterUtils {
 
     private static final KeymapManager keyMapManager = KeymapManager.getInstance();
+    private static final KeyPromoterSettings mySettings = ServiceManager.getService(KeyPromoterSettings.class);
 
     /**
      * Get first field of class with target type to use during click source handling.
@@ -55,10 +58,20 @@ class KeyPromoterUtils {
      */
     static String getKeyboardShortcutsText(String myIdeaActionID) {
         final Keymap activeKeymap = keyMapManager.getActiveKeymap();
-        Shortcut[] shortcuts = activeKeymap.getShortcuts(myIdeaActionID);
+        Shortcut[] shortcuts;
+        if (mySettings.isShowKeyboardShortcutsOnly()) {
+            shortcuts = Arrays.stream(
+                activeKeymap.getShortcuts(myIdeaActionID)
+            ).filter(Shortcut::isKeyboard).toArray(Shortcut[]::new);
+        } else {
+            shortcuts = activeKeymap.getShortcuts(myIdeaActionID);
+        }
+
+
         if (shortcuts.length == 0) {
             return "";
         }
+
         StringBuilder buffer = new StringBuilder();
         for (int i = 0; i < shortcuts.length; i++) {
             Shortcut shortcut = shortcuts[i];

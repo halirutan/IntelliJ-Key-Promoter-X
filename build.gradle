@@ -1,5 +1,5 @@
 plugins {
-    id "org.jetbrains.intellij" version "0.3.4"
+    id "org.jetbrains.intellij" version "0.3.12"
 }
 
 apply plugin: 'idea'
@@ -16,7 +16,7 @@ if (project.file('gradle.properties').exists()) {
 }
 
 intellij {
-    version = '2018.1.6'
+    version = 'LATEST-EAP-SNAPSHOT'
     updateSinceUntilBuild = true
     pluginName = 'Key-Promoter-X'
 //    intellij.alternativeIdePath = '/usr/local/IntelliJ/android-studio'

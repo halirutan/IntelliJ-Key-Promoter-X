@@ -32,6 +32,10 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
 
 
     /**
+     * Whether to show only shortcuts for the keyboard
+     */
+    private boolean showKeyboardShortcutsOnly = true;
+    /**
      * Whether popup enabled or disabled on menus clicks.
      */
     private boolean menusEnabled = true;
@@ -60,10 +64,14 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
 
     private int proposeToCreateShortcutCount = 3;
 
-    /**
-     * Restrict the number of tips that a simultaneously shown
-     */
-    private int maxNumberOfTips = 3;
+
+    boolean isShowKeyboardShortcutsOnly() {
+        return showKeyboardShortcutsOnly;
+    }
+
+    void setShowKeyboardShortcutsOnly(boolean enabled) {
+        this.showKeyboardShortcutsOnly = enabled;
+    }
 
     boolean isMenusEnabled() {
         return menusEnabled;
@@ -111,13 +119,6 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
         this.proposeToCreateShortcutCount = proposeToCreateShortcutCount;
     }
 
-    int getMaxNumberOfTips() {
-        return maxNumberOfTips;
-    }
-
-    void setMaxNumberOfTips(int maxNumberOfTips) {
-        this.maxNumberOfTips = maxNumberOfTips;
-    }
 
     int getShowTipsClickCount() {
         return showTipsClickCount;
@@ -140,8 +141,8 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
         if (toolWindowButtonsEnabled != that.toolWindowButtonsEnabled) return false;
         if (toolbarButtonsEnabled != that.toolbarButtonsEnabled) return false;
         if (editorPopupEnabled != that.editorPopupEnabled) return false;
-        if (maxNumberOfTips != that.maxNumberOfTips) return false;
         if (showTipsClickCount != that.showTipsClickCount) return false;
+        if (showKeyboardShortcutsOnly != that.showKeyboardShortcutsOnly) return false;
         return true;
     }
 
@@ -153,8 +154,8 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
         result = 31 * result + (editorPopupEnabled ? 1 : 0);
         result = 31 * result + (allButtonsEnabled ? 1 : 0);
         result = 31 * result + proposeToCreateShortcutCount;
-        result = 31 * result + maxNumberOfTips;
         result = 31 * result + showTipsClickCount;
+        result = 31 * result + (showKeyboardShortcutsOnly ? 1 : 0);
         return result;
     }
 

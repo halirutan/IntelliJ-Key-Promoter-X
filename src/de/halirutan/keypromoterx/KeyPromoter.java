@@ -12,12 +12,12 @@
 
 package de.halirutan.keypromoterx;
 
-import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.application.Topics;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.ex.AnActionListener;
-import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.wm.impl.StripeButton;
@@ -33,38 +33,32 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The main {@link ApplicationComponent} that is registered in plugin.xml. It will take care of catching UI events
+ * The main component that is registered in plugin.xml. It will take care of catching UI events
  * and transfers the them to {@link KeyPromoterAction} for inspection. Depending on the type of action (tool-window button,
  * menu entry, etc.) a balloon is shown and the statistic is updated.
  *
  * @author Patrick Scheibe, Dmitry Kashin
  */
-public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnActionListener {
+public class KeyPromoter implements AWTEventListener, AnActionListener, Disposable {
 
-    private final Map<String, Integer> withoutShortcutStats = Collections.synchronizedMap(new HashMap<String, Integer>());
+    private final Map<String, Integer> withoutShortcutStats = Collections.synchronizedMap(new HashMap<>());
     private final KeyPromoterStatistics statsService = ServiceManager.getService(KeyPromoterStatistics.class);
     private final KeyPromoterSettings keyPromoterSettings = ServiceManager.getService(KeyPromoterSettings.class);
     // Presentation and stats fields.
 
     private static volatile boolean wasMouseClick = false;
 
-    @Override
-    public void initComponent() {
-        ActionManager.getInstance().addAnActionListener(this);
+    public KeyPromoter() {
+        Topics.subscribe(AnActionListener.TOPIC, this, this);
         long eventMask = AWTEvent.MOUSE_EVENT_MASK | AWTEvent.WINDOW_EVENT_MASK | AWTEvent.WINDOW_STATE_EVENT_MASK;
         Toolkit.getDefaultToolkit().addAWTEventListener(this, eventMask);
     }
 
     @Override
-    public void disposeComponent() {
+    public void dispose() {
         Toolkit.getDefaultToolkit().removeAWTEventListener(this);
     }
 
-    @Override
-    @NotNull
-    public String getComponentName() {
-        return KeyPromoterBundle.message("component.name");
-    }
 
     /**
      * Catches all UI events from the main IDEA AWT making it possible to inspect all mouse-clicks.
@@ -95,7 +89,7 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnAc
     }
 
     @Override
-    public void beforeActionPerformed(AnAction action, DataContext dataContext, AnActionEvent event) {
+    public void beforeActionPerformed(@NotNull AnAction action, @NotNull DataContext dataContext, AnActionEvent event) {
         final InputEvent input = event.getInputEvent();
         if (input instanceof MouseEvent && wasMouseClick) {
             final String place = event.getPlace();
@@ -140,7 +134,9 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnAc
             final String ideaActionID = action.getIdeaActionID();
             withoutShortcutStats.putIfAbsent(ideaActionID, 0);
             withoutShortcutStats.put(ideaActionID, withoutShortcutStats.get(ideaActionID) + 1);
-            if (keyPromoterSettings.getProposeToCreateShortcutCount() > 0 && withoutShortcutStats.get(ideaActionID) % keyPromoterSettings.getProposeToCreateShortcutCount() == 0) {
+            if (keyPromoterSettings.getProposeToCreateShortcutCount() > 0
+                &&
+                withoutShortcutStats.get(ideaActionID) % keyPromoterSettings.getProposeToCreateShortcutCount() == 0) {
                 KeyPromoterNotification.askToCreateShortcut(action);
 
             }
@@ -148,12 +144,13 @@ public class KeyPromoter implements ApplicationComponent, AWTEventListener, AnAc
     }
 
     @Override
-    public void afterActionPerformed(AnAction action, DataContext dataContext, AnActionEvent event) {
+    public void afterActionPerformed(AnAction action, @NotNull DataContext dataContext, AnActionEvent event) {
 
     }
 
     @Override
-    public void beforeEditorTyping(char c, DataContext dataContext) {
+    public void beforeEditorTyping(char c, @NotNull DataContext dataContext) {
 
     }
+
 }

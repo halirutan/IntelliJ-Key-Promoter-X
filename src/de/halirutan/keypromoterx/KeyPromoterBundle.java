@@ -27,23 +27,23 @@ import java.util.ResourceBundle;
  */
 public class KeyPromoterBundle {
 
-    public static String message(@NotNull @PropertyKey(resourceBundle = "de.halirutan.keypromoterx.messages.KeyPromoterBundle") String key, @NotNull Object... params) {
-        return CommonBundle.message(getBundle(), key, params);
-    }
+  @NonNls
+  private static final String PATH_TO_BUNDLE = "de.halirutan.keypromoterx.messages.KeyPromoterBundle";
+  private static Reference<ResourceBundle> ourBundle;
 
-    private static Reference<ResourceBundle> ourBundle;
-    @NonNls
-    private static final String PATH_TO_BUNDLE = "de.halirutan.keypromoterx.messages.KeyPromoterBundle";
+  private KeyPromoterBundle() {
+  }
 
-    private KeyPromoterBundle() {
-    }
+  public static String message(@NotNull @PropertyKey(resourceBundle = "de.halirutan.keypromoterx.messages.KeyPromoterBundle") String key, @NotNull Object... params) {
+    return CommonBundle.message(getBundle(), key, params);
+  }
 
-    private static ResourceBundle getBundle() {
-        ResourceBundle bundle = com.intellij.reference.SoftReference.dereference(ourBundle);
-        if (bundle == null) {
-            bundle = ResourceBundle.getBundle(PATH_TO_BUNDLE);
-            ourBundle = new SoftReference<>(bundle);
-        }
-        return bundle;
+  private static ResourceBundle getBundle() {
+    ResourceBundle bundle = com.intellij.reference.SoftReference.dereference(ourBundle);
+    if (bundle == null) {
+      bundle = ResourceBundle.getBundle(PATH_TO_BUNDLE);
+      ourBundle = new SoftReference<>(bundle);
     }
+    return bundle;
+  }
 }
