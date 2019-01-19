@@ -24,7 +24,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="de.halirutan.keypromoterx.statistic.KeyPromoterStatistics"/>
         <applicationService serviceImplementation="de.halirutan.keypromoterx.KeyPromoterSettings"/>
-        <toolWindow id="Key Promoter X" anchor="right" icon="/de/halirutan/keypromoterx/icons/toolwindow.png"
+        <toolWindow id="Key Promoter X" anchor="right" icon="/de/halirutan/keypromoterx/icons/kpxToolwindow.svg"
                     factoryClass="de.halirutan.keypromoterx.KeyPromoterToolWindowFactory"/>
         <applicationConfigurable id="keyPromoterConfiguration" displayName="Key Promoter X"
                                  instance="de.halirutan.keypromoterx.KeyPromoterConfiguration" groupId="tools"/>

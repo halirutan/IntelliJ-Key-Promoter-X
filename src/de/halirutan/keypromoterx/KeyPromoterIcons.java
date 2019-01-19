@@ -22,7 +22,7 @@ import javax.swing.*;
  * @author Patrick Scheibe.
  */
 interface KeyPromoterIcons {
-    Icon KP_ICON = IconLoader.getIcon("/de/halirutan/keypromoterx/icons/tip.png");
+    Icon KP_ICON = IconLoader.getIcon("/de/halirutan/keypromoterx/icons/kpx.svg");
     @SuppressWarnings("unused")
-    Icon KP_TOOL_WINDOW = IconLoader.getIcon("/de/halirutan/keypromoterx/icons/toolwindow.png");
+    Icon KP_TOOL_WINDOW = IconLoader.getIcon("/de/halirutan/keypromoterx/icons/kpxToolwindow.svg");
 }
