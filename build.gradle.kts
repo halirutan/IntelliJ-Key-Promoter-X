@@ -46,7 +46,7 @@ fun htmlFixer(filename: String): String {
   return ""
 }
 
-version = "5.12"
+version = "2019.1"
 
 tasks {
   patchPluginXml {
