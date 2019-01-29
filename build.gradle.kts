@@ -1,19 +1,5 @@
-import org.jetbrains.intellij.tasks.RunIdeTask
-
-buildscript {
-  repositories {
-    mavenCentral()
-    maven("https://oss.sonatype.org/content/repositories/snapshots/")
-    maven("http://dl.bintray.com/jetbrains/intellij-plugin-service")
-
-  }
-  dependencies {
-    classpath("org.jetbrains.intellij.plugins:gradle-intellij-plugin:0.5.0-SNAPSHOT")
-  }
-}
-
 plugins {
-  id("org.jetbrains.intellij") version "0.5.0-SNAPSHOT"
+  id("org.jetbrains.intellij") version "0.4.1"
   id("java")
 }
 
@@ -67,8 +53,11 @@ tasks {
     sinceBuild("162")
   }
 
-  register<RunIdeTask>("runProfiler") {
-    jvmArgs("-agentpath:/home/patrick/build/share/YourKit-JavaProfiler-2018.5/bin/linux-x86-64/libyjpagent.so")
+  publishPlugin {
+    if (project.hasProperty("pluginsToken")) {
+      token(project.property("pluginsToken"))
+    }
   }
 
 }
+
