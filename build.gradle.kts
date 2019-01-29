@@ -1,7 +1,19 @@
 import org.jetbrains.intellij.tasks.RunIdeTask
 
+buildscript {
+  repositories {
+    mavenCentral()
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
+    maven("http://dl.bintray.com/jetbrains/intellij-plugin-service")
+
+  }
+  dependencies {
+    classpath("org.jetbrains.intellij.plugins:gradle-intellij-plugin:0.5.0-SNAPSHOT")
+  }
+}
+
 plugins {
-  id("org.jetbrains.intellij") version "0.4.1"
+  id("org.jetbrains.intellij") version "0.5.0-SNAPSHOT"
   id("java")
 }
 
@@ -53,7 +65,6 @@ tasks {
     changeNotes(htmlFixer("resources/META-INF/change-notes.html"))
     pluginDescription(htmlFixer("resources/META-INF/description.html"))
     sinceBuild("162")
-    untilBuild("191.*")
   }
 
   register<RunIdeTask>("runProfiler") {
