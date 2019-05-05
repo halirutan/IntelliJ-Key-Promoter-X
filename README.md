@@ -1,14 +1,16 @@
-# Key Promoter X Plugin - For ![logo][logo-image] development
+![banner](doc/img/kpxBanner.png)
 
 [![Join the chat at https://gitter.im/IntelliJ-Key-Promoter-X/Lobby](https://badges.gitter.im/IntelliJ-Key-Promoter-X/Lobby.svg)](https://gitter.im/IntelliJ-Key-Promoter-X/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/halirutan/IntelliJ-Key-Promoter.svg?branch=KeyPromoterX)](https://travis-ci.org/halirutan/IntelliJ-Key-Promoter)
 
-![Teaser](http://i.imgur.com/2zBdMT8.gif)
+A plugin for IntelliJ products like IDEA, Android Studio, CLion, etc.
+The Key Promoter X helps you to learn essential keyboard shortcuts from mouse actions while you are working.
+When you use the mouse on a button inside the IDE, the Key Promoter X shows you the keyboard shortcut that you should
+have used instead. This provides an easy way to learn how
+to replace tedious mouse work with keyboard keys and helps to transition to a faster, mouse free development.
+Currently, it supports toolbar buttons, menu buttons, tool windows and the actions therein.
 
-This is an almost completely rewritten version of the original Key Promoter plugin by Dmitry Kashin. 
-The *Key Promoter X Plugin* is intended to show hints when using the mouse
-for something that can be done with a keyboard shortcut.
-This is crucial to replace tedious mouse interaction if you intend to become efficient IntelliJ IDEA developer.
+![Teaser](http://i.imgur.com/2zBdMT8.gif)
 
 ## ![Docs][doc-image] Features and Documentation
 
@@ -99,9 +101,8 @@ last version in 2012, more than 6 years ago.
 
 [User athiele](https://github.com/athiele/key-promoter-fork/commits/master)
 took the time to fork the original code, fix issues and provide
-a version that can be used on recent IDEA versions.
+a version that can be used on more recent IDEA versions but stopped working on it a few years ago.
 
-The Key Promoter X logo bases on a mouse icon from [Zlatko Najdenovski](http://www.flaticon.com/authors/zlatko-najdenovski) found on [www.flaticon.com](http://www.flaticon.com/free-icon/mouse_181831).
 
 [logo-image]: http://i.imgur.com/p3u3ehU.png
 [doc-image]: http://i.stack.imgur.com/erf8e.png
