@@ -1,7 +1,20 @@
+buildscript {
+  repositories {
+    mavenCentral()
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
+    maven("http://dl.bintray.com/jetbrains/intellij-plugin-service")
+
+  }
+  dependencies {
+    classpath("org.jetbrains.intellij.plugins:gradle-intellij-plugin:0.5.0-SNAPSHOT")
+  }
+}
+
 plugins {
-  id("org.jetbrains.intellij") version "0.4.1"
   id("java")
 }
+
+apply(plugin = "org.jetbrains.intellij")
 
 java {
   sourceCompatibility = JavaVersion.VERSION_1_8
@@ -21,13 +34,14 @@ sourceSets {
 }
 // tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
 
-intellij {
+configure<org.jetbrains.intellij.IntelliJPluginExtension> {
   version = "LATEST-EAP-SNAPSHOT"
   updateSinceUntilBuild = true
   pluginName = "Key-Promoter-X"
-//    intellij.alternativeIdePath = "/usr/local/IntelliJ/android-studio"
-//    intellij.alternativeIdePath = "/Applications/Development/Android Studio.app"
-//    alternativeIdePath = "/Applications/Development/GoLand.app"
+//  alternativeIdePath = "/home/patrick/.local/share/JetBrains/Toolbox/apps/AndroidStudio/ch-0/183.5452501"
+//  alternativeIdePath = "/home/patrick/.local/share/JetBrains/Toolbox/apps/PyCharm-P/ch-0/191.6605.12"
+//  alternativeIdePath = "/usr/local/IntelliJ/android-studio"
+//  alternativeIdePath = "/home/patrick/.local/share/JetBrains/Toolbox/apps/WebStorm/ch-0/191.6707.60"
 }
 
 
@@ -44,16 +58,16 @@ fun htmlFixer(filename: String): String {
   return ""
 }
 
-version = "2019.1"
+version = "2019.1.2"
 
 tasks {
-  patchPluginXml {
+  named<org.jetbrains.intellij.tasks.PatchPluginXmlTask>("patchPluginXml") {
     changeNotes(htmlFixer("resources/META-INF/change-notes.html"))
     pluginDescription(htmlFixer("resources/META-INF/description.html"))
-    sinceBuild("162")
+    sinceBuild("182")
   }
 
-  publishPlugin {
+  named<org.jetbrains.intellij.tasks.PublishTask>("publishPlugin") {
     if (project.hasProperty("pluginsToken")) {
       token(project.property("pluginsToken"))
     }

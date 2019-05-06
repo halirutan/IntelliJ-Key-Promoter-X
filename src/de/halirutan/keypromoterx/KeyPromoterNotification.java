@@ -99,6 +99,7 @@ class KeyPromoterNotification {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e, @NotNull Notification notification) {
       statistics.suppressItem(myAction);
+      notification.expire();
     }
   }
 

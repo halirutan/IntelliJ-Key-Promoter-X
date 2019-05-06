@@ -139,7 +139,7 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
   }
 
   private void createUIComponents() {
-    myProposeToCreateShortcutCount = new JSpinner(new SpinnerNumberModel(0, 0, 9, 1));
-    myShowClickCount = new JSpinner(new SpinnerNumberModel(1, 1, 9, 1));
+    myProposeToCreateShortcutCount = new JSpinner(new SpinnerNumberModel(0, 0, 30, 1));
+    myShowClickCount = new JSpinner(new SpinnerNumberModel(1, 1, 30, 1));
   }
 }

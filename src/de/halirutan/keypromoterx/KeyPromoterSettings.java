@@ -64,6 +64,8 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
 
     private int proposeToCreateShortcutCount = 3;
 
+  private String installedVersion = "1.0";
+
 
     boolean isShowKeyboardShortcutsOnly() {
         return showKeyboardShortcutsOnly;
@@ -128,6 +130,14 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
         this.showTipsClickCount = showTipsClickCount;
     }
 
+  public String getInstalledVersion() {
+    return installedVersion;
+  }
+
+  public void setInstalledVersion(String installedVersion) {
+    this.installedVersion = installedVersion;
+  }
+
     @SuppressWarnings("RedundantIfStatement")
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -143,6 +153,7 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
         if (editorPopupEnabled != that.editorPopupEnabled) return false;
         if (showTipsClickCount != that.showTipsClickCount) return false;
         if (showKeyboardShortcutsOnly != that.showKeyboardShortcutsOnly) return false;
+      if (!installedVersion.equals(that.installedVersion)) return false;
         return true;
     }
 
@@ -156,6 +167,7 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
         result = 31 * result + proposeToCreateShortcutCount;
         result = 31 * result + showTipsClickCount;
         result = 31 * result + (showKeyboardShortcutsOnly ? 1 : 0);
+      result = 31 * result + (installedVersion.hashCode());
         return result;
     }
 
