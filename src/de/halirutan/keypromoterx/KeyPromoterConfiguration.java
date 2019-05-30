@@ -30,7 +30,7 @@ import javax.swing.*;
  *
  * @author Patrick Scheibe, Dmitry Kashin
  */
-@SuppressWarnings({"FieldCanBeLocal", "unused"})
+@SuppressWarnings("unused")
 public class KeyPromoterConfiguration extends BaseConfigurable implements SearchableConfigurable, PersistentStateComponent<KeyPromoterConfiguration> {
 
   JPanel myConfigPanel;

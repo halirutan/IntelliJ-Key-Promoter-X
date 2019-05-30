@@ -1,9 +1,10 @@
 ![banner](doc/img/kpxBanner.png)
 
-[![Join the chat at https://gitter.im/IntelliJ-Key-Promoter-X/Lobby](https://badges.gitter.im/IntelliJ-Key-Promoter-X/Lobby.svg)](https://gitter.im/IntelliJ-Key-Promoter-X/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+![Downloads Badge](https://img.shields.io/jetbrains/plugin/d/9792-key-promoter-x.svg)
 [![Build Status](https://travis-ci.org/halirutan/IntelliJ-Key-Promoter.svg?branch=KeyPromoterX)](https://travis-ci.org/halirutan/IntelliJ-Key-Promoter)
+[![Join the chat at https://gitter.im/IntelliJ-Key-Promoter-X/Lobby](https://badges.gitter.im/IntelliJ-Key-Promoter-X/Lobby.svg)](https://gitter.im/IntelliJ-Key-Promoter-X/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-A plugin for IntelliJ products like IDEA, Android Studio, CLion, etc.
+A plugin for IntelliJ platform based products like IDEA, Android Studio, CLion, and many more.
 The Key Promoter X helps you to learn essential keyboard shortcuts from mouse actions while you are working.
 When you use the mouse on a button inside the IDE, the Key Promoter X shows you the keyboard shortcut that you should
 have used instead. This provides an easy way to learn how
@@ -24,7 +25,7 @@ Currently, it supports toolbar buttons, menu buttons, tool windows and the actio
 
 ## Installation
 
-The plugin can be installed with *Settings* -> *Plugins* -> *Browse Repositories* and no further set up is required. When a button is
+The plugin can be installed with **Settings | Plugins | Browse Repositories** and no further set up is required. When a button is
 clicked with the mouse, a notification pops up that shows the shortcut which can be used instead. If a button has no shortcut and
 is pressed several times, a notification is shown that lets you easily create a shortcut for this action.
 

@@ -12,8 +12,8 @@
 
 package de.halirutan.keypromoterx;
 
+import com.intellij.application.Topics;
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -48,8 +48,7 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
   private final KeyPromoterSettings keyPromoterSettings = ServiceManager.getService(KeyPromoterSettings.class);
 
   public KeyPromoter() {
-//        Topics.subscribe(AnActionListener.TOPIC, this, this);
-    ActionManager.getInstance().addAnActionListener(this);
+    Topics.subscribe(AnActionListener.TOPIC, this, this);
     long eventMask = AWTEvent.MOUSE_EVENT_MASK | AWTEvent.WINDOW_EVENT_MASK | AWTEvent.WINDOW_STATE_EVENT_MASK;
     Toolkit.getDefaultToolkit().addAWTEventListener(this, eventMask);
   }
@@ -142,15 +141,4 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
       }
     }
   }
-
-  @Override
-  public void afterActionPerformed(AnAction action, @NotNull DataContext dataContext, AnActionEvent event) {
-
-  }
-
-  @Override
-  public void beforeEditorTyping(char c, @NotNull DataContext dataContext) {
-
-  }
-
 }

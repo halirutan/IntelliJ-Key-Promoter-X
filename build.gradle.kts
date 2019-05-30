@@ -58,13 +58,13 @@ fun htmlFixer(filename: String): String {
   return ""
 }
 
-version = "2019.1.2"
+version = "2019.2"
 
 tasks {
   named<org.jetbrains.intellij.tasks.PatchPluginXmlTask>("patchPluginXml") {
     changeNotes(htmlFixer("resources/META-INF/change-notes.html"))
     pluginDescription(htmlFixer("resources/META-INF/description.html"))
-    sinceBuild("182")
+    sinceBuild("190")
   }
 
   named<org.jetbrains.intellij.tasks.PublishTask>("publishPlugin") {

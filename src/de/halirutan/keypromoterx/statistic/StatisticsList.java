@@ -15,7 +15,6 @@ package de.halirutan.keypromoterx.statistic;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.ui.JBUI;
 import de.halirutan.keypromoterx.KeyPromoterBundle;

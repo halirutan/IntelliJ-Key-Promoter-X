@@ -14,10 +14,11 @@ package de.halirutan.keypromoterx;
 
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.ui.Messages;
-import de.halirutan.keypromoterx.statistic.*;
+import de.halirutan.keypromoterx.statistic.KeyPromoterStatistics;
+import de.halirutan.keypromoterx.statistic.StatisticsList;
+import de.halirutan.keypromoterx.statistic.SuppressedList;
 
 import javax.swing.*;
-import java.beans.PropertyChangeListener;
 
 /**
  * Controlling class of the tool-window
@@ -25,6 +26,7 @@ import java.beans.PropertyChangeListener;
  * @author athiele, Patrick Scheibe
  *
  */
+@SuppressWarnings("unused")
 class KeyPromoterToolWindowPanel {
 
     private JPanel panel;
@@ -46,7 +48,7 @@ class KeyPromoterToolWindowPanel {
         if (Messages.showYesNoDialog(
                 KeyPromoterBundle.message("kp.dialog.reset.statistic.text"),
                 KeyPromoterBundle.message("kp.dialog.reset.statistic.title"),
-                Messages.getQuestionIcon()) == 0) {
+            Messages.getQuestionIcon()) == Messages.YES) {
             statService.resetStatistic();
         }
     }
@@ -54,9 +56,5 @@ class KeyPromoterToolWindowPanel {
     private void createUIComponents() {
         statisticsList = new StatisticsList();
         suppressedList = new SuppressedList();
-//        suppressedListModel.getPropertyChangeSupport().addPropertyChangeListener((PropertyChangeListener) suppressedList);
-//        suppressedListModel.getPropertyChangeSupport().addPropertyChangeListener((PropertyChangeListener) statisticsList);
     }
-
-
 }
