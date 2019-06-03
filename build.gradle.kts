@@ -2,7 +2,7 @@ buildscript {
   repositories {
     mavenCentral()
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
-    maven("http://dl.bintray.com/jetbrains/intellij-plugin-service")
+    maven("https://dl.bintray.com/jetbrains/intellij-plugin-service")
 
   }
   dependencies {
