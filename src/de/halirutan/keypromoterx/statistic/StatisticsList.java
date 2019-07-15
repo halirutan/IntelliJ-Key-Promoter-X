@@ -18,6 +18,7 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.ui.JBUI;
 import de.halirutan.keypromoterx.KeyPromoterBundle;
+import de.halirutan.keypromoterx.KeyPromoterIcons;
 
 import javax.swing.*;
 import java.awt.*;
@@ -91,6 +92,8 @@ public class StatisticsList extends JBList<StatisticsItem> implements PropertyCh
                     final Icon icon = action.getTemplatePresentation().getIcon();
                     if (icon != null) {
                         setIcon(icon);
+                    } else {
+                        setIcon(KeyPromoterIcons.KP_ICON);
                     }
                 }
             }

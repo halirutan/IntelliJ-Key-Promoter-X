@@ -19,6 +19,7 @@ import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.ui.JBUI;
 import de.halirutan.keypromoterx.KeyPromoterBundle;
+import de.halirutan.keypromoterx.KeyPromoterIcons;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
@@ -138,6 +139,8 @@ public class SuppressedList extends JBList<StatisticsItem> implements PropertyCh
                     final Icon icon = action.getTemplatePresentation().getIcon();
                     if (icon != null) {
                         setIcon(icon);
+                    } else {
+                        setIcon(KeyPromoterIcons.KP_ICON);
                     }
                 }
             }
