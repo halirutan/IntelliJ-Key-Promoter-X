@@ -45,13 +45,11 @@ import java.util.Map;
 public class KeyPromoter implements AWTEventListener, AnActionListener, Disposable {
 
   private Logger logger = Logger.getInstance(this.getClass());
-  private static volatile boolean wasMouseClick = false;
   private final Map<String, Integer> withoutShortcutStats = Collections.synchronizedMap(new HashMap<>());
   private final KeyPromoterStatistics statsService = ServiceManager.getService(KeyPromoterStatistics.class);
   // Presentation and stats fields.
   private final KeyPromoterSettings keyPromoterSettings = ServiceManager.getService(KeyPromoterSettings.class);
   private static final String distractionFreeModeKey = "editor.distraction.free.mode";
-
 
   public KeyPromoter() {
     Topics.subscribe(AnActionListener.TOPIC, this, this);
@@ -63,7 +61,6 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
   public void dispose() {
     Toolkit.getDefaultToolkit().removeAWTEventListener(this);
   }
-
 
   /**
    * Catches all UI events from the main IDEA AWT making it possible to inspect all mouse-clicks.
@@ -78,7 +75,6 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
     }
   }
 
-
   /**
    * Transfers the event to {@link KeyPromoterAction} and inspects the results. Then, depending on the result and the
    * Key Promoter X settings, a balloon is shown with the shortcut tip and the statistic is updated.
@@ -86,7 +82,6 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
    * @param e event that is handled
    */
   private void handleMouseEvent(AWTEvent e) {
-    wasMouseClick = true;
     if (e.getSource() instanceof StripeButton && keyPromoterSettings.isToolWindowButtonsEnabled()) {
       KeyPromoterAction action = new KeyPromoterAction(e);
       showTip(action);
@@ -96,7 +91,7 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
   @Override
   public void beforeActionPerformed(@NotNull AnAction action, @NotNull DataContext dataContext, AnActionEvent event) {
     final InputEvent input = event.getInputEvent();
-    if (input instanceof MouseEvent && wasMouseClick) {
+    if (input instanceof MouseEvent) {
       final String place = event.getPlace();
       KeyPromoterAction kpAction;
       if ("MainMenu".equals(place)) {
@@ -119,7 +114,6 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
         showTip(kpAction);
       }
     }
-    wasMouseClick = false;
   }
 
   private boolean disabledInPresentationMode() {
