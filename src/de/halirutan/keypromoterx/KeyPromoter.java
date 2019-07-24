@@ -13,12 +13,15 @@
 package de.halirutan.keypromoterx;
 
 import com.intellij.application.Topics;
+import com.intellij.ide.ui.UISettings;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.ex.AnActionListener;
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.wm.impl.StripeButton;
 import de.halirutan.keypromoterx.statistic.KeyPromoterStatistics;
@@ -41,11 +44,14 @@ import java.util.Map;
  */
 public class KeyPromoter implements AWTEventListener, AnActionListener, Disposable {
 
+  private Logger logger = Logger.getInstance(this.getClass());
   private static volatile boolean wasMouseClick = false;
   private final Map<String, Integer> withoutShortcutStats = Collections.synchronizedMap(new HashMap<>());
   private final KeyPromoterStatistics statsService = ServiceManager.getService(KeyPromoterStatistics.class);
   // Presentation and stats fields.
   private final KeyPromoterSettings keyPromoterSettings = ServiceManager.getService(KeyPromoterSettings.class);
+  private static final String distractionFreeModeKey = "editor.distraction.free.mode";
+
 
   public KeyPromoter() {
     Topics.subscribe(AnActionListener.TOPIC, this, this);
@@ -116,10 +122,24 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
     wasMouseClick = false;
   }
 
+  private boolean disabledInPresentationMode() {
+    boolean isPresentationMode = UISettings.getInstance().getPresentationMode();
+    return isPresentationMode && keyPromoterSettings.isDisabledInPresentationMode();
+  }
+
+  private boolean disabledInDistractionFreeMode() {
+    final boolean isDistractionFreeMode = Registry.get(distractionFreeModeKey).asBoolean();
+    return isDistractionFreeMode && keyPromoterSettings.isDisabledInDistractionFreeMode();
+  }
+
   private void showTip(KeyPromoterAction action) {
-    if (action == null || !action.isValid() || statsService.isSuppressed(action)) {
-      return;
-    }
+    if (action == null
+        || !action.isValid()
+        || statsService.isSuppressed(action)
+        || disabledInPresentationMode()
+        || disabledInDistractionFreeMode()
+    ) { return; }
+    logger.debug("KeyPromoterX received Action: " + action.getDescription() + " " + action.getShortcut());
 
     final String shortcut = action.getShortcut();
     if (!StringUtil.isEmpty(shortcut)) {
