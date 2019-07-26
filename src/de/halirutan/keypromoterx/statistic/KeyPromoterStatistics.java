@@ -13,6 +13,7 @@
 package de.halirutan.keypromoterx.statistic;
 
 import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.RoamingType;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
@@ -45,7 +46,12 @@ import java.util.Map;
  */
 @State(
     name = "KeyPromoterXStatistic",
-    storages = {@Storage("KeyPromoterXStatistic.xml")}
+    storages = {
+        @Storage(
+            value = "KeyPromoterXStatistic.xml",
+            roamingType = RoamingType.DISABLED
+        )
+    }
 )
 public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromoterStatistics> {
 

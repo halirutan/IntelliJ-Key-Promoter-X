@@ -4,19 +4,20 @@
 </head>
 <body>
 <p>
-    Since its first release, the Key Promoter X has about 300.000 downloads. It is top-rated on the JetBrains
-    site,
-    and since it is entirely open-source, other plugin developers can browse through the code to understand how things
-    are implemented.
+    The Key Promoter X has now reached over 320.000 downloads. It is top-rated on the JetBrains
+    site, and since it is entirely open-source, other plugin developers can browse through the code to understand how
+    things are implemented.
 </p>
 <p>
-    The plugin is not for me or a by-product of something I would do anyway. It is for <em>you</em> who want to learn
+    The plugin is not for me or a by-product of something I would do anyway. It is for <b>you</b> who want to learn
     shortcuts in IntelliJ IDEA, and I give away some of my free time to keep it up to date and fix bugs. If you
-    appreciate my efforts, then please <a href="https://www.paypal.me/halirutan">donate some money</a>.
-    And don't forget to <a href="https://github.com/halirutan/IntelliJ-Key-Promoter-X">star the GitHub repository</a>
-    and
-    leave a rating on the <a href="https://plugins.jetbrains.com/plugin/9792-key-promoter-x">JetBrains plugin site</a>.
+    appreciate my efforts, then
 </p>
+<ul>
+    <li><a href="https://www.patreon.com/halirutan">Become a patron on Patreon</a></li>
+    <li><a href="https://github.com/halirutan/IntelliJ-Key-Promoter-X">Star the GitHub repository</a>
+    <li><a href="https://plugins.jetbrains.com/plugin/9792-key-promoter-x">Rate the plugin</a></li>
+</ul>
 <p>
     If you want to see IntelliJ plugin development, fixing bugs or interesting projects live on Twitch, you can
     <a href="https://www.twitch.tv/halirutan">turn on when I stream</a>.
@@ -24,33 +25,21 @@
 
 <h3>Latest changes</h3>
 <ul>
-    <li>Fix wrong icon for actions without icon (<a
-            href="https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/37">Issue 37</a>)</li>
-    <li>Make Key Promoter X work on EAP versions like PhpStorm 2019.2</li>
-    <li>Increase minimum required IntelliJ version to get rid of deprecated code</li>
-</ul>
-<ul>
-    <li>"Do not show again" action dismisses the tip immediately (<a
-            href="https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/34">Issue 34</a>)
+    <li>Your shortcut statistic is now kept local to prevent merging conflicts when using IDEA's "Settings repository"
+        to keep configuration in sync on multiple workstations
+        (<a href="https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/40">Issue 40</a>)
     </li>
-    <li>Increase possible settings for notification limits (<a
-            href="https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/30">Issue 30</a>)
+    <li>Add features that let's you turn off KPX in Presentation and Distraction Free Mode
+        (<a href="https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/39">Issue 39</a>)
     </li>
-    <li>Add plugin icon shown in the settings and the repository</li>
-    <li>New icons that better integrate into the UI</li>
-    <li>Implemented a setting to only show "Keyboard" shortcuts. This is default and can be adjusted.</li>
-    <li>Fixed exception <a href="https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/27">that occurred on
-        closing Keymap dialog in 2018.3</a>.
+    <li>Fix instances where the KPX would not recognize a mouse-click. This replaces a hack that worked around an
+        <a href="https://youtrack.jetbrains.com/issue/IDEA-219133">issue in IDEA</a> with still another hack that
+        hopefully works better.
     </li>
-    <li>Removed setting for maximum visible notifications. IDEA 2018.3 seems to restrict this itself.</li>
-    <li>Implemented feature-request: <a
-            href="https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/20#event-1720427835">Minimum count before
-        notification</a></li>
-    <li>Fixed empty tool-window with several windows open</li>
 </ul>
 <hr>
 <p>
-    This message will only appear once for each new version. The donation link can later be found in the plugin
+    This message will only appear once for each new version. The Patreon link can later be found in the plugin
     description under <b>Settings | Plugins | Key Promoter X</b>.
 </p>
 </body>

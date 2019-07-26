@@ -27,7 +27,11 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("WeakerAccess")
 @State(
     name = "KeyPromoterXSettings",
-    storages = {@Storage("KeyPromoterXSettings.xml")}
+    storages = {
+        @Storage(
+            value = "KeyPromoterXSettings.xml"
+        )
+    }
 )
 public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoterSettings> {
 
@@ -67,12 +71,12 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
 
   /**
    * Whether to show notification when the IDE is in Presentation Mode
-   * */
+   */
   private boolean disabledInPresentationMode = false;
 
   /**
    * Whether to show notification when the IDE is in Distraction Free Mode
-   * */
+   */
   private boolean disabledInDistractionFreeMode = false;
 
   private String installedVersion = "1.0";

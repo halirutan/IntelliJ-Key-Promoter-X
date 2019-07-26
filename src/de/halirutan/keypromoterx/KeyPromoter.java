@@ -12,18 +12,18 @@
 
 package de.halirutan.keypromoterx;
 
-import com.intellij.application.Topics;
 import com.intellij.ide.ui.UISettings;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.ex.AnActionListener;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.wm.impl.StripeButton;
+import com.intellij.util.messages.MessageBusConnection;
 import de.halirutan.keypromoterx.statistic.KeyPromoterStatistics;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,15 +44,19 @@ import java.util.Map;
  */
 public class KeyPromoter implements AWTEventListener, AnActionListener, Disposable {
 
-  private Logger logger = Logger.getInstance(this.getClass());
   private final Map<String, Integer> withoutShortcutStats = Collections.synchronizedMap(new HashMap<>());
   private final KeyPromoterStatistics statsService = ServiceManager.getService(KeyPromoterStatistics.class);
   // Presentation and stats fields.
   private final KeyPromoterSettings keyPromoterSettings = ServiceManager.getService(KeyPromoterSettings.class);
   private static final String distractionFreeModeKey = "editor.distraction.free.mode";
+  private long lastEventTime = -1;
+
 
   public KeyPromoter() {
-    Topics.subscribe(AnActionListener.TOPIC, this, this);
+//    Topics.subscribe(AnActionListener.TOPIC, this, this);
+    final MessageBusConnection busConnection = ApplicationManager.getApplication().getMessageBus().connect(this);
+    busConnection.subscribe(AnActionListener.TOPIC, this);
+
     long eventMask = AWTEvent.MOUSE_EVENT_MASK | AWTEvent.WINDOW_EVENT_MASK | AWTEvent.WINDOW_STATE_EVENT_MASK;
     Toolkit.getDefaultToolkit().addAWTEventListener(this, eventMask);
   }
@@ -92,6 +96,14 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
   public void beforeActionPerformed(@NotNull AnAction action, @NotNull DataContext dataContext, AnActionEvent event) {
     final InputEvent input = event.getInputEvent();
     if (input instanceof MouseEvent) {
+      // The following is a hack to work around an issue with IDEA, where certain events arrive
+      // twice. See https://youtrack.jetbrains.com/issue/IDEA-219133
+      if (lastEventTime == input.getWhen()) {
+        lastEventTime = input.getWhen();
+        return;
+      }
+      lastEventTime = input.getWhen();
+
       final String place = event.getPlace();
       KeyPromoterAction kpAction;
       if ("MainMenu".equals(place)) {
@@ -133,7 +145,6 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
         || disabledInPresentationMode()
         || disabledInDistractionFreeMode()
     ) { return; }
-    logger.debug("KeyPromoterX received Action: " + action.getDescription() + " " + action.getShortcut());
 
     final String shortcut = action.getShortcut();
     if (!StringUtil.isEmpty(shortcut)) {

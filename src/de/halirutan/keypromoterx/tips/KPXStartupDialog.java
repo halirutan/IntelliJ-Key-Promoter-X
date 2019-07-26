@@ -48,9 +48,10 @@ public class KPXStartupDialog extends DialogWrapper {
     setCancelButtonText(CommonBundle.getCloseButtonText());
     myTipPanel = new TipPanel();
     myTipPanel.setMessageText(loadMessageText());
-    setHorizontalStretch(1.33f);
-    setVerticalStretch(1.25f);
+    setHorizontalStretch(1.5f);
+    setVerticalStretch(2.1f);
     init();
+
   }
 
   @NotNull

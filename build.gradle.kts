@@ -58,7 +58,7 @@ fun htmlFixer(filename: String): String {
   return ""
 }
 
-version = "2019.2.1"
+version = "2019.2.2"
 
 tasks {
   named<org.jetbrains.intellij.tasks.PatchPluginXmlTask>("patchPluginXml") {
@@ -72,6 +72,5 @@ tasks {
       token(project.property("pluginsToken"))
     }
   }
-
 }
 
