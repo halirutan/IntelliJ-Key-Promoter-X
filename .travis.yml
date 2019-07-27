@@ -1,8 +1,8 @@
 language: java
 jdk:
-  - openjdk8
-  - openjdk10
-  - openjdk11
+- openjdk8
+- openjdk10
+- openjdk11
 sudo: required
 env:
   global:
@@ -15,12 +15,11 @@ before_script:
 - chmod +x gradlew
 deploy:
   provider: releases
-  skip_cleanup: true
   api_key:
-    secure: lWFeErtahHDLWSaLxDUHWivsXM5Qqwzw3ZX0doDvKQEwPCQ/C2LAAkykwRkuiAfjc1UtGL3xbavAr1YyTwpZqYd/mBbnZj94VecIPhVpw38yM/zVpJ0enc9HA0UUtMlR3X1cAjAei/ybRX4hooSMU5HKceoCWub1w2uJCYKdQPsjGIHObR2lWmgrIr64t8B+n5ZRaa6I9COsew/HIiL0/15qDZ5+IXZ94MmWkrSDm/rqOIntVlNqov8HF6Cf0T6PmQIoeNeWyx74iIrIcmLwMQ0VjMI/rLLGkmCGVQGWCERL7JPb50HVR3cneaqnJp+TZyKbO7nRwGkl1sKIfVzWi6hbXLNhMEmBOW34Fp+QiK9LNQ1zlP081JwG+4X7Z01+uEonaB1O0iwu5U+5bMaJQZdSMd8jwvBNTSrMD3Ycy2Zd6Ykc82ca16ptHo1NBmuoqeNLGSnJFz9ykS8KtWOa6/wLenSz22uB7MZBD8MNxykNINrEKP4V1jPDxt2NgUJKPoTC9zS+IOA51ELkMyFwqAU+zyulBeonGqSIDaYRF8e+Wc6VXAMDAEuuP4zxDjd2n8P+MajxoXPHPYtm6El5QLps+Tyaer8+XSxxi8yIpiZbP7jPAmJaulMokoyIOGj2kA4DrqhCSXnIeKEsjIa8UscZwyrTAja2F5fQfBOirXQ=
-  file_glob: true
-  file: $CI_HOME/build/distributions/Key-Promoter-X*.zip
+    secure: SdCmZ1toP3b/jPvI0IbBK9n3k8ljpOW58WezEttU+z1fda4M+wYHqJnd/ovehLDsBra2Pa0VoC08W3Ba7k4Bm8+bNLjrQyq+X5lzdL4AW4H4Bm/608rH+3IUNnCtUWSx/La4Ul9wxp0cVf0DLx64boRyC/ao5G+JI6qkNkwPiv7/rmJ6dpxBCMdedIQSAAarlhx8cnge2mAUtiKVXAmM36fMDzvq0q1M2VQGXSyxHpzUu9VUxsc6u4CfnJKQiK1E6KfCAnd0WICRxzV2Kt6CIkJyF+7eVdQw11sDvIkSxGri63VNO3Hec8lDJoTHda/tfDmbz8PU1DeLzpiMg4VaFaVKjI22yI2rjaqdxNe2pN1JPuAzkR1rEdPvn54OC228UOkKiojKLG+hnHRrdUs2bxFHexFYzTzPJaYuOEwUTOizX4rJhVC039w/jQHb3py2iGKaoco+hKqa64ibStwEZW6o0Y3/yHVZG5dprsfpVN66dRkuTeMNvXus83BC/IR3WQk6v1S8YjrM3DkIr6zopOSrRQ5WI7A9S8yAsuSQF8oSeLGjA9ODcDJ36MzvvUKhS7yzw4hEZOTXrR9sYvri5JV0Oudgj3CuZ9udSBMSgNVtKLxlBL1t03YMyh0FIVL/Pz+Fxzhvql8xzo2UdnsBZvQ4m6ZocwYe415PWh3svgU=
+  file: "$CI_HOME/build/distributions/Key-Promoter-X*.zip"
   on:
     repo: halirutan/IntelliJ-Key-Promoter-X
     all_branches: true
     tags: true
+
