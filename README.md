@@ -1,11 +1,13 @@
-![banner](doc/img/kpxBanner.png)
+[![banner](doc/img/kpxBanner.png)](https://www.patreon.com/halirutan)
+
+[Become a patron and support the Key Promoter X development](https://www.patreon.com/halirutan)
 
 ![Downloads Badge](https://img.shields.io/jetbrains/plugin/d/9792-key-promoter-x.svg)
 [![Build Status](https://travis-ci.org/halirutan/IntelliJ-Key-Promoter.svg?branch=KeyPromoterX)](https://travis-ci.org/halirutan/IntelliJ-Key-Promoter)
 [![Join the chat at https://gitter.im/IntelliJ-Key-Promoter-X/Lobby](https://badges.gitter.im/IntelliJ-Key-Promoter-X/Lobby.svg)](https://gitter.im/IntelliJ-Key-Promoter-X/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-A plugin for IntelliJ platform based products like IDEA, Android Studio, CLion, and many more.
-The Key Promoter X helps you to learn essential keyboard shortcuts from mouse actions while you are working.
+The Key Promoter X is a plugin for IntelliJ-based products like IDEA, Android Studio, or CLion, and it helps to learn
+essential keyboard shortcuts from mouse actions while you are working.
 When you use the mouse on a button inside the IDE, the Key Promoter X shows you the keyboard shortcut that you should
 have used instead. This provides an easy way to learn how
 to replace tedious mouse work with keyboard keys and helps to transition to a faster, mouse free development.
@@ -43,13 +45,13 @@ Additionally, it will save your mouse-click
 in the Key Promoter X statistics tool-windows so that you see which actions you are using the most and which shortcuts you should learn first.
 
 If the action is not connected to a shortcut but has an `ActionID` (which basically means we can assign a shortcut), the plugin still registers
-your click. Depending on your settings under *Settings* -> *Tools* -> *Key Promoter X*, you will get a notification every x clicks on the
+your click. Depending on your settings under **Settings | Tools | Key Promoter X**, you will get a notification every x clicks on the
 same action that asks you if you want to create a shortcut for this.
 
 Be aware that there are certain mouse-clicks that, although they do something, cannot be successfully inspected and the plugin won't be able
 to help you with those. This for instance happens for some of the buttons in the tool-windows.
 
-### The *Key Promoter X* tool-window
+### The Key Promoter X tool-window
 
 The Key Promoter X comes with built in tool-window on the right side that gives you access to your hit-list of missed shortcuts and to the
 the list of suppressed items.
@@ -62,31 +64,43 @@ Every mouse click that is connected to an action with a shortcut will be registe
 
 You can re-activate a suppressed item by double-clicking on it in the suppressed list.
 
-### Settings
+### Settings for the Key Promoter X
 
- Settings for the plugin can be found under *Settings* -> *Tools* -> *Key Promoter X*.
+ Settings for the plugin can be found under **Settings | Tools | Key Promoter X**.
 
 ![Settings Panel](doc/img/settings.png)
 
-The first box lets you adjust how many *Key Promoter X* notifications are allowed to be shown at the same time. If you have set this to a
-number, say 3, and you are a heavy clicker, then each new notification will make the oldest disappear so that only 3 messages are shown
-at max.
+#### General
 
-With the second spinner, you can adjust whether the Key Promoter X should display a notification each time you press
+- Show only keyboard shortcuts prevents the display of notifications of short-cuts for the mouse. One example is the
+*Go to declaration* action, which also has certain mouse combination to invoke the action. Enabling this option will
+only show valid keyboard short-cuts.
+- Disable in presentation or distraction free mode will disable the Key Promoter X when you are giving a presentation or
+you explicitly don't wan to be disturbed.
+
+#### Settings
+
+- Clicks before notification is shown adjusts whether the Key Promoter X should display a notification each time you press
 a button with the mouse that has a key combination available.
-If you adjust this setting to 2, only every second click will show a notification, etc.
+E.g., with a setting of 2, every second click will show a notification.
+- Number of invocations before suggesting to create adjusts how often a button without a short-cut needs to be clicked
+before you see a message suggesting to create one for it.
 
-The last spinner lets you adjust how often you have to click a button with no shortcut before you see a message suggesting to create
-a shortcut for it.
+#### Enable for
 
-In the *Enabled for* box it is possible to adjust which buttons are allowed to show a tip. Note that the *All Buttons* checkbox will try
+Adjusts which buttons are allowed to show a tip. Note that the *All Buttons* checkbox will try
 to catch as many mouse-clicks as possible, even if you are not pressing a real button. This will show you for instance a tip when you
 hold Ctrl and press on a Java method to jump to its declaration which can be replaced by Ctrl+B.
 
 
 ## ![dev image][dev-image] Development  [![Build Status](https://travis-ci.org/halirutan/IntelliJ-Key-Promoter.svg?branch=KeyPromoterX)](https://travis-ci.org/halirutan/IntelliJ-Key-Promoter)
 
-The plugin is written in Java using IntelliJ's plugin framework. The code-base is extremely small and contains only a handful of well documented classes. The code is hosted on GitHub and has a [Travis-CI](https://travis-ci.org/) integration for automatic building. Compilation is done with Gradle using the IntelliJ Gradle plugin and should work out of the box with a recent (v3.5) version.
+The plugin is written in Java using IntelliJ's plugin framework.
+The code-base is small and contains only a handful of well documented classes, which makes it an excellent candidate to 
+learn how to implement IntelliJ plugins.
+
+The code is hosted on GitHub and has a [Travis-CI](https://travis-ci.org/) integration for automatic building.
+Compilation is done with Gradle using the IntelliJ Gradle plugin and should work out of the box with a recent (v3.5) version.
 
 ## ![bug image][issues-image] Reporting issues
 
