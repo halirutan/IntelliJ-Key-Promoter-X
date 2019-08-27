@@ -59,10 +59,14 @@ the list of suppressed items.
 ![Tool-window](doc/img/tool-window.png)
 
 Every mouse click that is connected to an action with a shortcut will be registered in the statistic. The items in this list are ordered by
- how often you missed this shortcut. There might be some mouse actions that you don't want to replace by its shortcut. For those, you can
- press *Don't show again* in the notification and all suppressed shortcuts will appear in the list below the statistics.
-
+ how often you missed this shortcut.
+ 
+There might be some mouse actions that you don't want to replace by its shortcut.
+For those, you can press *Don't show again* in the notification and all suppressed shortcuts will appear in the list below the statistics.
 You can re-activate a suppressed item by double-clicking on it in the suppressed list.
+
+The Key Promoter X toolwindow additionally allows you to clear your statistics and make a fresh start, and you can
+snooze the Key Promoter X notification until the restart of IDEA (or you turn it off again).
 
 ### Settings for the Key Promoter X
 
