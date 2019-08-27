@@ -13,7 +13,7 @@
 <idea-plugin>
     <name>Key Promoter X</name>
     <vendor>Patrick Scheibe</vendor>
-    <idea-version since-build="190"/>
+    <idea-version since-build="191"/>
     <application-components>
         <component>
             <implementation-class>de.halirutan.keypromoterx.KeyPromoter</implementation-class>
