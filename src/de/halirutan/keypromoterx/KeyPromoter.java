@@ -104,8 +104,7 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
     if (input instanceof MouseEvent) {
       // The following is a hack to work around an issue with IDEA, where certain events arrive
       // twice. See https://youtrack.jetbrains.com/issue/IDEA-219133
-      if (lastEventTime == input.getWhen()) {
-        lastEventTime = input.getWhen();
+      if (input.getWhen() != 0 && lastEventTime == input.getWhen()) {
         return;
       }
       lastEventTime = input.getWhen();
