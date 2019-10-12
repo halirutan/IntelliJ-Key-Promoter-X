@@ -81,6 +81,7 @@ public class KeyPromoterAction {
     myDescription = event.getPresentation().getText();
     mySource = source;
     myShortcut = KeyPromoterUtils.getKeyboardShortcutsText(myIdeaActionID);
+    fixDescription();
   }
 
   /**
@@ -181,7 +182,21 @@ public class KeyPromoterAction {
     myDescription = anAction.getTemplatePresentation().getText();
     myIdeaActionID = ActionManager.getInstance().getId(anAction);
     myShortcut = KeyPromoterUtils.getKeyboardShortcutsText(myIdeaActionID);
+  }
 
+  /**
+   * Used to adjust Run and Debug descriptions so that the don't contain the name of the run-configuration
+   */
+  private void fixDescription() {
+    if (myDescription == null || myDescription.length() == 0) {
+      return;
+    }
+    if ("Debug".equals(myIdeaActionID)) {
+      myDescription = myDescription.replaceFirst("Debug '.*'", "Debug");
+    }
+    if ("Run".equals(myIdeaActionID)) {
+      myDescription = myDescription.replaceFirst("Run '.*'", "Run");
+    }
   }
 
   ActionSource getSource() {
