@@ -1,6 +1,6 @@
 [![banner](doc/img/kpxBanner.png)](https://www.patreon.com/halirutan)
 
-[Become GitHub Sponsor and support the Key Promoter X development](https://github.com/sponsors/halirutan)
+[Become a GitHub Sponsor and support the Key Promoter X development](https://github.com/sponsors/halirutan)
 
 ![Downloads Badge](https://img.shields.io/jetbrains/plugin/d/9792-key-promoter-x.svg)
 [![Build Status](https://travis-ci.org/halirutan/IntelliJ-Key-Promoter.svg?branch=KeyPromoterX)](https://travis-ci.org/halirutan/IntelliJ-Key-Promoter)
