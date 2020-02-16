@@ -7,7 +7,8 @@
 ---
 I'm grateful that this project is currently sponsored by [Daniel Babiak](https://github.com/dbabiak), 
 [Christopher Kolstad](https://github.com/chriswk), [Frank Harper](https://github.com/franklinharper), 
-[Mac Adamarczuk](https://github.com/macalac), and [8 other people](https://github.com/sponsors/halirutan).
+[Mac Adamarczuk](https://github.com/macalac),
+ [Stefan Hagen](https://github.com/sthagen), and [13 other people](https://github.com/sponsors/halirutan).
 
 - [Become a GitHub Sponsor and support the Key Promoter X development](https://github.com/sponsors/halirutan)
 

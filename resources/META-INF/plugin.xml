@@ -12,7 +12,7 @@
 
 <idea-plugin>
     <name>Key Promoter X</name>
-    <vendor>Patrick Scheibe</vendor>
+    <vendor>halirutan</vendor>
     <idea-version since-build="191"/>
     <application-components>
         <component>
