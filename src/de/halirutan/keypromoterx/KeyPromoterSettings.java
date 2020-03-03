@@ -24,7 +24,6 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author Dmitry Kashin, Patrick Scheibe
  */
-@SuppressWarnings("WeakerAccess")
 @State(
     name = "KeyPromoterXSettings",
     storages = {
@@ -35,51 +34,50 @@ import org.jetbrains.annotations.Nullable;
 )
 public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoterSettings> {
 
-
   /**
    * Whether to show only shortcuts for the keyboard
    */
-  private boolean showKeyboardShortcutsOnly = true;
+  public boolean showKeyboardShortcutsOnly = true;
   /**
    * Whether popup enabled or disabled on menus clicks.
    */
-  private boolean menusEnabled = true;
+  public boolean menusEnabled = true;
   /**
    * Whether popup enabled or disabled on toolbar buttons clicks.
    */
-  private boolean toolbarButtonsEnabled = true;
+  public boolean toolbarButtonsEnabled = true;
   /**
    * Whether popup enabled or disabled on tool-window buttons clicks.
    */
-  private boolean toolWindowButtonsEnabled = true;
+  public boolean toolWindowButtonsEnabled = true;
   /**
    * Editor popups are the context menu that can be opened with right-click on the mouse
    */
-  private boolean editorPopupEnabled = true;
+  public boolean editorPopupEnabled = true;
   /**
    * Whether popup enabled or disabled on all buttons with mnemonics clicks.
    */
-  private boolean allButtonsEnabled = true;
+  public boolean allButtonsEnabled = true;
 
   /**
-   * If the user clicks a button, usually each time a notification is shown (setting 1). If setting is 2, only
-   * each second click will trigger a notification, and so on.
+   * If the user clicks a button, usually each time a notification is shown (setting 1). If setting is 2, only each
+   * second click will trigger a notification, and so on.
    */
-  private int showTipsClickCount = 1;
+  public int showTipsClickCount = 1;
 
-  private int proposeToCreateShortcutCount = 3;
+  public int proposeToCreateShortcutCount = 3;
 
   /**
    * Whether to show notification when the IDE is in Presentation Mode
    */
-  private boolean disabledInPresentationMode = false;
+  public boolean disabledInPresentationMode = false;
 
   /**
    * Whether to show notification when the IDE is in Distraction Free Mode
    */
-  private boolean disabledInDistractionFreeMode = false;
+  public boolean disabledInDistractionFreeMode = false;
 
-  private String installedVersion = "1.0";
+  public String installedVersion = "1.0";
 
 
   boolean isShowKeyboardShortcutsOnly() {
@@ -169,43 +167,6 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
 
   public void setDisabledInDistractionFreeMode(boolean disabledInDistractionFreeMode) {
     this.disabledInDistractionFreeMode = disabledInDistractionFreeMode;
-  }
-
-  @SuppressWarnings("RedundantIfStatement")
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-
-    KeyPromoterSettings that = (KeyPromoterSettings) o;
-
-    if (allButtonsEnabled != that.allButtonsEnabled) return false;
-    if (menusEnabled != that.menusEnabled) return false;
-    if (proposeToCreateShortcutCount != that.proposeToCreateShortcutCount) return false;
-    if (toolWindowButtonsEnabled != that.toolWindowButtonsEnabled) return false;
-    if (toolbarButtonsEnabled != that.toolbarButtonsEnabled) return false;
-    if (editorPopupEnabled != that.editorPopupEnabled) return false;
-    if (showTipsClickCount != that.showTipsClickCount) return false;
-    if (showKeyboardShortcutsOnly != that.showKeyboardShortcutsOnly) return false;
-    if (disabledInDistractionFreeMode != that.disabledInDistractionFreeMode) return false;
-    if (disabledInPresentationMode != that.disabledInPresentationMode) return false;
-    if (!installedVersion.equals(that.installedVersion)) return false;
-    return true;
-  }
-
-  public int hashCode() {
-    int result;
-    result = (menusEnabled ? 1 : 0);
-    result = 31 * result + (toolbarButtonsEnabled ? 1 : 0);
-    result = 31 * result + (toolWindowButtonsEnabled ? 1 : 0);
-    result = 31 * result + (editorPopupEnabled ? 1 : 0);
-    result = 31 * result + (allButtonsEnabled ? 1 : 0);
-    result = 31 * result + proposeToCreateShortcutCount;
-    result = 31 * result + showTipsClickCount;
-    result = 31 * result + (showKeyboardShortcutsOnly ? 1 : 0);
-    result = 31 * result + (disabledInPresentationMode ? 1 : 0);
-    result = 31 * result + (disabledInDistractionFreeMode ? 1 : 0);
-    result = 31 * result + (installedVersion.hashCode());
-    return result;
   }
 
   @Nullable
