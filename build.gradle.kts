@@ -21,7 +21,6 @@ java {
   targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-
 repositories {
   mavenCentral()
 }
@@ -58,7 +57,7 @@ fun htmlFixer(filename: String): String {
   return ""
 }
 
-version = "2020.1.1"
+version = "2020.1.2"
 
 tasks {
   named<org.jetbrains.intellij.tasks.PatchPluginXmlTask>("patchPluginXml") {
