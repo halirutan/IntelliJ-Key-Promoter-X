@@ -13,7 +13,7 @@ jobs:
       run: ./gradlew buildPlugin
     - uses: thepieterdc/intellij-plugin-verifier-action@v1.1.0
       with:
-        plugin: '/home/runner/work/IntelliJ-Key-Promoter-X/build/distributions/IntelliJ-Key-Promoter-X-2020.1.2.zip'
+        plugin: '/home/runner/work/IntelliJ-Key-Promoter-X/build/distributions/IntelliJ-Key-Promoter-X-*'
         versions: |
           2019.3.3
           LATEST-EAP-SNAPSHOT
