@@ -21,7 +21,7 @@ with $2/month by
 [Hasnain Baxamoosa](https://github.com/hbaxamoosa),
 [James Haskell](https://github.com/JamesHaskell),
 [Ryan Quinn](https://github.com/ryanwilliamquinn),
-and with $1/month by [15 other people](https://github.com/sponsors/halirutan).
+and with $1/month by [21 other people](https://github.com/sponsors/halirutan).
 
 - [Become a GitHub Sponsor and support the Key Promoter X development](https://github.com/sponsors/halirutan)
 
