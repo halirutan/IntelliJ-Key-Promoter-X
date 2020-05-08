@@ -3,7 +3,6 @@ buildscript {
     mavenCentral()
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
     maven("https://dl.bintray.com/jetbrains/intellij-plugin-service")
-
   }
   dependencies {
     classpath("org.jetbrains.intellij.plugins:gradle-intellij-plugin:0.5.0-SNAPSHOT")
@@ -57,13 +56,13 @@ fun htmlFixer(filename: String): String {
   return ""
 }
 
-version = "2020.1.2"
+version = "2020.1.3"
 
 tasks {
   named<org.jetbrains.intellij.tasks.PatchPluginXmlTask>("patchPluginXml") {
     changeNotes(htmlFixer("resources/META-INF/change-notes.html"))
     pluginDescription(htmlFixer("resources/META-INF/description.html"))
-    sinceBuild("191")
+    sinceBuild("193")
   }
 
   named<org.jetbrains.intellij.tasks.PublishTask>("publishPlugin") {

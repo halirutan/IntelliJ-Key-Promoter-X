@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (c) 2017 Patrick Scheibe, Dmitry Kashin, Athiele.
+  ~ Copyright (c) 2020 Patrick Scheibe, Dmitry Kashin, Athiele.
   ~
   ~ Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
   ~
@@ -13,15 +13,10 @@
 <idea-plugin>
     <name>Key Promoter X</name>
     <vendor>halirutan</vendor>
-    <idea-version since-build="191"/>
-    <application-components>
-        <component>
-            <implementation-class>de.halirutan.keypromoterx.KeyPromoter</implementation-class>
-        </component>
-    </application-components>
-    <!-- Mark the plugin as compatible with RubyMine and other products based on the IntelliJ platform -->
+    <idea-version since-build="193"/>
     <depends>com.intellij.modules.lang</depends>
     <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceImplementation="de.halirutan.keypromoterx.KeyPromoter" preload="notHeadless"/>
         <postStartupActivity implementation="de.halirutan.keypromoterx.tips.KPXStartupNotification"/>
         <applicationService serviceImplementation="de.halirutan.keypromoterx.statistic.KeyPromoterStatistics"/>
         <applicationService serviceImplementation="de.halirutan.keypromoterx.KeyPromoterSettings"/>

@@ -1,7 +1,7 @@
 package de.halirutan.keypromoterx.tips;
 
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
-import com.intellij.ide.plugins.PluginManager;
+import com.intellij.ide.plugins.PluginManagerCore;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
@@ -25,9 +25,10 @@ public class KPXStartupNotification implements StartupActivity, DumbAware {
     final KeyPromoterSettings settings = ServiceManager.getService(KeyPromoterSettings.class);
     final String installedVersion = settings.getInstalledVersion();
 
-    final IdeaPluginDescriptor plugin = PluginManager.getPlugin(PluginId.getId("Key Promoter X"));
+    final IdeaPluginDescriptor plugin = PluginManagerCore.getPlugin(PluginId.getId("Key Promoter X"));
     if (installedVersion != null && plugin != null) {
       final int compare = VersionComparatorUtil.compare(installedVersion, plugin.getVersion());
+//      if (true) { // TODO: Don't forget to remove that!
       if (compare < 0) {
         application.invokeLater(() -> KPXStartupDialog.showStartupDialog(project));
         settings.setInstalledVersion(plugin.getVersion());
