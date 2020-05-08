@@ -1,7 +1,6 @@
 package de.halirutan.keypromoterx.tips;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.*;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -11,10 +10,12 @@ import com.intellij.ide.util.TipUIUtil;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.SimpleTextAttributes;
+import com.intellij.ui.components.JBBox;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.util.IconUtil;
 import com.intellij.util.ui.JBDimension;
 import com.intellij.util.ui.JBUI;
+import de.halirutan.keypromoterx.KeyPromoterBundle;
 import de.halirutan.keypromoterx.KeyPromoterIcons;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +28,7 @@ import static com.intellij.util.ui.UIUtil.isUnderDarcula;
  */
 public class TipPanel extends JPanel {
   private static final JBColor DIVIDER_COLOR = new JBColor(0xd9d9d9, 0x515151);
-  private static final int DEFAULT_WIDTH = 400;
+  private static final int DEFAULT_WIDTH = 450;
   private static final int DEFAULT_HEIGHT = 200;
   private final TipUIUtil.Browser myBrowser;
 
@@ -42,12 +43,20 @@ public class TipPanel extends JPanel {
     scrollPane.setBorder(JBUI.Borders.customLine(DIVIDER_COLOR, 0, 0, 1, 0));
     add(scrollPane, BorderLayout.CENTER);
 
-    JLabel myPoweredByLabel = new JBLabel(IconUtil.scale(KeyPromoterIcons.KP_ICON, this, 3.0f));
-    myPoweredByLabel.setSize(128, 128);
-    myPoweredByLabel.setBorder(JBUI.Borders.empty(0, 10));
-    myPoweredByLabel.setForeground(SimpleTextAttributes.GRAY_ITALIC_ATTRIBUTES.getFgColor());
+    JLabel kpxIcon = new JBLabel(IconUtil.scale(KeyPromoterIcons.KP_ICON, this, 3.0f));
+    kpxIcon.setSize(128, 128);
+    kpxIcon.setBorder(JBUI.Borders.empty(0, 10));
+    kpxIcon.setForeground(SimpleTextAttributes.GRAY_ITALIC_ATTRIBUTES.getFgColor());
 
-    add(myPoweredByLabel, BorderLayout.NORTH);
+    JLabel versionLabel = new JBLabel(KeyPromoterBundle.message("kp.tool.window.name"));
+    versionLabel.setFont(new Font(versionLabel.getName(), Font.BOLD, 24));
+    versionLabel.setForeground(JBUI.CurrentTheme.Label.foreground(false));
+    JBBox horizontalBox = JBBox.createHorizontalBox();
+    horizontalBox.setAlignmentX(.5f);
+    horizontalBox.add(kpxIcon);
+    horizontalBox.add(versionLabel);
+
+    add(horizontalBox, BorderLayout.NORTH);
   }
 
   void setMessageText(@NotNull String text) {
