@@ -22,6 +22,14 @@
 
 package de.halirutan.keypromoterx;
 
+import javax.swing.Icon;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTextPane;
+import javax.swing.SpinnerNumberModel;
+
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.options.BaseConfigurable;
@@ -31,8 +39,6 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
 
 
 /**
@@ -121,8 +127,8 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
     keyPromoterSettings.setDisabledInPresentationMode(myDisabledInPresentationMode.isSelected());
     keyPromoterSettings.setDisabledInDistractionFreeMode(myDisabledInDistractionFreeMode.isSelected());
     keyPromoterSettings
-        .setProposeToCreateShortcutCount(new Integer(myProposeToCreateShortcutCount.getValue().toString()));
-    keyPromoterSettings.setShowTipsClickCount(new Integer(myShowClickCount.getValue().toString()));
+            .setProposeToCreateShortcutCount(Integer.parseInt(myProposeToCreateShortcutCount.getValue().toString()));
+    keyPromoterSettings.setShowTipsClickCount(Integer.parseInt(myShowClickCount.getValue().toString()));
   }
 
   public void reset() {
