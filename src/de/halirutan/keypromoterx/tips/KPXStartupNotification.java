@@ -28,7 +28,7 @@ public class KPXStartupNotification implements StartupActivity, DumbAware {
     final IdeaPluginDescriptor plugin = PluginManagerCore.getPlugin(PluginId.getId("Key Promoter X"));
     if (installedVersion != null && plugin != null) {
       final int compare = VersionComparatorUtil.compare(installedVersion, plugin.getVersion());
-//      if (true) { // TODO: Don't forget to remove that!
+//      if (true) { // TODO: Don't forget to remove that! For proofreading.
       if (compare < 0) {
         application.invokeLater(() -> KPXStartupDialog.showStartupDialog(project));
         settings.setInstalledVersion(plugin.getVersion());

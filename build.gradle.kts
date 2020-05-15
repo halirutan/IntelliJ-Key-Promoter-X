@@ -1,19 +1,8 @@
-buildscript {
-  repositories {
-    mavenCentral()
-    maven("https://oss.sonatype.org/content/repositories/snapshots/")
-    maven("https://dl.bintray.com/jetbrains/intellij-plugin-service")
-  }
-  dependencies {
-    classpath("org.jetbrains.intellij.plugins:gradle-intellij-plugin:0.5.0-SNAPSHOT")
-  }
-}
-
 plugins {
+  idea apply true
+  id("org.jetbrains.intellij") version "0.4.18"
   id("java")
 }
-
-apply(plugin = "org.jetbrains.intellij")
 
 java {
   sourceCompatibility = JavaVersion.VERSION_1_8
@@ -30,7 +19,6 @@ sourceSets {
     resources.srcDir("resources")
   }
 }
-// tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
 
 configure<org.jetbrains.intellij.IntelliJPluginExtension> {
   version = "LATEST-EAP-SNAPSHOT"
@@ -59,16 +47,21 @@ fun htmlFixer(filename: String): String {
 version = "2020.1.3"
 
 tasks {
-  named<org.jetbrains.intellij.tasks.PatchPluginXmlTask>("patchPluginXml") {
+  withType(JavaCompile::class.java) {
+    options.encoding = "UTF-8"
+  }
+
+  withType(org.jetbrains.intellij.tasks.PatchPluginXmlTask::class.java) {
     changeNotes(htmlFixer("resources/META-INF/change-notes.html"))
     pluginDescription(htmlFixer("resources/META-INF/description.html"))
     sinceBuild("193")
   }
 
-  named<org.jetbrains.intellij.tasks.PublishTask>("publishPlugin") {
+  withType(org.jetbrains.intellij.tasks.PublishTask::class.java) {
     if (project.hasProperty("pluginsToken")) {
       token(project.property("pluginsToken"))
     }
+    channels("default")
   }
 }
 

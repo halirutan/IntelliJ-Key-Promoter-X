@@ -6,13 +6,17 @@
 [![banner](doc/img/kpxBanner.png)](https://github.com/sponsors/halirutan)
 
 ---
-I'm grateful this project is currently sponsored with $4/month by
+I'm grateful this project is currently sponsored by 
+
+[![CodeStream](https://alt-images.codestream.com/codestream_logo_keypromoterx.png)](https://sponsorlink.codestream.com/?utm_source=jbmarket&amp;utm_campaign=keypromoterx&amp;utm_medium=banner)
+
+and receives $4/month from
 [Daniel Babiak](https://github.com/dbabiak), 
 [Stefan Hagen](https://github.com/sthagen), 
 [Joshua Lückers](https://github.com/JoshuaLuckers),
 [jlash13](https://github.com/jlash13),
 [Mark McCorkle](https://github.com/mccorkle),
-with $2/month by
+$2/month from
 [Mac Adamarczuk](https://github.com/macalac),
 [Frank Harper](https://github.com/franklinharper), 
 [Christopher Kolstad](https://github.com/chriswk),
@@ -21,7 +25,7 @@ with $2/month by
 [Hasnain Baxamoosa](https://github.com/hbaxamoosa),
 [James Haskell](https://github.com/JamesHaskell),
 [Ryan Quinn](https://github.com/ryanwilliamquinn),
-and with $1/month by [21 other people](https://github.com/sponsors/halirutan).
+and $1/month from [21 other people](https://github.com/sponsors/halirutan).
 
 - [Become a GitHub Sponsor and support the Key Promoter X development](https://github.com/sponsors/halirutan)
 
