@@ -44,7 +44,7 @@ fun htmlFixer(filename: String): String {
   return ""
 }
 
-version = "2020.1.3"
+version = "2020.1.3.1"
 
 tasks {
   withType(JavaCompile::class.java) {
@@ -54,7 +54,7 @@ tasks {
   withType(org.jetbrains.intellij.tasks.PatchPluginXmlTask::class.java) {
     changeNotes(htmlFixer("resources/META-INF/change-notes.html"))
     pluginDescription(htmlFixer("resources/META-INF/description.html"))
-    sinceBuild("193")
+    sinceBuild("201")
   }
 
   withType(org.jetbrains.intellij.tasks.PublishTask::class.java) {
