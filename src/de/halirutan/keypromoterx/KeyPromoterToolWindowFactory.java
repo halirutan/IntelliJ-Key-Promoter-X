@@ -22,15 +22,16 @@
 
 package de.halirutan.keypromoterx;
 
+import javax.swing.ScrollPaneConstants;
+
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
+import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
 
 /**
  * Core class to create the Key Promoter X tool-window. Nothing interesting here except of template code.
@@ -43,7 +44,8 @@ public class KeyPromoterToolWindowFactory implements ToolWindowFactory, DumbAwar
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
         KeyPromoterToolWindowPanel toolWindowBuilder = new KeyPromoterToolWindowPanel();
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-        JPanel toolWindowContent = toolWindowBuilder.getContent();
+        JBScrollPane toolWindowContent = new JBScrollPane(toolWindowBuilder.getContent());
+        toolWindowContent.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         Content content = contentFactory.createContent(toolWindowContent, "", false);
         content.setPreferredFocusableComponent(toolWindowContent);
         content.setDisposer(toolWindowBuilder);
