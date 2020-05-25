@@ -44,7 +44,7 @@ fun htmlFixer(filename: String): String {
   return ""
 }
 
-version = "2020.1.3.3"
+version = "2020.1.3.4"
 
 tasks {
   withType(JavaCompile::class.java) {
