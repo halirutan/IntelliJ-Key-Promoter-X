@@ -1,6 +1,6 @@
 plugins {
   idea apply true
-  id("org.jetbrains.intellij") version "0.4.18"
+  id("org.jetbrains.intellij") version "0.4.21"
   id("java")
 }
 
@@ -24,6 +24,7 @@ configure<org.jetbrains.intellij.IntelliJPluginExtension> {
   version = "LATEST-EAP-SNAPSHOT"
   updateSinceUntilBuild = true
   pluginName = "Key-Promoter-X"
+//  alternativeIdePath = "/home/patrick/build/share/JetBrains/Toolbox/apps/Rider/ch-0/201.7846.1"
 //  alternativeIdePath = "/home/patrick/.local/share/JetBrains/Toolbox/apps/AndroidStudio/ch-0/183.5452501"
 //  alternativeIdePath = "/home/patrick/.local/share/JetBrains/Toolbox/apps/PyCharm-P/ch-0/191.6605.12"
 //  alternativeIdePath = "/usr/local/IntelliJ/android-studio"
@@ -44,7 +45,7 @@ fun htmlFixer(filename: String): String {
   return ""
 }
 
-version = "2020.1.3.4"
+version = "2020.2.1"
 
 tasks {
   withType(JavaCompile::class.java) {

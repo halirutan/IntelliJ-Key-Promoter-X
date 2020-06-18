@@ -191,10 +191,10 @@ public class KeyPromoterAction {
     if (myDescription == null || myDescription.length() == 0) {
       return;
     }
-    if ("Debug".equals(myIdeaActionID)) {
+    if ("Debug".equals(myIdeaActionID) || "DebugClass".equals(myIdeaActionID)) {
       myDescription = myDescription.replaceFirst("Debug '.*'", "Debug");
     }
-    if ("Run".equals(myIdeaActionID)) {
+    if ("Run".equals(myIdeaActionID) || "RunClass".equals(myIdeaActionID)) {
       myDescription = myDescription.replaceFirst("Run '.*'", "Run");
     }
   }
