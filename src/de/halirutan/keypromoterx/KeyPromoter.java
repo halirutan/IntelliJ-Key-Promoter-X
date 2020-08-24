@@ -39,6 +39,7 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.*;
 import java.awt.event.AWTEventListener;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.Collections;
 import java.util.HashMap;
@@ -52,6 +53,19 @@ import java.util.Map;
  * @author Patrick Scheibe, Dmitry Kashin
  */
 public class KeyPromoter implements AWTEventListener, AnActionListener, Disposable {
+
+  /**
+   * Transfers the event to {@link KeyPromoterAction} and inspects the results. Then, depending on the result and the
+   * Key Promoter X settings, a balloon is shown with the shortcut tip and the statistic is updated.
+   *
+   * @param e event that is handled
+   */
+  private void handleMouseEvent(AWTEvent e) {
+    if (e.getSource() instanceof StripeButton && keyPromoterSettings.isToolWindowButtonsEnabled()) {
+      KeyPromoterAction action = new KeyPromoterAction(e);
+      showTip(action, ActionType.MouseAction);
+    }
+  }
 
   private final Map<String, Integer> withoutShortcutStats = Collections.synchronizedMap(new HashMap<>());
   private final KeyPromoterStatistics statsService = ServiceManager.getService(KeyPromoterStatistics.class);
@@ -85,50 +99,79 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
     }
   }
 
-  /**
-   * Transfers the event to {@link KeyPromoterAction} and inspects the results. Then, depending on the result and the
-   * Key Promoter X settings, a balloon is shown with the shortcut tip and the statistic is updated.
-   *
-   * @param e event that is handled
-   */
-  private void handleMouseEvent(AWTEvent e) {
-    if (e.getSource() instanceof StripeButton && keyPromoterSettings.isToolWindowButtonsEnabled()) {
-      KeyPromoterAction action = new KeyPromoterAction(e);
-      showTip(action);
-    }
-  }
-
   @Override
   public void beforeActionPerformed(@NotNull AnAction action, @NotNull DataContext dataContext, AnActionEvent event) {
     final InputEvent input = event.getInputEvent();
-    if (input instanceof MouseEvent) {
-      // The following is a hack to work around an issue with IDEA, where certain events arrive
-      // twice. See https://youtrack.jetbrains.com/issue/IDEA-219133
-      if (input.getWhen() != 0 && lastEventTime == input.getWhen()) {
-        return;
-      }
-      lastEventTime = input.getWhen();
 
-      final String place = event.getPlace();
-      KeyPromoterAction kpAction;
-      if ("MainMenu".equals(place)) {
-        if (keyPromoterSettings.isMenusEnabled()) {
-          kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.MENU_ENTRY);
-          showTip(kpAction);
+    // The following is a hack to work around an issue with IDEA, where certain events arrive
+    // twice. See https://youtrack.jetbrains.com/issue/IDEA-219133
+    if (input.getWhen() != 0 && lastEventTime == input.getWhen()) {
+      return;
+    }
+    lastEventTime = input.getWhen();
+
+    ActionType type = ActionType.Unknown;
+    if (input instanceof MouseEvent) {
+      type = ActionType.MouseAction;
+    } else if (input instanceof KeyEvent) {
+      type = ActionType.KeyboardAction;
+    }
+    final String place = event.getPlace();
+    KeyPromoterAction kpAction;
+    if ("MainMenu".equals(place)) {
+      if (keyPromoterSettings.isMenusEnabled()) {
+        kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.MENU_ENTRY);
+        showTip(kpAction, type);
+      }
+    } else if ("MainToolbar".equals(place)) {
+      if (keyPromoterSettings.isToolbarButtonsEnabled()) {
+        kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.MAIN_TOOLBAR);
+        showTip(kpAction, type);
+      }
+    } else if (place.matches(".*Popup")) {
+      if (keyPromoterSettings.isEditorPopupEnabled()) {
+        kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.POPUP);
+        showTip(kpAction, type);
+      }
+    } else if (keyPromoterSettings.isAllButtonsEnabled()) {
+      kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.OTHER);
+      showTip(kpAction, type);
+    }
+  }
+
+  private void showTip(KeyPromoterAction action, ActionType type) {
+    if (action == null
+        || !action.isValid()
+        || statsService.isSuppressed(action)
+        || disabledInPresentationMode()
+        || disabledInDistractionFreeMode()
+        || SnoozeNotifier.isSnoozed()
+        || type == ActionType.Unknown
+    ) {
+      return;
+    }
+
+    final String shortcut = action.getShortcut();
+    if (!StringUtil.isEmpty(shortcut)) {
+      if (type == ActionType.MouseAction) {
+        statsService.registerAction(action);
+        int count = statsService.get(action).count;
+        if (count % keyPromoterSettings.getShowTipsClickCount() == 0) {
+          KeyPromoterNotification.showTip(action, statsService.get(action).getCount());
         }
-      } else if ("MainToolbar".equals(place)) {
-        if (keyPromoterSettings.isToolbarButtonsEnabled()) {
-          kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.MAIN_TOOLBAR);
-          showTip(kpAction);
-        }
-      } else if (place.matches(".*Popup")) {
-        if (keyPromoterSettings.isEditorPopupEnabled()) {
-          kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.POPUP);
-          showTip(kpAction);
-        }
-      } else if (keyPromoterSettings.isAllButtonsEnabled()) {
-        kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.OTHER);
-        showTip(kpAction);
+      } else if (type == ActionType.KeyboardAction) {
+        statsService.registerShortcutUsed(action);
+      }
+
+    } else {
+      final String ideaActionID = action.getIdeaActionID();
+      withoutShortcutStats.putIfAbsent(ideaActionID, 0);
+      withoutShortcutStats.put(ideaActionID, withoutShortcutStats.get(ideaActionID) + 1);
+      if (keyPromoterSettings.getProposeToCreateShortcutCount() > 0
+          &&
+          withoutShortcutStats.get(ideaActionID) % keyPromoterSettings.getProposeToCreateShortcutCount() == 0) {
+        KeyPromoterNotification.askToCreateShortcut(action);
+
       }
     }
   }
@@ -143,33 +186,9 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
     return isDistractionFreeMode && keyPromoterSettings.isDisabledInDistractionFreeMode();
   }
 
-  private void showTip(KeyPromoterAction action) {
-    if (action == null
-        || !action.isValid()
-        || statsService.isSuppressed(action)
-        || disabledInPresentationMode()
-        || disabledInDistractionFreeMode()
-        || SnoozeNotifier.isSnoozed()
-    ) { return; }
-
-    final String shortcut = action.getShortcut();
-    if (!StringUtil.isEmpty(shortcut)) {
-      statsService.registerAction(action);
-      int count = statsService.get(action).count;
-      if (count % keyPromoterSettings.getShowTipsClickCount() == 0) {
-        KeyPromoterNotification.showTip(action, statsService.get(action).getCount());
-      }
-
-    } else {
-      final String ideaActionID = action.getIdeaActionID();
-      withoutShortcutStats.putIfAbsent(ideaActionID, 0);
-      withoutShortcutStats.put(ideaActionID, withoutShortcutStats.get(ideaActionID) + 1);
-      if (keyPromoterSettings.getProposeToCreateShortcutCount() > 0
-          &&
-          withoutShortcutStats.get(ideaActionID) % keyPromoterSettings.getProposeToCreateShortcutCount() == 0) {
-        KeyPromoterNotification.askToCreateShortcut(action);
-
-      }
-    }
+  enum ActionType {
+    MouseAction,
+    KeyboardAction,
+    Unknown
   }
 }
