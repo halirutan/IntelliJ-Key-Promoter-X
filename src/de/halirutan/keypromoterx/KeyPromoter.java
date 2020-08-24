@@ -73,11 +73,12 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
   private final KeyPromoterSettings keyPromoterSettings = ServiceManager.getService(KeyPromoterSettings.class);
   private static final String distractionFreeModeKey = "editor.distraction.free.mode";
   private long lastEventTime = -1;
+  private boolean mouseDrag = false;
 
 
   public KeyPromoter() {
     Topics.subscribe(AnActionListener.TOPIC, this, this);
-    long eventMask = AWTEvent.MOUSE_EVENT_MASK | AWTEvent.WINDOW_EVENT_MASK | AWTEvent.WINDOW_STATE_EVENT_MASK;
+    long eventMask = AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK | AWTEvent.WINDOW_EVENT_MASK | AWTEvent.WINDOW_STATE_EVENT_MASK;
     Toolkit.getDefaultToolkit().addAWTEventListener(this, eventMask);
   }
 
@@ -89,19 +90,38 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
   /**
    * Catches all UI events from the main IDEA AWT making it possible to inspect all mouse-clicks.
    * Note that on OSX this will not catch clicks on the (detached) menu bar.
+   * It also takes care of handling drag events that we're not interested in.
    *
    * @param e event that is caught
    */
   @Override
   public void eventDispatched(AWTEvent e) {
-    if (e.getID() == MouseEvent.MOUSE_RELEASED && ((MouseEvent) e).getButton() == MouseEvent.BUTTON1) {
-      handleMouseEvent(e);
+    int id = e.getID();
+    if (id == MouseEvent.MOUSE_DRAGGED) {
+      mouseDrag = true;
+      return;
+    }
+
+    if (id == MouseEvent.MOUSE_RELEASED && ((MouseEvent) e).getButton() == MouseEvent.BUTTON1) {
+      if (!mouseDrag) {
+        handleMouseEvent(e);
+      }
+      mouseDrag = false;
     }
   }
 
   @Override
   public void beforeActionPerformed(@NotNull AnAction action, @NotNull DataContext dataContext, AnActionEvent event) {
     final InputEvent input = event.getInputEvent();
+
+    ActionType type;
+    if (input instanceof MouseEvent) {
+      type = ActionType.MouseAction;
+    } else if (input instanceof KeyEvent) {
+      type = ActionType.KeyboardAction;
+    } else {
+      return;
+    }
 
     // The following is a hack to work around an issue with IDEA, where certain events arrive
     // twice. See https://youtrack.jetbrains.com/issue/IDEA-219133
@@ -110,12 +130,6 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
     }
     lastEventTime = input.getWhen();
 
-    ActionType type = ActionType.Unknown;
-    if (input instanceof MouseEvent) {
-      type = ActionType.MouseAction;
-    } else if (input instanceof KeyEvent) {
-      type = ActionType.KeyboardAction;
-    }
     final String place = event.getPlace();
     KeyPromoterAction kpAction;
     if ("MainMenu".equals(place)) {
