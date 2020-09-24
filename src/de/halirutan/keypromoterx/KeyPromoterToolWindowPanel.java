@@ -40,58 +40,57 @@ import javax.swing.*;
 @SuppressWarnings("unused")
 class KeyPromoterToolWindowPanel implements Disposable, SnoozeNotifier.Handler {
 
-    private final KeyPromoterStatistics statService = ServiceManager.getService(KeyPromoterStatistics.class);
-    private JPanel panel;
-    private JList statisticsList;
-    private JButton resetStatisticsButton;
-    private JList suppressedList;
-    private JCheckBox snoozeCheckBox;
-    private JButton exportReportButton;
+  private final KeyPromoterStatistics statService = ServiceManager.getService(KeyPromoterStatistics.class);
+  private JPanel panel;
+  private JList statisticsList;
+  private JButton resetStatisticsButton;
+  private JList suppressedList;
+  private JCheckBox snoozeCheckBox;
+  private JButton exportReportButton;
 
-    KeyPromoterToolWindowPanel() {
-        resetStatisticsButton.addActionListener(e -> resetStats());
-        exportReportButton.addActionListener(e -> saveReport());
-        Topics.subscribe(SnoozeNotifier.Handler.SNOOZE_TOPIC, this, this);
-        snoozeCheckBox.addItemListener(e -> SnoozeNotifier.setSnoozed(snoozeCheckBox.isSelected()));
+  KeyPromoterToolWindowPanel() {
+    resetStatisticsButton.addActionListener(e -> resetStats());
+    exportReportButton.addActionListener(e -> exportReport());
+    Topics.subscribe(SnoozeNotifier.Handler.SNOOZE_TOPIC, this, this);
+    snoozeCheckBox.addItemListener(e -> SnoozeNotifier.setSnoozed(snoozeCheckBox.isSelected()));
+  }
+
+  @SuppressWarnings("WeakerAccess")
+  public JPanel getContent() {
+    return panel;
+  }
+
+  private void resetStats() {
+    if (Messages.showYesNoDialog(
+        KeyPromoterBundle.message("kp.dialog.reset.statistic.text"),
+        KeyPromoterBundle.message("kp.dialog.reset.statistic.title"),
+        Messages.getQuestionIcon()) == Messages.YES) {
+      statService.resetStatistic();
     }
+  }
 
-    private void saveReport() {
-        if (Messages.showYesNoDialog(
-                KeyPromoterBundle.message("kp.dialog.export.statistic.text"),
-                KeyPromoterBundle.message("kp.dialog.export.statistic.title"),
-                Messages.getQuestionIcon()) == Messages.YES) {
-
-            statService.exportReport();
-        }
+  private void exportReport() {
+    if (Messages.showYesNoDialog(
+        KeyPromoterBundle.message("kp.dialog.export.statistic.text"),
+        KeyPromoterBundle.message("kp.dialog.export.statistic.title"),
+        Messages.getQuestionIcon()) == Messages.YES) {
+      statService.exportReport();
     }
+  }
 
-    @SuppressWarnings("WeakerAccess")
-    public JPanel getContent() {
-        return panel;
-    }
+  private void createUIComponents() {
+    statisticsList = new StatisticsList();
+    suppressedList = new SuppressedList();
+  }
 
-    private void resetStats() {
-        if (Messages.showYesNoDialog(
-                KeyPromoterBundle.message("kp.dialog.reset.statistic.text"),
-                KeyPromoterBundle.message("kp.dialog.reset.statistic.title"),
-                Messages.getQuestionIcon()) == Messages.YES) {
-            statService.resetStatistic();
-        }
-    }
+  @Override
+  public void dispose() {
 
-    private void createUIComponents() {
-        statisticsList = new StatisticsList();
-        suppressedList = new SuppressedList();
-    }
+  }
 
-    @Override
-    public void dispose() {
-
-    }
-
-    @Override
-    public void snoozeAction(boolean state) {
-        snoozeCheckBox.setSelected(state);
-    }
+  @Override
+  public void snoozeAction(boolean state) {
+    snoozeCheckBox.setSelected(state);
+  }
 
 }

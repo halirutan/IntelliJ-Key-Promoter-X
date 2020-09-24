@@ -12,7 +12,6 @@
 
 package de.halirutan.keypromoterx.statistic;
 
-import Utilities.Exporter;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.RoamingType;
 import com.intellij.openapi.components.State;
@@ -24,15 +23,16 @@ import de.halirutan.keypromoterx.KeyPromoterAction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
-import javax.swing.filechooser.FileSystemView;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import Utilities.Exporter;
+import java.io.IOException;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileSystemView;
 
 /**
  * Provides storing the statistics persistently. Note that the only thing we store persistently is the list of
@@ -49,160 +49,158 @@ import java.util.Map;
  * @author Patrick Scheibe
  */
 @State(
-        name = "KeyPromoterXStatistic",
-        storages = {
-                @Storage(
-                        value = "KeyPromoterXStatistic.xml",
-                        roamingType = RoamingType.DISABLED
-                )
-        }
+    name = "KeyPromoterXStatistic",
+    storages = {
+        @Storage(
+            value = "KeyPromoterXStatistic.xml",
+            roamingType = RoamingType.DISABLED
+        )
+    }
 )
 public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromoterStatistics> {
 
-    @Transient
-    static final String STATISTIC = "add";
-    @Transient
-    static final String SUPPRESS = "suppress";
+  @Transient
+  static final String STATISTIC = "add";
+  @Transient
+  static final String SUPPRESS = "suppress";
 
-    @MapAnnotation(surroundKeyWithTag = false,
-            surroundValueWithTag = false,
-            surroundWithTag = false,
-            entryTagName = "Statistic",
-            keyAttributeName = "Action")
+  @MapAnnotation(surroundKeyWithTag = false, surroundValueWithTag = false, surroundWithTag = false, entryTagName = "Statistic", keyAttributeName = "Action")
+  private final Map<String, StatisticsItem> statistics = Collections.synchronizedMap(new HashMap<>());
 
-    private final Map<String, StatisticsItem> statistics = Collections.synchronizedMap(new HashMap<>());
+  @MapAnnotation(surroundKeyWithTag = false, surroundValueWithTag = false, surroundWithTag = false, entryTagName = "Statistic", keyAttributeName = "Action")
+  private final Map<String, StatisticsItem> suppressed = Collections.synchronizedMap(new HashMap<>());
 
-    @MapAnnotation(surroundKeyWithTag = false,
-            surroundValueWithTag = false,
-            surroundWithTag = false,
-            entryTagName = "Statistic",
-            keyAttributeName = "Action")
-    private final Map<String, StatisticsItem> suppressed = Collections.synchronizedMap(new HashMap<>());
+  @Transient
+  private final PropertyChangeSupport myChangeSupport = new PropertyChangeSupport(this);
 
-    @Transient
-    private final PropertyChangeSupport myChangeSupport = new PropertyChangeSupport(this);
+  @Nullable
+  @Override
+  public KeyPromoterStatistics getState() {
+    return this;
+  }
 
-    @Nullable
-    @Override
-    public KeyPromoterStatistics getState() {
-        return this;
+  @Override
+  public void loadState(@NotNull KeyPromoterStatistics stats) {
+    XmlSerializerUtil.copyBean(stats, this);
+  }
+
+
+  @Transient
+  void registerPropertyChangeSupport(PropertyChangeListener listener) {
+    myChangeSupport.addPropertyChangeListener(listener);
+  }
+
+  @Transient
+  public void registerAction(KeyPromoterAction action) {
+    synchronized (statistics) {
+      statistics.putIfAbsent(action.getDescription(), new StatisticsItem(action));
+      statistics.get(action.getDescription()).registerEvent();
+    }
+    myChangeSupport.firePropertyChange(STATISTIC, null, null);
+  }
+
+  @Transient
+  public void resetStatistic() {
+    synchronized (statistics) {
+      statistics.clear();
+    }
+    myChangeSupport.firePropertyChange(STATISTIC, null, null);
+  }
+
+  @Transient
+  public void suppressItem(KeyPromoterAction action) {
+    StatisticsItem removed;
+    synchronized (statistics) {
+      removed = statistics.remove(action.getDescription());
+      removed = removed == null ? new StatisticsItem(action) : removed;
+    }
+    synchronized (suppressed) {
+      suppressed.putIfAbsent(action.getDescription(), removed);
+    }
+    myChangeSupport.firePropertyChange(SUPPRESS, null, null);
+    myChangeSupport.firePropertyChange(STATISTIC, null, null);
+  }
+
+  @Transient
+  public StatisticsItem get(KeyPromoterAction action) {
+    return statistics.get(action.getDescription());
+  }
+
+  @Transient
+  ArrayList<StatisticsItem> getStatisticItems() {
+    final ArrayList<StatisticsItem> items = new ArrayList<>(statistics.values());
+    Collections.sort(items);
+    return items;
+  }
+
+  @Transient
+  ArrayList<StatisticsItem> getSuppressedItems() {
+    return new ArrayList<>(suppressed.values());
+  }
+
+  @Transient
+  public boolean isSuppressed(KeyPromoterAction action) {
+    return suppressed.containsKey(action.getDescription());
+  }
+
+  /**
+   * Puts an item from the suppress list back into the statistics.
+   *
+   * @param item Item to unsuppress
+   */
+  @Transient
+  void unsuppressItem(StatisticsItem item) {
+    final StatisticsItem statisticsItem = suppressed.remove(item.getDescription());
+    if (statisticsItem != null && statisticsItem.count > 0) {
+      statistics.putIfAbsent(statisticsItem.getDescription(), statisticsItem);
+    }
+    myChangeSupport.firePropertyChange(SUPPRESS, null, null);
+    myChangeSupport.firePropertyChange(STATISTIC, null, null);
+  }
+
+  public void exportReport() {
+    String basePath = FileSystemView.getFileSystemView().getHomeDirectory() + "/Key-Promoter-X-Reports/";
+    String outputFileName = "output.csv";
+
+    ArrayList<String[]> reportData = getAccumulatedContent();
+
+    Exporter exporter = new Exporter(basePath, outputFileName, reportData);
+
+    try {
+      exporter.export();
+      JOptionPane.showMessageDialog(
+              null,
+              String.format("Data Entered into %s", basePath + outputFileName),
+              "Key Promoter X",
+              JOptionPane.INFORMATION_MESSAGE
+      );
+
+    } catch (IOException e) {
+      JOptionPane.showMessageDialog(
+              null,
+              String.format("Failed to Export to %s", (basePath + outputFileName)),
+              "Error",
+              JOptionPane.ERROR_MESSAGE
+      );
+    }
+  }
+
+  private ArrayList<String[]> getAccumulatedContent() {
+    ArrayList<String[]> reportData = new ArrayList<>();
+
+    reportData.add(new String[]{"shortcuts", "description", "count", "ideaActionID"});
+
+    for (StatisticsItem statisticsItem : getStatisticItems()) {
+      reportData.add(
+              new String[]{
+                      statisticsItem.shortCut,
+                      statisticsItem.description,
+                      String.valueOf(statisticsItem.count),
+                      statisticsItem.ideaActionID
+              }
+      );
     }
 
-    @Override
-    public void loadState(@NotNull KeyPromoterStatistics stats) {
-        XmlSerializerUtil.copyBean(stats, this);
-    }
-
-
-    @Transient
-    void registerPropertyChangeSupport(PropertyChangeListener listener) {
-        myChangeSupport.addPropertyChangeListener(listener);
-    }
-
-    @Transient
-    public void registerAction(KeyPromoterAction action) {
-        synchronized (statistics) {
-            statistics.putIfAbsent(action.getDescription(), new StatisticsItem(action));
-            statistics.get(action.getDescription()).registerEvent();
-        }
-        myChangeSupport.firePropertyChange(STATISTIC, null, null);
-    }
-
-    @Transient
-    public void resetStatistic() {
-        synchronized (statistics) {
-            statistics.clear();
-        }
-        myChangeSupport.firePropertyChange(STATISTIC, null, null);
-    }
-
-    @Transient
-    public void suppressItem(KeyPromoterAction action) {
-        StatisticsItem removed;
-        synchronized (statistics) {
-            removed = statistics.remove(action.getDescription());
-            removed = removed == null ? new StatisticsItem(action) : removed;
-        }
-        synchronized (suppressed) {
-            suppressed.putIfAbsent(action.getDescription(), removed);
-        }
-        myChangeSupport.firePropertyChange(SUPPRESS, null, null);
-        myChangeSupport.firePropertyChange(STATISTIC, null, null);
-    }
-
-    @Transient
-    public StatisticsItem get(KeyPromoterAction action) {
-        return statistics.get(action.getDescription());
-    }
-
-    @Transient
-    ArrayList<StatisticsItem> getStatisticItems() {
-        final ArrayList<StatisticsItem> items = new ArrayList<>(statistics.values());
-        Collections.sort(items);
-        return items;
-    }
-
-    @Transient
-    ArrayList<StatisticsItem> getSuppressedItems() {
-        return new ArrayList<>(suppressed.values());
-    }
-
-    @Transient
-    public boolean isSuppressed(KeyPromoterAction action) {
-        return suppressed.containsKey(action.getDescription());
-    }
-
-    /**
-     * Puts an item from the suppress list back into the statistics.
-     *
-     * @param item Item to unsuppress
-     */
-    @Transient
-    void unsuppressItem(StatisticsItem item) {
-        final StatisticsItem statisticsItem = suppressed.remove(item.getDescription());
-        if (statisticsItem != null && statisticsItem.count > 0) {
-            statistics.putIfAbsent(statisticsItem.getDescription(), statisticsItem);
-        }
-        myChangeSupport.firePropertyChange(SUPPRESS, null, null);
-        myChangeSupport.firePropertyChange(STATISTIC, null, null);
-    }
-
-    public void exportReport() {
-        String basePath = FileSystemView.getFileSystemView().getHomeDirectory() + "/Key-Promoter-X-Reports/";
-        String outputFileName = "output.csv";
-
-        ArrayList<String[]> reportData = getAccumulatedContent();
-
-        Exporter exporter = new Exporter(basePath, outputFileName, reportData);
-
-        try {
-            exporter.export();
-            JOptionPane.showMessageDialog(
-                    null,
-                    String.format("Data Entered into %s", basePath + outputFileName),
-                    "Key Promoter X",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
-
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(
-                    null,
-                    String.format("Failed to Export to %s", (basePath + outputFileName)),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
-        }
-    }
-
-    private ArrayList<String[]> getAccumulatedContent() {
-        ArrayList<String[]> reportData = new ArrayList<>();
-
-        reportData.add(new String[]{"shortcuts", "description", "count", "ideaActionID"});
-
-        for (StatisticsItem statisticsItem : getStatisticItems()) {
-            reportData.add(new String[]{statisticsItem.shortCut, statisticsItem.description, String.valueOf(statisticsItem.count), statisticsItem.ideaActionID});
-        }
-
-        return reportData;
-    }
+    return reportData;
+  }
 }
