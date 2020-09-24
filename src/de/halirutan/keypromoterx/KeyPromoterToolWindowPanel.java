@@ -46,11 +46,22 @@ class KeyPromoterToolWindowPanel implements Disposable, SnoozeNotifier.Handler {
   private JButton resetStatisticsButton;
   private JList suppressedList;
   private JCheckBox snoozeCheckBox;
+  private JButton exportReportButton;
 
   KeyPromoterToolWindowPanel() {
     resetStatisticsButton.addActionListener(e -> resetStats());
+    exportReportButton.addActionListener(e -> saveReport());
     Topics.subscribe(SnoozeNotifier.Handler.SNOOZE_TOPIC, this, this);
     snoozeCheckBox.addItemListener(e -> SnoozeNotifier.setSnoozed(snoozeCheckBox.isSelected()));
+  }
+
+  private void saveReport() {
+    if (Messages.showYesNoDialog(
+            KeyPromoterBundle.message("kp.dialog.export.statistic.text"),
+            KeyPromoterBundle.message("kp.dialog.export.statistic.title"),
+            Messages.getQuestionIcon()) == Messages.YES) {
+      statService.exportToFile();
+    }
   }
 
   @SuppressWarnings("WeakerAccess")
@@ -60,8 +71,8 @@ class KeyPromoterToolWindowPanel implements Disposable, SnoozeNotifier.Handler {
 
   private void resetStats() {
     if (Messages.showYesNoDialog(
-        KeyPromoterBundle.message("kp.dialog.reset.statistic.text"),
-        KeyPromoterBundle.message("kp.dialog.reset.statistic.title"),
+            KeyPromoterBundle.message("kp.dialog.reset.statistic.text"),
+            KeyPromoterBundle.message("kp.dialog.reset.statistic.title"),
         Messages.getQuestionIcon()) == Messages.YES) {
       statService.resetStatistic();
     }

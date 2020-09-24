@@ -23,6 +23,7 @@ import de.halirutan.keypromoterx.KeyPromoterAction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
@@ -45,112 +46,133 @@ import java.util.Map;
  * @author Patrick Scheibe
  */
 @State(
-    name = "KeyPromoterXStatistic",
-    storages = {
-        @Storage(
-            value = "KeyPromoterXStatistic.xml",
-            roamingType = RoamingType.DISABLED
-        )
-    }
+        name = "KeyPromoterXStatistic",
+        storages = {
+                @Storage(
+                        value = "KeyPromoterXStatistic.xml",
+                        roamingType = RoamingType.DISABLED
+                )
+        }
 )
 public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromoterStatistics> {
 
-  @Transient
-  static final String STATISTIC = "add";
-  @Transient
-  static final String SUPPRESS = "suppress";
+    @Transient
+    static final String STATISTIC = "add";
+    @Transient
+    static final String SUPPRESS = "suppress";
 
-  @MapAnnotation(surroundKeyWithTag = false, surroundValueWithTag = false, surroundWithTag = false, entryTagName = "Statistic", keyAttributeName = "Action")
-  private final Map<String, StatisticsItem> statistics = Collections.synchronizedMap(new HashMap<>());
+    @MapAnnotation(surroundKeyWithTag = false,
+            surroundValueWithTag = false,
+            surroundWithTag = false,
+            entryTagName = "Statistic",
+            keyAttributeName = "Action")
 
-  @MapAnnotation(surroundKeyWithTag = false, surroundValueWithTag = false, surroundWithTag = false, entryTagName = "Statistic", keyAttributeName = "Action")
-  private final Map<String, StatisticsItem> suppressed = Collections.synchronizedMap(new HashMap<>());
+    private final Map<String, StatisticsItem> statistics = Collections.synchronizedMap(new HashMap<>());
 
-  @Transient
-  private final PropertyChangeSupport myChangeSupport = new PropertyChangeSupport(this);
+    @MapAnnotation(surroundKeyWithTag = false,
+            surroundValueWithTag = false,
+            surroundWithTag = false,
+            entryTagName = "Statistic",
+            keyAttributeName = "Action")
+    private final Map<String, StatisticsItem> suppressed = Collections.synchronizedMap(new HashMap<>());
 
-  @Nullable
-  @Override
-  public KeyPromoterStatistics getState() {
-    return this;
-  }
+    @Transient
+    private final PropertyChangeSupport myChangeSupport = new PropertyChangeSupport(this);
 
-  @Override
-  public void loadState(@NotNull KeyPromoterStatistics stats) {
-    XmlSerializerUtil.copyBean(stats, this);
-  }
-
-
-  @Transient
-  void registerPropertyChangeSupport(PropertyChangeListener listener) {
-    myChangeSupport.addPropertyChangeListener(listener);
-  }
-
-  @Transient
-  public void registerAction(KeyPromoterAction action) {
-    synchronized (statistics) {
-      statistics.putIfAbsent(action.getDescription(), new StatisticsItem(action));
-      statistics.get(action.getDescription()).registerEvent();
+    @Nullable
+    @Override
+    public KeyPromoterStatistics getState() {
+        return this;
     }
-    myChangeSupport.firePropertyChange(STATISTIC, null, null);
-  }
 
-  @Transient
-  public void resetStatistic() {
-    synchronized (statistics) {
-      statistics.clear();
+    @Override
+    public void loadState(@NotNull KeyPromoterStatistics stats) {
+        XmlSerializerUtil.copyBean(stats, this);
     }
-    myChangeSupport.firePropertyChange(STATISTIC, null, null);
-  }
 
-  @Transient
-  public void suppressItem(KeyPromoterAction action) {
-    StatisticsItem removed;
-    synchronized (statistics) {
-      removed = statistics.remove(action.getDescription());
-      removed = removed == null ? new StatisticsItem(action) : removed;
+
+    @Transient
+    void registerPropertyChangeSupport(PropertyChangeListener listener) {
+        myChangeSupport.addPropertyChangeListener(listener);
     }
-    synchronized (suppressed) {
-      suppressed.putIfAbsent(action.getDescription(), removed);
+
+    @Transient
+    public void registerAction(KeyPromoterAction action) {
+        synchronized (statistics) {
+            statistics.putIfAbsent(action.getDescription(), new StatisticsItem(action));
+            statistics.get(action.getDescription()).registerEvent();
+        }
+        myChangeSupport.firePropertyChange(STATISTIC, null, null);
     }
-    myChangeSupport.firePropertyChange(SUPPRESS, null, null);
-    myChangeSupport.firePropertyChange(STATISTIC, null, null);
-  }
 
-  @Transient
-  public StatisticsItem get(KeyPromoterAction action) {
-    return statistics.get(action.getDescription());
-  }
-
-  @Transient
-  ArrayList<StatisticsItem> getStatisticItems() {
-    final ArrayList<StatisticsItem> items = new ArrayList<>(statistics.values());
-    Collections.sort(items);
-    return items;
-  }
-
-  @Transient
-  ArrayList<StatisticsItem> getSuppressedItems() {
-    return new ArrayList<>(suppressed.values());
-  }
-
-  @Transient
-  public boolean isSuppressed(KeyPromoterAction action) {
-    return suppressed.containsKey(action.getDescription());
-  }
-
-  /**
-   * Puts an item from the suppress list back into the statistics.
-   *
-   * @param item Item to unsuppress
-   */
-  @Transient
-  void unsuppressItem(StatisticsItem item) {
-    final StatisticsItem statisticsItem = suppressed.remove(item.getDescription());
-    if (statisticsItem != null && statisticsItem.count > 0) {
-      statistics.putIfAbsent(statisticsItem.getDescription(), statisticsItem);
+    @Transient
+    public void resetStatistic() {
+        synchronized (statistics) {
+            statistics.clear();
+        }
+        myChangeSupport.firePropertyChange(STATISTIC, null, null);
     }
-    myChangeSupport.firePropertyChange(SUPPRESS, null, null);
-    myChangeSupport.firePropertyChange(STATISTIC, null, null);
-  }
+
+    @Transient
+    public void suppressItem(KeyPromoterAction action) {
+        StatisticsItem removed;
+        synchronized (statistics) {
+            removed = statistics.remove(action.getDescription());
+            removed = removed == null ? new StatisticsItem(action) : removed;
+        }
+        synchronized (suppressed) {
+            suppressed.putIfAbsent(action.getDescription(), removed);
+        }
+        myChangeSupport.firePropertyChange(SUPPRESS, null, null);
+        myChangeSupport.firePropertyChange(STATISTIC, null, null);
+    }
+
+    @Transient
+    public StatisticsItem get(KeyPromoterAction action) {
+        return statistics.get(action.getDescription());
+    }
+
+    @Transient
+    ArrayList<StatisticsItem> getStatisticItems() {
+        final ArrayList<StatisticsItem> items = new ArrayList<>(statistics.values());
+        Collections.sort(items);
+        return items;
+    }
+
+    @Transient
+    ArrayList<StatisticsItem> getSuppressedItems() {
+        return new ArrayList<>(suppressed.values());
+    }
+
+    @Transient
+    public boolean isSuppressed(KeyPromoterAction action) {
+        return suppressed.containsKey(action.getDescription());
+    }
+
+    /**
+     * Puts an item from the suppress list back into the statistics.
+     *
+     * @param item Item to unsuppress
+     */
+    @Transient
+    void unsuppressItem(StatisticsItem item) {
+        final StatisticsItem statisticsItem = suppressed.remove(item.getDescription());
+        if (statisticsItem != null && statisticsItem.count > 0) {
+            statistics.putIfAbsent(statisticsItem.getDescription(), statisticsItem);
+        }
+        myChangeSupport.firePropertyChange(SUPPRESS, null, null);
+        myChangeSupport.firePropertyChange(STATISTIC, null, null);
+    }
+
+    public void exportToFile() {
+        JOptionPane.showMessageDialog(new JFrame(), blah(getStatisticItems()));
+    }
+
+    private String blah(ArrayList<StatisticsItem> statisticItems) {
+        StringBuilder t = new StringBuilder();
+        for (StatisticsItem s : statisticItems) {
+            t.append(String.format("%s - %s - %s - %s \n", s.shortCut, s.description, s.count, s.ideaActionID));
+        }
+        return t.toString();
+    }
 }
