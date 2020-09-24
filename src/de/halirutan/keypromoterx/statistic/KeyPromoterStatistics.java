@@ -161,46 +161,12 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
   public void exportReport() {
     String basePath = FileSystemView.getFileSystemView().getHomeDirectory() + "/Key-Promoter-X-Reports/";
     String outputFileName = "output.csv";
-
-    ArrayList<String[]> reportData = getAccumulatedContent();
-
-    Exporter exporter = new Exporter(basePath, outputFileName, reportData);
-
+    Exporter exporter = new Exporter(basePath, outputFileName, getStatisticItems());
     try {
       exporter.export();
-      JOptionPane.showMessageDialog(
-              null,
-              String.format("Data Entered into %s", basePath + outputFileName),
-              "Key Promoter X",
-              JOptionPane.INFORMATION_MESSAGE
-      );
-
+      JOptionPane.showMessageDialog(null, String.format("Successfully Exported into %s", basePath + outputFileName), "Key Promoter X", JOptionPane.INFORMATION_MESSAGE);
     } catch (IOException e) {
-      JOptionPane.showMessageDialog(
-              null,
-              String.format("Failed to Export to %s", (basePath + outputFileName)),
-              "Error",
-              JOptionPane.ERROR_MESSAGE
-      );
+      JOptionPane.showMessageDialog(null, String.format("Failed to Export to %s", (basePath + outputFileName)), "Error", JOptionPane.ERROR_MESSAGE);
     }
-  }
-
-  private ArrayList<String[]> getAccumulatedContent() {
-    ArrayList<String[]> reportData = new ArrayList<>();
-
-    reportData.add(new String[]{"shortcuts", "description", "count", "ideaActionID"});
-
-    for (StatisticsItem statisticsItem : getStatisticItems()) {
-      reportData.add(
-              new String[]{
-                      statisticsItem.shortCut,
-                      statisticsItem.description,
-                      String.valueOf(statisticsItem.count),
-                      statisticsItem.ideaActionID
-              }
-      );
-    }
-
-    return reportData;
   }
 }
