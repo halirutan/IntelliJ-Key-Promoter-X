@@ -62,6 +62,11 @@ class KeyPromoterToolWindowPanel implements Disposable, SnoozeNotifier.Handler {
             KeyPromoterBundle.message("kp.dialog.export.statistic.text"),
             KeyPromoterBundle.message("kp.dialog.export.statistic.title"),
             Messages.getQuestionIcon()) == Messages.YES) {
+
+      // Todo
+      //  - Does Wrapping it in a try-catch makes sense?
+      //  - The JOptionPane Does not work for the 2nd time.
+
       try {
         statService.exportToFile();
       } catch (IOException e) {

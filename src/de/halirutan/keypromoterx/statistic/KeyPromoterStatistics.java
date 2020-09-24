@@ -169,14 +169,25 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
     }
 
     public void exportToFile() throws IOException {
+        // Todo
+        //  - The Current Implementation only work if it already has the file path -> $HOME/reports/output.csv
+        //  - But this is not good i guess. So Need to create the file or the path first.
+        //  - This methods gathers the data and also writes. What about splitting the responsibility into two?
+
         ArrayList<String[]> list = new ArrayList<>();
+
+        // Todo As this line is responsible for only creating the column, Can we do better?
+
         list.add(new String[]{"shortCut", "description", "count", "ideaActionID"});
+
         for (StatisticsItem s : getStatisticItems()) {
             list.add(new String[]{s.shortCut, s.description, String.valueOf(s.count), s.ideaActionID});
         }
+
         CSVWriter writer = new CSVWriter(new FileWriter(FileSystemView.getFileSystemView().getHomeDirectory() + "/reports/output.csv"));
         writer.writeAll(list);
         writer.flush();
+
         JOptionPane.showMessageDialog(new JFrame(), String.format("Data Entered into %s", FileSystemView.getFileSystemView().getHomeDirectory() + "/reports/output.csv"));
     }
 }
