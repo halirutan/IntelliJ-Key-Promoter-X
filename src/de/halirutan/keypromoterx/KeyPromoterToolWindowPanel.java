@@ -31,6 +31,7 @@ import de.halirutan.keypromoterx.statistic.StatisticsList;
 import de.halirutan.keypromoterx.statistic.SuppressedList;
 
 import javax.swing.*;
+import java.io.IOException;
 
 /**
  * Controlling class of the tool-window
@@ -60,7 +61,11 @@ class KeyPromoterToolWindowPanel implements Disposable, SnoozeNotifier.Handler {
             KeyPromoterBundle.message("kp.dialog.export.statistic.text"),
             KeyPromoterBundle.message("kp.dialog.export.statistic.title"),
             Messages.getQuestionIcon()) == Messages.YES) {
-      statService.exportToFile();
+      try {
+        statService.exportToFile();
+      } catch (IOException e) {
+        JOptionPane.showMessageDialog(new JFrame(), "NO FILE FOUND");
+      }
     }
   }
 
@@ -73,7 +78,7 @@ class KeyPromoterToolWindowPanel implements Disposable, SnoozeNotifier.Handler {
     if (Messages.showYesNoDialog(
             KeyPromoterBundle.message("kp.dialog.reset.statistic.text"),
             KeyPromoterBundle.message("kp.dialog.reset.statistic.title"),
-        Messages.getQuestionIcon()) == Messages.YES) {
+            Messages.getQuestionIcon()) == Messages.YES) {
       statService.resetStatistic();
     }
   }

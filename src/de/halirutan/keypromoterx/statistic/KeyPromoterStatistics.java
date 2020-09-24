@@ -19,6 +19,7 @@ import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import com.intellij.util.xmlb.annotations.MapAnnotation;
 import com.intellij.util.xmlb.annotations.Transient;
+import com.opencsv.CSVWriter;
 import de.halirutan.keypromoterx.KeyPromoterAction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,6 +27,8 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -164,15 +167,15 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
         myChangeSupport.firePropertyChange(STATISTIC, null, null);
     }
 
-    public void exportToFile() {
-        JOptionPane.showMessageDialog(new JFrame(), blah(getStatisticItems()));
-    }
-
-    private String blah(ArrayList<StatisticsItem> statisticItems) {
-        StringBuilder t = new StringBuilder();
-        for (StatisticsItem s : statisticItems) {
-            t.append(String.format("%s - %s - %s - %s \n", s.shortCut, s.description, s.count, s.ideaActionID));
+    public void exportToFile() throws IOException {
+        ArrayList<String[]> list = new ArrayList<>();
+        list.add(new String[]{"shortCut", "description", "count", "ideaActionID"});
+        for (StatisticsItem s : getStatisticItems()) {
+            list.add(new String[]{s.shortCut, s.description, String.valueOf(s.count), s.ideaActionID});
         }
-        return t.toString();
+        CSVWriter writer = new CSVWriter(new FileWriter("./output.csv"));
+        writer.writeAll(list);
+        writer.flush();
+        JOptionPane.showMessageDialog(new JFrame(), "Data Entered");
     }
 }
