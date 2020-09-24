@@ -186,7 +186,7 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
     private ArrayList<String[]> getAccumulatedContent() {
         ArrayList<String[]> reportData = new ArrayList<>();
 
-        reportData.add(new String[]{"shortCut", "description", "count", "ideaActionID"});
+        reportData.add(new String[]{"shortcuts", "description", "count", "ideaActionID"});
 
         for (StatisticsItem s : getStatisticItems()) {
             reportData.add(new String[]{s.shortCut, s.description, String.valueOf(s.count), s.ideaActionID});
