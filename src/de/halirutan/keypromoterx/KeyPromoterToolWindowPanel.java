@@ -31,6 +31,7 @@ import de.halirutan.keypromoterx.statistic.StatisticsList;
 import de.halirutan.keypromoterx.statistic.SuppressedList;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileSystemView;
 import java.io.IOException;
 
 /**
@@ -64,7 +65,7 @@ class KeyPromoterToolWindowPanel implements Disposable, SnoozeNotifier.Handler {
       try {
         statService.exportToFile();
       } catch (IOException e) {
-        JOptionPane.showMessageDialog(new JFrame(), "NO FILE FOUND");
+        JOptionPane.showMessageDialog(null, String.format("NoFILE FOUND IN  %s", FileSystemView.getFileSystemView().getHomeDirectory() + "/reports/output.csv"));
       }
     }
   }

@@ -25,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileSystemView;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.FileWriter;
@@ -173,9 +174,9 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
         for (StatisticsItem s : getStatisticItems()) {
             list.add(new String[]{s.shortCut, s.description, String.valueOf(s.count), s.ideaActionID});
         }
-        CSVWriter writer = new CSVWriter(new FileWriter("./output.csv"));
+        CSVWriter writer = new CSVWriter(new FileWriter(FileSystemView.getFileSystemView().getHomeDirectory() + "/reports/output.csv"));
         writer.writeAll(list);
         writer.flush();
-        JOptionPane.showMessageDialog(new JFrame(), "Data Entered");
+        JOptionPane.showMessageDialog(new JFrame(), String.format("Data Entered into %s", FileSystemView.getFileSystemView().getHomeDirectory() + "/reports/output.csv"));
     }
 }
