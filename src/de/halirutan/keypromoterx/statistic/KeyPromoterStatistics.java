@@ -188,8 +188,8 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
 
         reportData.add(new String[]{"shortcuts", "description", "count", "ideaActionID"});
 
-        for (StatisticsItem s : getStatisticItems()) {
-            reportData.add(new String[]{s.shortCut, s.description, String.valueOf(s.count), s.ideaActionID});
+        for (StatisticsItem statisticsItem : getStatisticItems()) {
+            reportData.add(new String[]{statisticsItem.shortCut, statisticsItem.description, String.valueOf(statisticsItem.count), statisticsItem.ideaActionID});
         }
 
         return reportData;
