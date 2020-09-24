@@ -12,6 +12,7 @@
 
 package de.halirutan.keypromoterx.statistic;
 
+import Utilities.Exporter;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.RoamingType;
 import com.intellij.openapi.components.State;
@@ -19,7 +20,6 @@ import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import com.intellij.util.xmlb.annotations.MapAnnotation;
 import com.intellij.util.xmlb.annotations.Transient;
-import com.opencsv.CSVWriter;
 import de.halirutan.keypromoterx.KeyPromoterAction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +28,6 @@ import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -168,26 +167,31 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
         myChangeSupport.firePropertyChange(STATISTIC, null, null);
     }
 
-    public void exportToFile() throws IOException {
-        // Todo
-        //  - The Current Implementation only work if it already has the file path -> $HOME/reports/output.csv
-        //  - But this is not good i guess. So Need to create the file or the path first.
-        //  - This methods gathers the data and also writes. What about splitting the responsibility into two?
+    public void exportReport() {
+        String basePath = FileSystemView.getFileSystemView().getHomeDirectory() + "/Key-Promoter-X-Reports/";
+        String outputFileName = "output.csv";
 
-        ArrayList<String[]> list = new ArrayList<>();
+        ArrayList<String[]> reportData = getAccumulatedContent();
 
-        // Todo As this line is responsible for only creating the column, Can we do better?
+        Exporter exporter = new Exporter(basePath, outputFileName, reportData);
 
-        list.add(new String[]{"shortCut", "description", "count", "ideaActionID"});
+        try {
+            exporter.export();
+            JOptionPane.showMessageDialog(new JFrame(), String.format("Data Entered into %s", basePath + outputFileName));
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, String.format("Failed to Export to %s", (basePath + outputFileName)));
+        }
+    }
+
+    private ArrayList<String[]> getAccumulatedContent() {
+        ArrayList<String[]> reportData = new ArrayList<>();
+
+        reportData.add(new String[]{"shortCut", "description", "count", "ideaActionID"});
 
         for (StatisticsItem s : getStatisticItems()) {
-            list.add(new String[]{s.shortCut, s.description, String.valueOf(s.count), s.ideaActionID});
+            reportData.add(new String[]{s.shortCut, s.description, String.valueOf(s.count), s.ideaActionID});
         }
 
-        CSVWriter writer = new CSVWriter(new FileWriter(FileSystemView.getFileSystemView().getHomeDirectory() + "/reports/output.csv"));
-        writer.writeAll(list);
-        writer.flush();
-
-        JOptionPane.showMessageDialog(new JFrame(), String.format("Data Entered into %s", FileSystemView.getFileSystemView().getHomeDirectory() + "/reports/output.csv"));
+        return reportData;
     }
 }

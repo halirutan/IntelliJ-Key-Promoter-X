@@ -31,8 +31,6 @@ import de.halirutan.keypromoterx.statistic.StatisticsList;
 import de.halirutan.keypromoterx.statistic.SuppressedList;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileSystemView;
-import java.io.IOException;
 
 /**
  * Controlling class of the tool-window
@@ -42,66 +40,58 @@ import java.io.IOException;
 @SuppressWarnings("unused")
 class KeyPromoterToolWindowPanel implements Disposable, SnoozeNotifier.Handler {
 
-  private final KeyPromoterStatistics statService = ServiceManager.getService(KeyPromoterStatistics.class);
-  private JPanel panel;
-  private JList statisticsList;
-  private JButton resetStatisticsButton;
-  private JList suppressedList;
-  private JCheckBox snoozeCheckBox;
-  private JButton exportReportButton;
+    private final KeyPromoterStatistics statService = ServiceManager.getService(KeyPromoterStatistics.class);
+    private JPanel panel;
+    private JList statisticsList;
+    private JButton resetStatisticsButton;
+    private JList suppressedList;
+    private JCheckBox snoozeCheckBox;
+    private JButton exportReportButton;
 
-  KeyPromoterToolWindowPanel() {
-    resetStatisticsButton.addActionListener(e -> resetStats());
-    exportReportButton.addActionListener(e -> saveReport());
-    Topics.subscribe(SnoozeNotifier.Handler.SNOOZE_TOPIC, this, this);
-    snoozeCheckBox.addItemListener(e -> SnoozeNotifier.setSnoozed(snoozeCheckBox.isSelected()));
-  }
-
-  private void saveReport() {
-    if (Messages.showYesNoDialog(
-            KeyPromoterBundle.message("kp.dialog.export.statistic.text"),
-            KeyPromoterBundle.message("kp.dialog.export.statistic.title"),
-            Messages.getQuestionIcon()) == Messages.YES) {
-
-      // Todo
-      //  - Does Wrapping it in a try-catch makes sense?
-      //  - The JOptionPane Does not work for the 2nd time.
-
-      try {
-        statService.exportToFile();
-      } catch (IOException e) {
-        JOptionPane.showMessageDialog(null, String.format("NoFILE FOUND IN  %s", FileSystemView.getFileSystemView().getHomeDirectory() + "/reports/output.csv"));
-      }
+    KeyPromoterToolWindowPanel() {
+        resetStatisticsButton.addActionListener(e -> resetStats());
+        exportReportButton.addActionListener(e -> saveReport());
+        Topics.subscribe(SnoozeNotifier.Handler.SNOOZE_TOPIC, this, this);
+        snoozeCheckBox.addItemListener(e -> SnoozeNotifier.setSnoozed(snoozeCheckBox.isSelected()));
     }
-  }
 
-  @SuppressWarnings("WeakerAccess")
-  public JPanel getContent() {
-    return panel;
-  }
+    private void saveReport() {
+        if (Messages.showYesNoDialog(
+                KeyPromoterBundle.message("kp.dialog.export.statistic.text"),
+                KeyPromoterBundle.message("kp.dialog.export.statistic.title"),
+                Messages.getQuestionIcon()) == Messages.YES) {
 
-  private void resetStats() {
-    if (Messages.showYesNoDialog(
-            KeyPromoterBundle.message("kp.dialog.reset.statistic.text"),
-            KeyPromoterBundle.message("kp.dialog.reset.statistic.title"),
-            Messages.getQuestionIcon()) == Messages.YES) {
-      statService.resetStatistic();
+            statService.exportReport();
+        }
     }
-  }
 
-  private void createUIComponents() {
-    statisticsList = new StatisticsList();
-    suppressedList = new SuppressedList();
-  }
+    @SuppressWarnings("WeakerAccess")
+    public JPanel getContent() {
+        return panel;
+    }
 
-  @Override
-  public void dispose() {
+    private void resetStats() {
+        if (Messages.showYesNoDialog(
+                KeyPromoterBundle.message("kp.dialog.reset.statistic.text"),
+                KeyPromoterBundle.message("kp.dialog.reset.statistic.title"),
+                Messages.getQuestionIcon()) == Messages.YES) {
+            statService.resetStatistic();
+        }
+    }
 
-  }
+    private void createUIComponents() {
+        statisticsList = new StatisticsList();
+        suppressedList = new SuppressedList();
+    }
 
-  @Override
-  public void snoozeAction(boolean state) {
-    snoozeCheckBox.setSelected(state);
-  }
+    @Override
+    public void dispose() {
+
+    }
+
+    @Override
+    public void snoozeAction(boolean state) {
+        snoozeCheckBox.setSelected(state);
+    }
 
 }
