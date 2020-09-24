@@ -177,9 +177,20 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
 
         try {
             exporter.export();
-            JOptionPane.showMessageDialog(new JFrame(), String.format("Data Entered into %s", basePath + outputFileName));
+            JOptionPane.showMessageDialog(
+                    null,
+                    String.format("Data Entered into %s", basePath + outputFileName),
+                    "Key Promoter X",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, String.format("Failed to Export to %s", (basePath + outputFileName)));
+            JOptionPane.showMessageDialog(
+                    null,
+                    String.format("Failed to Export to %s", (basePath + outputFileName)),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
         }
     }
 
