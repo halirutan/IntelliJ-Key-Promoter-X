@@ -110,6 +110,9 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
     synchronized (statistics) {
       statistics.clear();
     }
+    synchronized (suppressed) {
+      suppressed.clear();
+    }
     myChangeSupport.firePropertyChange(STATISTIC, null, null);
   }
 
