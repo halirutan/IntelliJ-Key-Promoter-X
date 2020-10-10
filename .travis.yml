@@ -1,7 +1,5 @@
 language: java
 jdk:
-- openjdk8
-- openjdk10
 - openjdk11
 sudo: required
 env:
