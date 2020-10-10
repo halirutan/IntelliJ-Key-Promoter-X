@@ -120,16 +120,25 @@ public class SuppressedList extends JBList<StatisticsItem> implements PropertyCh
             final Color background = list.getBackground();
             final String message = KeyPromoterBundle.message(
                     "kp.list.suppressed.item",
-                    value.getShortcut(),
-                    value.description
+                value.getShortcut(),
+                value.description
             );
+            setText(message);
             if (isSelected) {
                 setBackground(JBColor.GRAY);
             } else {
                 setBackground(background);
             }
 
-            setText(message);
+            final String tooltip = KeyPromoterBundle.message(
+                "kp.list.item",
+                value.getShortcut(),
+                value.description,
+                value.count,
+                value.hits
+            );
+            setToolTipText(tooltip);
+
             setForeground(foreground);
             setBorder(JBUI.Borders.empty(2, 10));
             if (value.ideaActionID != null && !"".equals(value.ideaActionID)) {

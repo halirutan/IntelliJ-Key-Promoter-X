@@ -81,7 +81,7 @@ public class StatisticsList extends JBList<StatisticsItem> implements PropertyCh
                     value.getShortcut(),
                     value.description,
                     value.count,
-                    value.count == 1 ? "time" : "times"
+                    value.hits
                     );
             setText(message);
             setForeground(foreground);
