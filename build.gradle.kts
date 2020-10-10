@@ -50,7 +50,7 @@ tasks {
   withType(org.jetbrains.intellij.tasks.PatchPluginXmlTask::class.java) {
     changeNotes(htmlFixer("resources/META-INF/change-notes.html"))
     pluginDescription(htmlFixer("resources/META-INF/description.html"))
-    sinceBuild("201")
+    sinceBuild("201.8303.32")
   }
 
   withType(org.jetbrains.intellij.tasks.PublishTask::class.java) {

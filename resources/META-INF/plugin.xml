@@ -13,7 +13,7 @@
 <idea-plugin>
     <name>Key Promoter X</name>
     <vendor>halirutan</vendor>
-    <idea-version since-build="201"/>
+    <idea-version since-build="201.8303.32"/>
     <depends>com.intellij.modules.lang</depends>
     <application-components>
         <component>
