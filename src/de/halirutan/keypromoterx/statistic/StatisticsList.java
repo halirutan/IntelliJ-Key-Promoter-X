@@ -28,9 +28,10 @@ import java.beans.PropertyChangeListener;
 /**
  * Provides a custom JBList for displaying how often a button was pressed that could have been replaced by a shortcut.
  * The list is backed by {@link KeyPromoterStatistics} that keeps the values persistent through restarts.
+ *
  * @author Patrick Scheibe
  */
-public class StatisticsList extends JBList<StatisticsItem> implements PropertyChangeListener{
+public class StatisticsList extends JBList<StatisticsItem> implements PropertyChangeListener {
     private final DefaultListModel<StatisticsItem> myModel;
     private final KeyPromoterStatistics myStats = ServiceManager.getService(KeyPromoterStatistics.class);
 
@@ -50,6 +51,7 @@ public class StatisticsList extends JBList<StatisticsItem> implements PropertyCh
     /**
      * Catches events to keep the Key Promoter tool-window up-to-date with the underlying statistic that is updated
      * each time a shortcut was missed.
+     *
      * @param evt The event indicating a change in the model
      */
     @Override
@@ -59,12 +61,11 @@ public class StatisticsList extends JBList<StatisticsItem> implements PropertyCh
         }
     }
 
-    private void updateStats(){
+    private void updateStats() {
         myModel.removeAllElements();
         for (StatisticsItem statisticsItem : myStats.getStatisticItems()) {
             myModel.addElement(statisticsItem);
         }
-        
     }
 
 
@@ -82,8 +83,9 @@ public class StatisticsList extends JBList<StatisticsItem> implements PropertyCh
                     value.description,
                     value.count,
                     value.hits
-                    );
+            );
             setText(message);
+            setIcon(KeyPromoterIcons.KP_ICON);
             setForeground(foreground);
             setBorder(JBUI.Borders.empty(2, 10));
             if (value.ideaActionID != null && !"".equals(value.ideaActionID)) {
@@ -92,15 +94,12 @@ public class StatisticsList extends JBList<StatisticsItem> implements PropertyCh
                     final Icon icon = action.getTemplatePresentation().getIcon();
                     if (icon != null) {
                         setIcon(icon);
-                    } else {
-                        setIcon(KeyPromoterIcons.KP_ICON);
                     }
                 }
             }
             return this;
         }
     }
-
 
 
 }

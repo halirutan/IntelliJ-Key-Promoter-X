@@ -132,6 +132,12 @@ public class KeyPromoterAction {
     if (myMnemonic > 0) {
       myDescription = myDescription.replaceFirst("\\d: ", "");
     }
+
+    // Ugly hack to work around that the "Problems" tool-window does not follow the default naming of tool-windows.
+    // Hint: The ActionID is actually "ActivateProblemsViewToolWindow"
+    if ("Problems".equals(myDescription)) {
+      myDescription = "ProblemsView";
+    }
     // This is hack, but for IDEA stripe buttons it doesn't seem possible to extract the IdeaActionID.
     // We turn e.g. "9: Version Control" to "ActivateVersionControlToolWindow" which seems to work for all tool windows
     // in a similar way.
