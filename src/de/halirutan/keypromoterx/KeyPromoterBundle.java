@@ -21,14 +21,14 @@
  */
 package de.halirutan.keypromoterx;
 
-import java.lang.ref.Reference;
-import java.lang.ref.SoftReference;
-import java.util.ResourceBundle;
-
-import com.intellij.AbstractBundle;
+import com.intellij.CommonBundle;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.PropertyKey;
+
+import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
+import java.util.ResourceBundle;
 
 /**
  * Bundle that provides us with all messages, strings, etc. that are used in the plugin.
@@ -45,7 +45,7 @@ public class KeyPromoterBundle {
   }
 
   public static String message(@NotNull @PropertyKey(resourceBundle = "de.halirutan.keypromoterx.messages.KeyPromoterBundle") String key, @NotNull Object... params) {
-    return AbstractBundle.message(getBundle(), key, params);
+    return CommonBundle.message(getBundle(), key, params);
   }
 
   private static ResourceBundle getBundle() {
