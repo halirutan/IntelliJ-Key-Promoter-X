@@ -1,7 +1,12 @@
+import org.jetbrains.intellij.IntelliJPluginExtension
+import org.jetbrains.intellij.tasks.BuildSearchableOptionsTask
+import org.jetbrains.intellij.tasks.PatchPluginXmlTask
+import org.jetbrains.intellij.tasks.PublishTask
+
 plugins {
-  idea apply true
+  java
+  idea
   id("org.jetbrains.intellij") version "0.5.0"
-  id("java")
 }
 
 java {
@@ -20,7 +25,7 @@ sourceSets {
   }
 }
 
-configure<org.jetbrains.intellij.IntelliJPluginExtension> {
+configure<IntelliJPluginExtension> {
   version = "LATEST-EAP-SNAPSHOT"
   updateSinceUntilBuild = true
   pluginName = "Key-Promoter-X"
@@ -43,17 +48,21 @@ fun htmlFixer(filename: String): String {
 version = "2020.2.2"
 
 tasks {
-  withType(JavaCompile::class.java) {
+  withType<BuildSearchableOptionsTask> {
+    enabled = false
+  }
+
+  withType<JavaCompile> {
     options.encoding = "UTF-8"
   }
 
-  withType(org.jetbrains.intellij.tasks.PatchPluginXmlTask::class.java) {
+  withType<PatchPluginXmlTask> {
     changeNotes(htmlFixer("resources/META-INF/change-notes.html"))
     pluginDescription(htmlFixer("resources/META-INF/description.html"))
     sinceBuild("201.8303.32")
   }
 
-  withType(org.jetbrains.intellij.tasks.PublishTask::class.java) {
+  withType<PublishTask> {
     if (project.hasProperty("pluginsToken")) {
       token(project.property("pluginsToken"))
     }
