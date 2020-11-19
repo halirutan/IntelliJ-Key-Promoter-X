@@ -136,7 +136,7 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
   }
 
   @Transient
-  ArrayList<StatisticsItem> getStatisticItems() {
+  public ArrayList<StatisticsItem> getStatisticItems() {
     final ArrayList<StatisticsItem> items = new ArrayList<>(statistics.values());
     Collections.sort(items);
     return items;
