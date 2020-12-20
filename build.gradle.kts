@@ -22,10 +22,10 @@ val platformVersion: String by project
 val platformPlugins: String by project
 val platformDownloadSources: String by project
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
+//java {
+//    sourceCompatibility = JavaVersion.VERSION_11
+//    targetCompatibility = JavaVersion.VERSION_11
+//}
 
 repositories {
     mavenCentral()
@@ -82,6 +82,8 @@ tasks {
 
     withType<JavaCompile> {
         options.encoding = "UTF-8"
+        sourceCompatibility = "11"
+        targetCompatibility = "11"
     }
 
     withType<PatchPluginXmlTask> {
