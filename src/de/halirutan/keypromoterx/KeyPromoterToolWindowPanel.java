@@ -26,6 +26,7 @@ import com.intellij.application.Topics;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.ui.Messages;
+import de.halirutan.keypromoterx.clipboard.CopyToClipboardAction;
 import de.halirutan.keypromoterx.statistic.KeyPromoterStatistics;
 import de.halirutan.keypromoterx.statistic.StatisticsList;
 import de.halirutan.keypromoterx.statistic.SuppressedList;
@@ -44,11 +45,14 @@ class KeyPromoterToolWindowPanel implements Disposable, SnoozeNotifier.Handler {
   private JPanel panel;
   private JList statisticsList;
   private JButton resetStatisticsButton;
+  private JButton copyStatisticsToClipboardButton;
   private JList suppressedList;
   private JCheckBox snoozeCheckBox;
+  private JCheckBox useMarkdownFormatCheckBox;
 
   KeyPromoterToolWindowPanel() {
     resetStatisticsButton.addActionListener(e -> resetStats());
+    copyStatisticsToClipboardButton.addActionListener(e -> copyToClipboardStats());
     Topics.subscribe(SnoozeNotifier.Handler.SNOOZE_TOPIC, this, this);
     snoozeCheckBox.addItemListener(e -> SnoozeNotifier.setSnoozed(snoozeCheckBox.isSelected()));
   }
@@ -65,6 +69,10 @@ class KeyPromoterToolWindowPanel implements Disposable, SnoozeNotifier.Handler {
         Messages.getQuestionIcon()) == Messages.YES) {
       statService.resetStatistic();
     }
+  }
+
+  private void copyToClipboardStats() {
+    CopyToClipboardAction.copyStatisticsToClipboard(useMarkdownFormatCheckBox.isSelected());
   }
 
   private void createUIComponents() {
