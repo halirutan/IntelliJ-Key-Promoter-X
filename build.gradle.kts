@@ -1,72 +1,112 @@
+import org.jetbrains.changelog.closure
 import org.jetbrains.intellij.IntelliJPluginExtension
 import org.jetbrains.intellij.tasks.BuildSearchableOptionsTask
 import org.jetbrains.intellij.tasks.PatchPluginXmlTask
 import org.jetbrains.intellij.tasks.PublishTask
 
 plugins {
-  java
-  idea
-  id("org.jetbrains.intellij") version "0.5.0"
+    java
+    id("org.jetbrains.intellij") version "0.6.5"
+    id("org.jetbrains.changelog") version "0.6.2"
 }
 
+val kpxPluginGroup: String by project
+val kpxPluginName: String by project
+val kpxPluginVersion: String by project
+val kpxPluginSinceBuild: String by project
+val kpxPluginUntilBuild: String by project
+val kpxPluginVerifierIdeVersions: String by project
+
+val platformType: String by project
+val platformVersion: String by project
+val platformPlugins: String by project
+val platformDownloadSources: String by project
+
 java {
-  sourceCompatibility = JavaVersion.VERSION_1_8
-  targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 repositories {
-  mavenCentral()
+    mavenCentral()
 }
 
 sourceSets {
-  main {
-    java.srcDir("src")
-    resources.srcDir("resources")
-  }
+    main {
+        java.srcDir("src")
+        resources.srcDir("resources")
+    }
 }
 
 configure<IntelliJPluginExtension> {
-  version = "LATEST-EAP-SNAPSHOT"
-  updateSinceUntilBuild = true
-  pluginName = "Key-Promoter-X"
+    version = platformVersion
+    type = platformType
+    downloadSources = platformDownloadSources.toBoolean()
+    updateSinceUntilBuild = true
+    pluginName = kpxPluginName
 }
 
+changelog {
+    version = "${project.version}"
+    path = "${project.projectDir}/CHANGELOG.md"
+    header = closure { "[${project.version}]" }
+    // 2019, 2019.2, 2020.1.2
+    headerParserRegex = """\d+(\.\d+)+""".toRegex()
+    itemPrefix = "-"
+    keepUnreleasedSection = true
+    unreleasedTerm = "[Unreleased]"
+    groups = listOf("Added", "Changed", "Deprecated", "Removed", "Fixed", "Security")
+}
 
 /**
  * Simple function to load HTML files and remove the surrounding `<html>` tags. This is useful for maintaining changes-notes
  * and the description of plugins in separate HTML files which makes them much more readable.
  */
 fun htmlFixer(filename: String): String {
-  if (!File(filename).exists()) {
-    logger.error("File $filename not found.")
-  } else {
-    return File(filename).readText().replace("<html>", "").replace("</html>", "")
-  }
-  return ""
+    if (!File(filename).exists()) {
+        logger.error("File $filename not found.")
+    } else {
+        return File(filename).readText().replace("<html>", "").replace("</html>", "")
+    }
+    return ""
 }
 
-version = "2020.2.2"
+group = kpxPluginGroup
+version = kpxPluginVersion
 
 tasks {
-  withType<BuildSearchableOptionsTask> {
-    enabled = false
-  }
 
-  withType<JavaCompile> {
-    options.encoding = "UTF-8"
-  }
-
-  withType<PatchPluginXmlTask> {
-    changeNotes(htmlFixer("resources/META-INF/change-notes.html"))
-    pluginDescription(htmlFixer("resources/META-INF/description.html"))
-    sinceBuild("201.8303.32")
-  }
-
-  withType<PublishTask> {
-    if (project.hasProperty("pluginsToken")) {
-      token(project.property("pluginsToken"))
+    withType<BuildSearchableOptionsTask> {
+        enabled = false
     }
-    channels("default")
-  }
+
+    withType<JavaCompile> {
+        options.encoding = "UTF-8"
+    }
+
+    withType<PatchPluginXmlTask> {
+        pluginDescription(htmlFixer("resources/META-INF/description.html"))
+        sinceBuild(kpxPluginSinceBuild)
+        untilBuild(kpxPluginUntilBuild)
+        changeNotes(
+                closure {
+                    changelog.getLatest().toHTML()
+                }
+        )
+    }
+
+    runPluginVerifier {
+        ideVersions(kpxPluginVerifierIdeVersions)
+    }
+
+    withType<PublishTask> {
+        dependsOn("patchChangelog")
+        if (project.hasProperty("intellijPublishToken")) {
+            token(project.property("intellijPublishToken"))
+        } else {
+            throw InvalidUserDataException("Could not publish due to missing intellijPublishToken")
+        }
+        channels("default")
+    }
 }
 
