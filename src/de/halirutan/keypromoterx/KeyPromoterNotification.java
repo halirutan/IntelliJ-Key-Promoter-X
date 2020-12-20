@@ -28,23 +28,27 @@ import org.jetbrains.annotations.NotNull;
  */
 class KeyPromoterNotification {
 
-  private static final NotificationGroup GROUP = new NotificationGroup(
-      KeyPromoterBundle.message("kp.notification.group"),
-      NotificationDisplayType.BALLOON,
-      false,
-      KeyPromoterBundle.message("kp.tool.window.name"),
-      KeyPromoterIcons.KP_ICON
+  private static final NotificationGroup GROUP = NotificationGroupManager.getInstance().getNotificationGroup(
+          KeyPromoterBundle.message("kp.notification.group")
   );
+
+  //          new NotificationGroup(
+//      KeyPromoterBundle.message("kp.notification.group"),
+//      NotificationDisplayType.BALLOON,
+//      false,
+//      KeyPromoterBundle.message("kp.tool.window.name"),
+//      KeyPromoterIcons.KP_ICON
+//  );
   private static final KeyPromoterSettings settings = ServiceManager.getService(KeyPromoterSettings.class);
 
   static void showTip(KeyPromoterAction action, int count) {
     String message = KeyPromoterBundle.message("kp.notification.tip", action.getDescription(), count);
     final Notification notification = GROUP.createNotification(KeyPromoterBundle.message(
-        "kp.notification.group"),
-        message,
-        NotificationType.INFORMATION, null)
-                                           .setIcon(KeyPromoterIcons.KP_ICON)
-                                           .addAction(new EditKeymapAction(action, action.getShortcut()))
+            "kp.notification.group"),
+            message,
+            NotificationType.INFORMATION, null)
+            .setIcon(KeyPromoterIcons.KP_ICON)
+            .addAction(new EditKeymapAction(action, action.getShortcut()))
                                            .addAction(new SuppressTipAction(action));
     notification.notify(null);
   }
