@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      # Setup Java 1.8 environment for the next steps
+      # Setup Java 11 environment for the next steps
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      # Setup Java 1.8 environment for the next steps
+      # Setup Java 11 environment for the next steps
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
