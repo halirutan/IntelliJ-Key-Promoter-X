@@ -101,12 +101,9 @@ tasks {
 
     withType<PublishTask> {
         dependsOn("patchChangelog")
-        if (project.hasProperty("intellijPublishToken")) {
-            token(project.property("intellijPublishToken"))
-        } else {
-            throw InvalidUserDataException("Could not publish due to missing intellijPublishToken")
-        }
-        channels("default")
+        token(System.getenv("PUBLISH_TOKEN"))
+        // Use beta versions like 2020.3-beta-1
+        channels(kpxPluginVersion.split('-').getOrElse(1) { "default" }.split('.').first())
     }
 }
 
