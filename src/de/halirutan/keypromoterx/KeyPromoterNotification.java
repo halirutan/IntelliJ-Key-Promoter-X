@@ -26,20 +26,25 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Patrick Scheibe.
  */
-class KeyPromoterNotification {
+public class KeyPromoterNotification {
 
   private static final NotificationGroup GROUP = NotificationGroupManager.getInstance().getNotificationGroup(
           KeyPromoterBundle.message("kp.notification.group")
   );
 
-  //          new NotificationGroup(
-//      KeyPromoterBundle.message("kp.notification.group"),
-//      NotificationDisplayType.BALLOON,
-//      false,
-//      KeyPromoterBundle.message("kp.tool.window.name"),
-//      KeyPromoterIcons.KP_ICON
-//  );
-  private static final KeyPromoterSettings settings = ServiceManager.getService(KeyPromoterSettings.class);
+  public static void showStartupNotification() {
+    final Notification notification = GROUP.createNotification(KeyPromoterBundle.message(
+            "kp.notification.group"),
+            KeyPromoterBundle.message("kp.notification.startup"),
+            NotificationType.INFORMATION, null)
+            .setIcon(KeyPromoterIcons.KP_ICON)
+            .addAction(new BrowseNotificationAction(
+                    KeyPromoterBundle.message("kp.notification.startup.link.name"),
+                    KeyPromoterBundle.message("kp.notification.startup.link"))
+            );
+    notification.notify(null);
+  }
+
 
   static void showTip(KeyPromoterAction action, int count) {
     String message = KeyPromoterBundle.message("kp.notification.tip", action.getDescription(), count);
@@ -96,7 +101,7 @@ class KeyPromoterNotification {
     private final KeyPromoterAction myAction;
 
     SuppressTipAction(KeyPromoterAction action) {
-      super("(Don't show again)");
+      super(KeyPromoterBundle.message("kp.notification.disable.message"));
       myAction = action;
     }
 

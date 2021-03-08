@@ -30,7 +30,7 @@
         />
 
         <!--        <applicationService serviceImplementation="de.halirutan.keypromoterx.KeyPromoter" preload="notHeadless"/>-->
-        <postStartupActivity implementation="de.halirutan.keypromoterx.tips.KPXStartupNotification"/>
+        <postStartupActivity implementation="de.halirutan.keypromoterx.KeyPromoterXStartupNotification"/>
         <applicationService serviceImplementation="de.halirutan.keypromoterx.statistic.KeyPromoterStatistics"/>
         <applicationService serviceImplementation="de.halirutan.keypromoterx.KeyPromoterSettings"/>
         <toolWindow id="Key Promoter X" anchor="right" icon="/de/halirutan/keypromoterx/icons/kpxToolwindow.svg"

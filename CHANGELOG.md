@@ -2,8 +2,28 @@
 
 ## [Unreleased]
 
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [2021.1]
+
 - Update build system and use ideas from the
   [IntelliJ Platform Plugin Template repository](https://github.com/JetBrains/intellij-platform-plugin-template)
+- Implement resizable split-pane and scroll-panes for Key Promoter tool window
+  ([Issue 72](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/72))
+- Support recent IntelliJ Platform 2021
+  ([Issue 77](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/77))
+- Make message for disabling a single shortcut alert clearer
+  ([Issue 75](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/75))
 
 ## [2020.2.2]
 
@@ -44,7 +64,7 @@
 - Fix icon sizes
 - Make extension reloadable without requiring a restart of the IDE
 - Fix all deprecation issues
-- Fix stupid bug that prevents settings from being
+- Fix bug that prevents settings from being
   saved ([Issue 51](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/51))
 - Include "Organization" requirement for plugins
 - Make compatible with 2020.1 EAP products

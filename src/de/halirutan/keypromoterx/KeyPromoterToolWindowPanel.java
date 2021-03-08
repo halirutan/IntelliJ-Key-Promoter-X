@@ -46,6 +46,7 @@ class KeyPromoterToolWindowPanel implements Disposable, SnoozeNotifier.Handler {
   private JButton resetStatisticsButton;
   private JList suppressedList;
   private JCheckBox snoozeCheckBox;
+  private JSplitPane splitPane;
 
   KeyPromoterToolWindowPanel() {
     resetStatisticsButton.addActionListener(e -> resetStats());
@@ -81,5 +82,4 @@ class KeyPromoterToolWindowPanel implements Disposable, SnoozeNotifier.Handler {
   public void snoozeAction(boolean state) {
     snoozeCheckBox.setSelected(state);
   }
-
 }
