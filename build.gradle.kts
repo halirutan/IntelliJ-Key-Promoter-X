@@ -6,8 +6,8 @@ import org.jetbrains.intellij.tasks.PublishTask
 
 plugins {
     java
-    id("org.jetbrains.intellij") version "0.6.5"
-    id("org.jetbrains.changelog") version "0.6.2"
+    id("org.jetbrains.intellij") version "0.7.2"
+    id("org.jetbrains.changelog") version "1.1.2"
 }
 
 val kpxPluginGroup: String by project
