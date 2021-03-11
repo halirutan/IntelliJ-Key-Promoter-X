@@ -1,6 +1,18 @@
 # Key Promoter X Changelog
 
 ## [Unreleased]
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+## [2021.1.1]
 
 - Update build system and use ideas from the
   [IntelliJ Platform Plugin Template repository](https://github.com/JetBrains/intellij-platform-plugin-template)
