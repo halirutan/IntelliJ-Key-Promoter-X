@@ -1,9 +1,14 @@
 # Key Promoter X Changelog
 
 ## [Unreleased]
+
 ### Added
 
+- Build for IntelliJ Platform version 212
+
 ### Changed
+
+- Move to Gradle IntelliJ Plugin version 1.0
 
 ### Deprecated
 
@@ -12,6 +17,7 @@
 ### Fixed
 
 ### Security
+
 ## [2021.1.1]
 
 - Update build system and use ideas from the

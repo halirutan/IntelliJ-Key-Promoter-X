@@ -21,12 +21,9 @@
         </component>
     </application-components>
     <extensions defaultExtensionNs="com.intellij">
-
         <notificationGroup
-                bundle="de.halirutan.keypromoterx.messages.KeyPromoterBundle"
                 displayType="BALLOON"
                 id="Key Promoter X"
-                key="kp.notification.group"
         />
 
         <!--        <applicationService serviceImplementation="de.halirutan.keypromoterx.KeyPromoter" preload="notHeadless"/>-->

@@ -1,31 +1,15 @@
 import org.jetbrains.changelog.closure
-import org.jetbrains.intellij.IntelliJPluginExtension
-import org.jetbrains.intellij.tasks.BuildSearchableOptionsTask
-import org.jetbrains.intellij.tasks.PatchPluginXmlTask
-import org.jetbrains.intellij.tasks.PublishTask
+
+fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
     java
-    id("org.jetbrains.intellij") version "0.7.2"
+    id("org.jetbrains.intellij") version "1.0"
     id("org.jetbrains.changelog") version "1.1.2"
 }
 
-val kpxPluginGroup: String by project
-val kpxPluginName: String by project
-val kpxPluginVersion: String by project
-val kpxPluginSinceBuild: String by project
-val kpxPluginUntilBuild: String by project
-val kpxPluginVerifierIdeVersions: String by project
-
-val platformType: String by project
-val platformVersion: String by project
-val platformPlugins: String by project
-val platformDownloadSources: String by project
-
-//java {
-//    sourceCompatibility = JavaVersion.VERSION_11
-//    targetCompatibility = JavaVersion.VERSION_11
-//}
+group = properties("kpxPluginGroup")
+version = properties("kpxPluginVersion")
 
 repositories {
     mavenCentral()
@@ -38,18 +22,18 @@ sourceSets {
     }
 }
 
-configure<IntelliJPluginExtension> {
-    version = platformVersion
-    type = platformType
-    downloadSources = platformDownloadSources.toBoolean()
-    updateSinceUntilBuild = true
-    pluginName = kpxPluginName
+intellij {
+    pluginName.set(properties("kpxPluginName"))
+    version.set(properties("platformVersion"))
+    type.set("platformType")
+    downloadSources.set(properties("platformDownloadSources").toBoolean())
+    updateSinceUntilBuild.set(true)
 }
 
 changelog {
-    version = "${project.version}"
+    version = properties("kpxPluginVersion")
     path = "${project.projectDir}/CHANGELOG.md"
-    header = closure { "[${project.version}]" }
+    header = closure { "[${properties("kpxPluginVersion")}]" }
     // 2019, 2019.2, 2020.1.2
     headerParserRegex = """\d+(\.\d+)+""".toRegex()
     itemPrefix = "-"
@@ -71,12 +55,9 @@ fun htmlFixer(filename: String): String {
     return ""
 }
 
-group = kpxPluginGroup
-version = kpxPluginVersion
-
 tasks {
 
-    withType<BuildSearchableOptionsTask> {
+    buildSearchableOptions {
         enabled = false
     }
 
@@ -86,26 +67,39 @@ tasks {
         targetCompatibility = "11"
     }
 
-    withType<PatchPluginXmlTask> {
-        pluginDescription(htmlFixer("resources/META-INF/description.html"))
-        sinceBuild(kpxPluginSinceBuild)
-        untilBuild(kpxPluginUntilBuild)
-        changeNotes(
-                closure {
+    patchPluginXml {
+        pluginDescription.set(htmlFixer("resources/META-INF/description.html"))
+        sinceBuild.set(properties("kpxPluginSinceBuild"))
+        untilBuild.set(properties("kpxPluginUntilBuild"))
+        changeNotes.set(
+                provider {
                     changelog.getLatest().toHTML()
                 }
         )
     }
 
     runPluginVerifier {
-        ideVersions(kpxPluginVerifierIdeVersions)
+        ideVersions.set(
+                properties("kpxPluginVerifierIdeVersions")
+                        .split(",")
+                        .map(String::trim)
+                        .filter(String::isNotEmpty)
+        )
     }
 
-    withType<PublishTask> {
+    publishPlugin {
         dependsOn("patchChangelog")
-        token(System.getenv("PUBLISH_TOKEN"))
+        token.set(System.getenv("PUBLISH_TOKEN"))
         // Use beta versions like 2020.3-beta-1
-        channels(kpxPluginVersion.split('-').getOrElse(1) { "default" }.split('.').first())
+        channels.set(
+                listOf(
+                        properties("kpxPluginVersion")
+                                .split('-')
+                                .getOrElse(1) { "default" }
+                                .split('.')
+                                .first()
+                )
+        )
     }
 }
 

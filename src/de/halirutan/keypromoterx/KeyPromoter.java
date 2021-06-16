@@ -181,9 +181,9 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
       final String ideaActionID = action.getIdeaActionID();
       withoutShortcutStats.putIfAbsent(ideaActionID, 0);
       withoutShortcutStats.put(ideaActionID, withoutShortcutStats.get(ideaActionID) + 1);
-      if (keyPromoterSettings.getProposeToCreateShortcutCount() > 0
-          &&
-          withoutShortcutStats.get(ideaActionID) % keyPromoterSettings.getProposeToCreateShortcutCount() == 0) {
+      if (keyPromoterSettings.getProposeToCreateShortcutCount() > 0 &&
+          withoutShortcutStats.get(ideaActionID) % keyPromoterSettings.getProposeToCreateShortcutCount() == 0
+      ) {
         KeyPromoterNotification.askToCreateShortcut(action);
 
       }
