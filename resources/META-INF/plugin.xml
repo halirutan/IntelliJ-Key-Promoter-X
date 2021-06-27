@@ -13,20 +13,19 @@
 <idea-plugin>
     <name>Key Promoter X</name>
     <vendor>halirutan</vendor>
-    <idea-version since-build="203.5981.155"/>
     <depends>com.intellij.modules.lang</depends>
-    <application-components>
-        <component>
-            <implementation-class>de.halirutan.keypromoterx.KeyPromoter</implementation-class>
-        </component>
-    </application-components>
+    <!--    <application-components>-->
+    <!--        <component>-->
+    <!--            <implementation-class>de.halirutan.keypromoterx.KeyPromoter</implementation-class>-->
+    <!--        </component>-->
+    <!--    </application-components>-->
     <extensions defaultExtensionNs="com.intellij">
         <notificationGroup
                 displayType="BALLOON"
                 id="Key Promoter X"
         />
 
-        <!--        <applicationService serviceImplementation="de.halirutan.keypromoterx.KeyPromoter" preload="notHeadless"/>-->
+        <applicationService serviceImplementation="de.halirutan.keypromoterx.KeyPromoter" preload="notHeadless"/>
         <postStartupActivity implementation="de.halirutan.keypromoterx.KeyPromoterXStartupNotification"/>
         <applicationService serviceImplementation="de.halirutan.keypromoterx.statistic.KeyPromoterStatistics"/>
         <applicationService serviceImplementation="de.halirutan.keypromoterx.KeyPromoterSettings"/>

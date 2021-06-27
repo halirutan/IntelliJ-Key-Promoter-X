@@ -65,6 +65,7 @@ tasks {
         options.encoding = "UTF-8"
         sourceCompatibility = "11"
         targetCompatibility = "11"
+        options.compilerArgs.add("-Xlint:all")
     }
 
     patchPluginXml {
@@ -79,12 +80,15 @@ tasks {
     }
 
     runPluginVerifier {
-        ideVersions.set(
-                properties("kpxPluginVerifierIdeVersions")
-                        .split(",")
-                        .map(String::trim)
-                        .filter(String::isNotEmpty)
-        )
+        val versions = properties("kpxPluginVerifierIdeVersions")
+                .split(",")
+                .map(String::trim)
+                .filter(String::isNotEmpty)
+        // Kinda useless since the pluginVerifier will cry out
+        // anyway, but may not setting a version will be implemented at some point.
+        if (versions.isNotEmpty()) {
+            ideVersions.set(versions)
+        }
     }
 
     publishPlugin {

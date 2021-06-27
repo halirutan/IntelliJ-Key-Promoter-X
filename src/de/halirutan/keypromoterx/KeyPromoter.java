@@ -27,9 +27,8 @@ import com.intellij.ide.ui.UISettings;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.ex.AnActionListener;
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.wm.impl.StripeButton;
@@ -47,7 +46,7 @@ import java.util.Map;
 
 /**
  * The main component that is registered in plugin.xml. It will take care of catching UI events
- * and transfers the them to {@link KeyPromoterAction} for inspection. Depending on the type of action (tool-window button,
+ * and transfers them to {@link KeyPromoterAction} for inspection. Depending on the type of action (tool-window button,
  * menu entry, etc.) a balloon is shown and the statistic is updated.
  *
  * @author Patrick Scheibe, Dmitry Kashin
@@ -68,11 +67,10 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
   }
 
   private final Map<String, Integer> withoutShortcutStats = Collections.synchronizedMap(new HashMap<>());
-  private final KeyPromoterStatistics statsService = ServiceManager.getService(KeyPromoterStatistics.class);
+  private final KeyPromoterStatistics statsService = ApplicationManager.getApplication().getService(KeyPromoterStatistics.class);
   // Presentation and stats fields.
-  private final KeyPromoterSettings keyPromoterSettings = ServiceManager.getService(KeyPromoterSettings.class);
+  private final KeyPromoterSettings keyPromoterSettings = ApplicationManager.getApplication().getService(KeyPromoterSettings.class);
   private static final String distractionFreeModeKey = "editor.distraction.free.mode";
-  private long lastEventTime = -1;
   private boolean mouseDrag = false;
 
 
@@ -111,7 +109,7 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
   }
 
   @Override
-  public void beforeActionPerformed(@NotNull AnAction action, @NotNull DataContext dataContext, AnActionEvent event) {
+  public void beforeActionPerformed(@NotNull AnAction action, AnActionEvent event) {
     final InputEvent input = event.getInputEvent();
 
     ActionType type;
@@ -122,13 +120,6 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
     } else {
       return;
     }
-
-    // The following is a hack to work around an issue with IDEA, where certain events arrive
-    // twice. See https://youtrack.jetbrains.com/issue/IDEA-219133
-    if (input.getWhen() != 0 && lastEventTime == input.getWhen()) {
-      return;
-    }
-    lastEventTime = input.getWhen();
 
     final String place = event.getPlace();
     KeyPromoterAction kpAction;

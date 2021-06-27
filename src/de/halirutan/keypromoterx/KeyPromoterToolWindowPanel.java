@@ -24,9 +24,10 @@ package de.halirutan.keypromoterx;
 
 import com.intellij.application.Topics;
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.ui.Messages;
 import de.halirutan.keypromoterx.statistic.KeyPromoterStatistics;
+import de.halirutan.keypromoterx.statistic.StatisticsItem;
 import de.halirutan.keypromoterx.statistic.StatisticsList;
 import de.halirutan.keypromoterx.statistic.SuppressedList;
 
@@ -40,11 +41,11 @@ import javax.swing.*;
 @SuppressWarnings("unused")
 class KeyPromoterToolWindowPanel implements Disposable, SnoozeNotifier.Handler {
 
-  private final KeyPromoterStatistics statService = ServiceManager.getService(KeyPromoterStatistics.class);
+  private final KeyPromoterStatistics statService = ApplicationManager.getApplication().getService(KeyPromoterStatistics.class);
   private JPanel panel;
-  private JList statisticsList;
+  private JList<StatisticsItem> statisticsList;
   private JButton resetStatisticsButton;
-  private JList suppressedList;
+  private JList<StatisticsItem> suppressedList;
   private JCheckBox snoozeCheckBox;
   private JSplitPane splitPane;
 

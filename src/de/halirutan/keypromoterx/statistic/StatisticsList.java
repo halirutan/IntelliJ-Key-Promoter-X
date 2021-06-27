@@ -14,7 +14,7 @@ package de.halirutan.keypromoterx.statistic;
 
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.ui.JBUI;
 import de.halirutan.keypromoterx.KeyPromoterBundle;
@@ -33,7 +33,7 @@ import java.beans.PropertyChangeListener;
  */
 public class StatisticsList extends JBList<StatisticsItem> implements PropertyChangeListener {
     private final DefaultListModel<StatisticsItem> myModel;
-    private final KeyPromoterStatistics myStats = ServiceManager.getService(KeyPromoterStatistics.class);
+    private final KeyPromoterStatistics myStats = ApplicationManager.getApplication().getService(KeyPromoterStatistics.class);
 
     public StatisticsList() {
         myModel = new DefaultListModel<>();

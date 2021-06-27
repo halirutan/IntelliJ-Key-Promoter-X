@@ -15,7 +15,6 @@ package de.halirutan.keypromoterx;
 import com.intellij.notification.*;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.keymap.impl.ui.EditKeymapsDialog;
 import de.halirutan.keypromoterx.statistic.KeyPromoterStatistics;
 import org.jetbrains.annotations.NotNull;
@@ -34,9 +33,9 @@ public class KeyPromoterNotification {
 
   public static void showStartupNotification() {
     final Notification notification = GROUP.createNotification(KeyPromoterBundle.message(
-            "kp.notification.group"),
+                "kp.notification.group"),
             KeyPromoterBundle.message("kp.notification.startup"),
-            NotificationType.INFORMATION, null)
+            NotificationType.INFORMATION)
             .setIcon(KeyPromoterIcons.KP_ICON)
             .addAction(new BrowseNotificationAction(
                     KeyPromoterBundle.message("kp.notification.startup.link.name"),
@@ -49,9 +48,9 @@ public class KeyPromoterNotification {
   static void showTip(KeyPromoterAction action, int count) {
     String message = KeyPromoterBundle.message("kp.notification.tip", action.getDescription(), count);
     final Notification notification = GROUP.createNotification(KeyPromoterBundle.message(
-            "kp.notification.group"),
+                "kp.notification.group"),
             message,
-            NotificationType.INFORMATION, null)
+            NotificationType.INFORMATION)
             .setIcon(KeyPromoterIcons.KP_ICON)
             .addAction(new EditKeymapAction(action, action.getShortcut()))
                                            .addAction(new SuppressTipAction(action));
@@ -62,8 +61,7 @@ public class KeyPromoterNotification {
     Notification notification = GROUP.createNotification(
         KeyPromoterBundle.message("kp.notification.group"),
         KeyPromoterBundle.message("kp.notification.ask.new.shortcut", action.getDescription()),
-        NotificationType.INFORMATION,
-        null
+            NotificationType.INFORMATION
     )
                                      .setIcon(KeyPromoterIcons.KP_ICON)
                                      .addAction(new EditKeymapAction(action))
@@ -97,7 +95,7 @@ public class KeyPromoterNotification {
   }
 
   private static class SuppressTipAction extends NotificationAction {
-    private final KeyPromoterStatistics statistics = ServiceManager.getService(KeyPromoterStatistics.class);
+    private final KeyPromoterStatistics statistics = ApplicationManager.getApplication().getService(KeyPromoterStatistics.class);
     private final KeyPromoterAction myAction;
 
     SuppressTipAction(KeyPromoterAction action) {

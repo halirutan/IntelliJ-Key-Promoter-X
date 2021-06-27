@@ -25,7 +25,6 @@ package de.halirutan.keypromoterx;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManagerCore;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
@@ -41,7 +40,7 @@ public class KeyPromoterXStartupNotification implements StartupActivity, DumbAwa
   public void runActivity(@NotNull Project project) {
     if (ApplicationManager.getApplication().isUnitTestMode()) return;
 
-    final KeyPromoterSettings settings = ServiceManager.getService(KeyPromoterSettings.class);
+    final KeyPromoterSettings settings = ApplicationManager.getApplication().getService(KeyPromoterSettings.class);
     final String installedVersion = settings.getInstalledVersion();
 
     final IdeaPluginDescriptor plugin = PluginManagerCore.getPlugin(PluginId.getId("Key Promoter X"));
