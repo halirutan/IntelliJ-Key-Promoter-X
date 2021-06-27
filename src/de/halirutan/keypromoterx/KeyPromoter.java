@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Patrick Scheibe, Dmitry Kashin, Athiele.
+ * Copyright (c) 2021 Patrick Scheibe, Dmitry Kashin, Athiele.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
  *
@@ -22,9 +22,7 @@
 
 package de.halirutan.keypromoterx;
 
-import com.intellij.application.Topics;
 import com.intellij.ide.ui.UISettings;
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.ex.AnActionListener;
@@ -51,7 +49,7 @@ import java.util.Map;
  *
  * @author Patrick Scheibe, Dmitry Kashin
  */
-public class KeyPromoter implements AWTEventListener, AnActionListener, Disposable {
+public class KeyPromoter implements AWTEventListener, AnActionListener {
 
   /**
    * Transfers the event to {@link KeyPromoterAction} and inspects the results. Then, depending on the result and the
@@ -75,14 +73,8 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
 
 
   public KeyPromoter() {
-    Topics.subscribe(AnActionListener.TOPIC, this, this);
     long eventMask = AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK | AWTEvent.WINDOW_EVENT_MASK | AWTEvent.WINDOW_STATE_EVENT_MASK;
     Toolkit.getDefaultToolkit().addAWTEventListener(this, eventMask);
-  }
-
-  @Override
-  public void dispose() {
-    Toolkit.getDefaultToolkit().removeAWTEventListener(this);
   }
 
   /**
