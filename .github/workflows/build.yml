@@ -197,7 +197,7 @@ jobs:
   releaseDraft:
     name: Release Draft
     if: github.event_name != 'pull_request'
-    needs: [ build, verify ]
+    needs: [ build ] # [ build, verify ]
     runs-on: ubuntu-latest
     steps:
 
