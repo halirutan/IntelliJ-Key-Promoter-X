@@ -11,6 +11,7 @@
   -->
 
 <idea-plugin>
+    <id>de.halirutan</id>
     <name>Key Promoter X</name>
     <vendor>halirutan</vendor>
     <depends>com.intellij.modules.lang</depends>
