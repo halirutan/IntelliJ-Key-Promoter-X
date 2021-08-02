@@ -15,10 +15,11 @@
     <vendor>halirutan</vendor>
     <depends>com.intellij.modules.lang</depends>
 
-    <applicationListeners>
-        <listener class="de.halirutan.keypromoterx.KeyPromoter"
-                  topic="com.intellij.openapi.actionSystem.ex.AnActionListener"/>
-    </applicationListeners>
+    <application-components>
+        <component>
+            <implementation-class>de.halirutan.keypromoterx.KeyPromoter</implementation-class>
+        </component>
+    </application-components>
 
     <extensions defaultExtensionNs="com.intellij">
         <notificationGroup

@@ -22,7 +22,9 @@
 
 package de.halirutan.keypromoterx;
 
+import com.intellij.application.Topics;
 import com.intellij.ide.ui.UISettings;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.ex.AnActionListener;
@@ -49,7 +51,7 @@ import java.util.Map;
  *
  * @author Patrick Scheibe, Dmitry Kashin
  */
-public class KeyPromoter implements AWTEventListener, AnActionListener {
+public class KeyPromoter implements AWTEventListener, AnActionListener, Disposable {
 
   /**
    * Transfers the event to {@link KeyPromoterAction} and inspects the results. Then, depending on the result and the
@@ -73,6 +75,7 @@ public class KeyPromoter implements AWTEventListener, AnActionListener {
 
 
   public KeyPromoter() {
+    Topics.subscribe(AnActionListener.TOPIC, this, this);
     long eventMask = AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK | AWTEvent.WINDOW_EVENT_MASK | AWTEvent.WINDOW_STATE_EVENT_MASK;
     Toolkit.getDefaultToolkit().addAWTEventListener(this, eventMask);
   }
@@ -103,7 +106,6 @@ public class KeyPromoter implements AWTEventListener, AnActionListener {
   @Override
   public void beforeActionPerformed(@NotNull AnAction action, AnActionEvent event) {
     final InputEvent input = event.getInputEvent();
-
     ActionType type;
     if (input instanceof MouseEvent) {
       type = ActionType.MouseAction;
@@ -181,6 +183,11 @@ public class KeyPromoter implements AWTEventListener, AnActionListener {
   private boolean disabledInDistractionFreeMode() {
     final boolean isDistractionFreeMode = Registry.get(distractionFreeModeKey).asBoolean();
     return isDistractionFreeMode && keyPromoterSettings.isDisabledInDistractionFreeMode();
+  }
+
+  @Override
+  public void dispose() {
+    Toolkit.getDefaultToolkit().removeAWTEventListener(this);
   }
 
   enum ActionType {

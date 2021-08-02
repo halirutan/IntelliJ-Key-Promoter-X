@@ -5,11 +5,11 @@
 ### Added
 
 - Build for IntelliJ Platform version 212
-- Add hot-reloading where updating the plugin does not require a restart
+- UUID for serializable classes
 
 ### Changed
 
-- Move to Gradle IntelliJ Plugin version 1.0
+- Move to Gradle IntelliJ Plugin version 1.1.4
 
 ### Deprecated
 

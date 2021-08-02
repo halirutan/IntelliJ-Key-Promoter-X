@@ -32,6 +32,7 @@ import java.beans.PropertyChangeListener;
  * @author Patrick Scheibe
  */
 public class StatisticsList extends JBList<StatisticsItem> implements PropertyChangeListener {
+    private static final long serialVersionUID = 20212;
     private final DefaultListModel<StatisticsItem> myModel;
     private final KeyPromoterStatistics myStats = ApplicationManager.getApplication().getService(KeyPromoterStatistics.class);
 
@@ -73,6 +74,7 @@ public class StatisticsList extends JBList<StatisticsItem> implements PropertyCh
      * Provides custom rendering of items in the Key Promoter X statistic tool-window.
      */
     static class StatisticsItemCellRenderer extends JLabel implements ListCellRenderer<StatisticsItem> {
+        private static final long serialVersionUID = 20212;
 
         @Override
         public JLabel getListCellRendererComponent(JList<? extends StatisticsItem> list, StatisticsItem value, int index, boolean isSelected, boolean cellHasFocus) {

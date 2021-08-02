@@ -36,6 +36,7 @@ import java.util.EventListener;
  * @author Patrick Scheibe
  */
 public class SuppressedList extends JBList<StatisticsItem> implements PropertyChangeListener, EventListener {
+    private static final long serialVersionUID = 20212;
     private final KeyPromoterStatistics myStats = ApplicationManager.getApplication().getService(KeyPromoterStatistics.class);
     private final DefaultListModel<StatisticsItem> myModel;
 
@@ -109,6 +110,7 @@ public class SuppressedList extends JBList<StatisticsItem> implements PropertyCh
      * Provides custom rendering of items in the Key Promoter X statistic tool-window.
      */
     static class SuppressedItemCellRenderer extends JLabel implements ListCellRenderer<StatisticsItem> {
+        private static final long serialVersionUID = 20212;
 
         SuppressedItemCellRenderer() {
             setOpaque(true);
