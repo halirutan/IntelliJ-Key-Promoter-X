@@ -1,6 +1,18 @@
 # Key Promoter X Changelog
 
 ## [Unreleased]
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+## [2021.2]
 
 ### Added
 
