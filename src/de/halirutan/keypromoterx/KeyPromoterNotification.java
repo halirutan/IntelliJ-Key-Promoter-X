@@ -15,7 +15,6 @@ package de.halirutan.keypromoterx;
 import com.intellij.notification.*;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.keymap.impl.ui.EditKeymapsDialog;
 import de.halirutan.keypromoterx.statistic.KeyPromoterStatistics;
 import org.jetbrains.annotations.NotNull;
@@ -26,25 +25,34 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Patrick Scheibe.
  */
-class KeyPromoterNotification {
+public class KeyPromoterNotification {
 
-  private static final NotificationGroup GROUP = new NotificationGroup(
-      KeyPromoterBundle.message("kp.notification.group"),
-      NotificationDisplayType.BALLOON,
-      false,
-      KeyPromoterBundle.message("kp.tool.window.name"),
-      KeyPromoterIcons.KP_ICON
+  private static final NotificationGroup GROUP = NotificationGroupManager.getInstance().getNotificationGroup(
+          KeyPromoterBundle.message("kp.notification.group")
   );
-  private static final KeyPromoterSettings settings = ServiceManager.getService(KeyPromoterSettings.class);
+
+  public static void showStartupNotification() {
+    final Notification notification = GROUP.createNotification(KeyPromoterBundle.message(
+                "kp.notification.group"),
+            KeyPromoterBundle.message("kp.notification.startup"),
+            NotificationType.INFORMATION)
+            .setIcon(KeyPromoterIcons.KP_ICON)
+            .addAction(new BrowseNotificationAction(
+                    KeyPromoterBundle.message("kp.notification.startup.link.name"),
+                    KeyPromoterBundle.message("kp.notification.startup.link"))
+            );
+    notification.notify(null);
+  }
+
 
   static void showTip(KeyPromoterAction action, int count) {
     String message = KeyPromoterBundle.message("kp.notification.tip", action.getDescription(), count);
     final Notification notification = GROUP.createNotification(KeyPromoterBundle.message(
-        "kp.notification.group"),
-        message,
-        NotificationType.INFORMATION, null)
-                                           .setIcon(KeyPromoterIcons.KP_ICON)
-                                           .addAction(new EditKeymapAction(action, action.getShortcut()))
+                "kp.notification.group"),
+            message,
+            NotificationType.INFORMATION)
+            .setIcon(KeyPromoterIcons.KP_ICON)
+            .addAction(new EditKeymapAction(action, action.getShortcut()))
                                            .addAction(new SuppressTipAction(action));
     notification.notify(null);
   }
@@ -53,8 +61,7 @@ class KeyPromoterNotification {
     Notification notification = GROUP.createNotification(
         KeyPromoterBundle.message("kp.notification.group"),
         KeyPromoterBundle.message("kp.notification.ask.new.shortcut", action.getDescription()),
-        NotificationType.INFORMATION,
-        null
+            NotificationType.INFORMATION
     )
                                      .setIcon(KeyPromoterIcons.KP_ICON)
                                      .addAction(new EditKeymapAction(action))
@@ -88,11 +95,11 @@ class KeyPromoterNotification {
   }
 
   private static class SuppressTipAction extends NotificationAction {
-    private final KeyPromoterStatistics statistics = ServiceManager.getService(KeyPromoterStatistics.class);
+    private final KeyPromoterStatistics statistics = ApplicationManager.getApplication().getService(KeyPromoterStatistics.class);
     private final KeyPromoterAction myAction;
 
     SuppressTipAction(KeyPromoterAction action) {
-      super("(Don't show again)");
+      super(KeyPromoterBundle.message("kp.notification.disable.message"));
       myAction = action;
     }
 

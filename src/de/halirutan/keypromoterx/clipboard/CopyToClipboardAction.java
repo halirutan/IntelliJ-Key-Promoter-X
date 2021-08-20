@@ -1,5 +1,7 @@
 package de.halirutan.keypromoterx.clipboard;
 
+import com.intellij.openapi.application.Application;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.ui.Messages;
 import de.halirutan.keypromoterx.KeyPromoterBundle;
@@ -21,7 +23,7 @@ public class CopyToClipboardAction {
     }
 
     public static void copyStatisticsToClipboard(boolean useMarkdownFormat) {
-        final KeyPromoterStatistics statService = ServiceManager.getService(KeyPromoterStatistics.class);
+        final KeyPromoterStatistics statService = ApplicationManager.getApplication().getService(KeyPromoterStatistics.class);
         ArrayList<StatisticsItem> statistics = statService.getStatisticItems();
 
         StatisticsRenderer statisticsRenderer;

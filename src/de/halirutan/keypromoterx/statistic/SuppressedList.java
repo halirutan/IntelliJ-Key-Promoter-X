@@ -14,7 +14,7 @@ package de.halirutan.keypromoterx.statistic;
 
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.ui.JBUI;
@@ -36,7 +36,8 @@ import java.util.EventListener;
  * @author Patrick Scheibe
  */
 public class SuppressedList extends JBList<StatisticsItem> implements PropertyChangeListener, EventListener {
-    private final KeyPromoterStatistics myStats = ServiceManager.getService(KeyPromoterStatistics.class);
+    private static final long serialVersionUID = 20212;
+    private final KeyPromoterStatistics myStats = ApplicationManager.getApplication().getService(KeyPromoterStatistics.class);
     private final DefaultListModel<StatisticsItem> myModel;
 
     public SuppressedList() {
@@ -108,7 +109,8 @@ public class SuppressedList extends JBList<StatisticsItem> implements PropertyCh
     /**
      * Provides custom rendering of items in the Key Promoter X statistic tool-window.
      */
-    class SuppressedItemCellRenderer extends JLabel implements ListCellRenderer<StatisticsItem> {
+    static class SuppressedItemCellRenderer extends JLabel implements ListCellRenderer<StatisticsItem> {
+        private static final long serialVersionUID = 20212;
 
         SuppressedItemCellRenderer() {
             setOpaque(true);

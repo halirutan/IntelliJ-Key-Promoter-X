@@ -1,72 +1,109 @@
-import org.jetbrains.intellij.IntelliJPluginExtension
-import org.jetbrains.intellij.tasks.BuildSearchableOptionsTask
-import org.jetbrains.intellij.tasks.PatchPluginXmlTask
-import org.jetbrains.intellij.tasks.PublishTask
+import org.jetbrains.changelog.closure
+
+fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
-  java
-  idea
-  id("org.jetbrains.intellij") version "0.5.0"
+    java
+    id("org.jetbrains.intellij") version "1.1.4"
+    id("org.jetbrains.changelog") version "1.1.2"
 }
 
-java {
-  sourceCompatibility = JavaVersion.VERSION_1_8
-  targetCompatibility = JavaVersion.VERSION_1_8
-}
+group = properties("kpxPluginGroup")
+version = properties("kpxPluginVersion")
 
 repositories {
-  mavenCentral()
+    mavenCentral()
 }
 
 sourceSets {
-  main {
-    java.srcDir("src")
-    resources.srcDir("resources")
-  }
+    main {
+        java.srcDir("src")
+        resources.srcDir("resources")
+    }
 }
 
-configure<IntelliJPluginExtension> {
-  version = "LATEST-EAP-SNAPSHOT"
-  updateSinceUntilBuild = true
-  pluginName = "Key-Promoter-X"
+intellij {
+    pluginName.set(properties("kpxPluginName"))
+    version.set(properties("platformVersion"))
+    type.set("platformType")
+    downloadSources.set(properties("platformDownloadSources").toBoolean())
+    updateSinceUntilBuild.set(true)
 }
 
+changelog {
+    version = properties("kpxPluginVersion")
+    path = "${project.projectDir}/CHANGELOG.md"
+    header = closure { "[${properties("kpxPluginVersion")}]" }
+    // 2019, 2019.2, 2020.1.2
+    headerParserRegex = """\d+(\.\d+)+""".toRegex()
+    itemPrefix = "-"
+    keepUnreleasedSection = true
+    unreleasedTerm = "[Unreleased]"
+    groups = listOf("Added", "Changed", "Deprecated", "Removed", "Fixed", "Security")
+}
 
 /**
  * Simple function to load HTML files and remove the surrounding `<html>` tags. This is useful for maintaining changes-notes
  * and the description of plugins in separate HTML files which makes them much more readable.
  */
 fun htmlFixer(filename: String): String {
-  if (!File(filename).exists()) {
-    logger.error("File $filename not found.")
-  } else {
-    return File(filename).readText().replace("<html>", "").replace("</html>", "")
-  }
-  return ""
+    if (!File(filename).exists()) {
+        logger.error("File $filename not found.")
+    } else {
+        return File(filename).readText().replace("<html>", "").replace("</html>", "")
+    }
+    return ""
 }
 
-version = "2020.2.2"
-
 tasks {
-  withType<BuildSearchableOptionsTask> {
-    enabled = false
-  }
 
-  withType<JavaCompile> {
-    options.encoding = "UTF-8"
-  }
-
-  withType<PatchPluginXmlTask> {
-    changeNotes(htmlFixer("resources/META-INF/change-notes.html"))
-    pluginDescription(htmlFixer("resources/META-INF/description.html"))
-    sinceBuild("201.8303.32")
-  }
-
-  withType<PublishTask> {
-    if (project.hasProperty("pluginsToken")) {
-      token(project.property("pluginsToken"))
+    buildSearchableOptions {
+        enabled = false
     }
-    channels("default")
-  }
+
+    withType<JavaCompile> {
+        options.encoding = "UTF-8"
+        sourceCompatibility = "11"
+        targetCompatibility = "11"
+        options.compilerArgs.add("-Xlint:all")
+    }
+
+    patchPluginXml {
+        pluginDescription.set(htmlFixer("resources/META-INF/description.html"))
+        sinceBuild.set(properties("kpxPluginSinceBuild"))
+        untilBuild.set(properties("kpxPluginUntilBuild"))
+        changeNotes.set(
+                provider {
+                    changelog.getLatest().toHTML()
+                }
+        )
+    }
+
+    runPluginVerifier {
+        val versions = properties("kpxPluginVerifierIdeVersions")
+                .split(",")
+                .map(String::trim)
+                .filter(String::isNotEmpty)
+        // Kinda useless since the pluginVerifier will cry out
+        // anyway, but may not setting a version will be implemented at some point.
+        if (versions.isNotEmpty()) {
+            ideVersions.set(versions)
+        }
+    }
+
+    publishPlugin {
+        dependsOn("patchChangelog")
+        token.set(System.getenv("PUBLISH_TOKEN"))
+        // Use beta versions like 2020.3-beta-1
+        channels.set(
+                listOf(
+                        properties("kpxPluginVersion")
+                                .split('-')
+                                .getOrElse(1) { "default" }
+                                .split('.')
+                                .first()
+                )
+        )
+    }
 }
 

@@ -19,41 +19,39 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package de.halirutan.keypromoterx;
 
-import com.intellij.AbstractBundle;
-import org.jetbrains.annotations.NonNls;
+import com.intellij.ide.plugins.IdeaPluginDescriptor;
+import com.intellij.ide.plugins.PluginManagerCore;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.extensions.PluginId;
+import com.intellij.openapi.project.DumbAware;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.startup.StartupActivity;
+import com.intellij.util.text.VersionComparatorUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.PropertyKey;
-
-import java.lang.ref.Reference;
-import java.lang.ref.SoftReference;
-import java.util.ResourceBundle;
 
 /**
- * Bundle that provides us with all messages, strings, etc. that are used in the plugin.
- *
- * @author Patrick Scheibe
+ * Provides an information balloon at the start of the IDE when a new version is installed.
  */
-public class KeyPromoterBundle {
+public class KeyPromoterXStartupNotification implements StartupActivity, DumbAware {
+  @Override
+  public void runActivity(@NotNull Project project) {
+    if (ApplicationManager.getApplication().isUnitTestMode()) return;
 
-  @NonNls
-  private static final String PATH_TO_BUNDLE = "de.halirutan.keypromoterx.messages.KeyPromoterBundle";
-  private static Reference<ResourceBundle> ourBundle;
+    final KeyPromoterSettings settings = ApplicationManager.getApplication().getService(KeyPromoterSettings.class);
+    final String installedVersion = settings.getInstalledVersion();
 
-  private KeyPromoterBundle() {
-  }
-
-  public static String message(@NotNull @PropertyKey(resourceBundle = "de.halirutan.keypromoterx.messages.KeyPromoterBundle") String key, @NotNull Object... params) {
-    return AbstractBundle.message(getBundle(), key, params);
-  }
-
-  private static ResourceBundle getBundle() {
-    ResourceBundle bundle = com.intellij.reference.SoftReference.dereference(ourBundle);
-    if (bundle == null) {
-      bundle = ResourceBundle.getBundle(PATH_TO_BUNDLE);
-      ourBundle = new SoftReference<>(bundle);
+    final IdeaPluginDescriptor plugin = PluginManagerCore.getPlugin(PluginId.getId("Key Promoter X"));
+    if (installedVersion != null && plugin != null) {
+      final int compare = VersionComparatorUtil.compare(installedVersion, plugin.getVersion());
+//      if (true) { // TODO: Don't forget to remove that! For proofreading.
+      if (compare < 0) {
+        KeyPromoterNotification.showStartupNotification();
+        settings.setInstalledVersion(plugin.getVersion());
+      }
     }
-    return bundle;
   }
+
 }

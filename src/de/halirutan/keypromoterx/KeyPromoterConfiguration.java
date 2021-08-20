@@ -22,16 +22,8 @@
 
 package de.halirutan.keypromoterx;
 
-import javax.swing.Icon;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.JTextPane;
-import javax.swing.SpinnerNumberModel;
-
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.options.BaseConfigurable;
 import com.intellij.openapi.options.SearchableConfigurable;
 import com.intellij.ui.ColorPanel;
@@ -39,6 +31,8 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
 
 
 /**
@@ -70,7 +64,7 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
   private JCheckBox myDisabledInDistractionFreeMode;
   private JTextPane myPopupTemplate;
 
-  private KeyPromoterSettings keyPromoterSettings = ServiceManager.getService(KeyPromoterSettings.class);
+  private KeyPromoterSettings keyPromoterSettings = ApplicationManager.getApplication().getService(KeyPromoterSettings.class);
 
   @NotNull
   public String getId() {

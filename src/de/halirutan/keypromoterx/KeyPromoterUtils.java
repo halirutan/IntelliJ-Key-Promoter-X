@@ -13,7 +13,7 @@
 package de.halirutan.keypromoterx;
 
 import com.intellij.openapi.actionSystem.Shortcut;
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.keymap.Keymap;
 import com.intellij.openapi.keymap.KeymapManager;
 import com.intellij.openapi.keymap.KeymapUtil;
@@ -29,7 +29,7 @@ import java.util.Arrays;
 class KeyPromoterUtils {
 
     private static final KeymapManager keyMapManager = KeymapManager.getInstance();
-    private static final KeyPromoterSettings mySettings = ServiceManager.getService(KeyPromoterSettings.class);
+    private static final KeyPromoterSettings mySettings = ApplicationManager.getApplication().getService(KeyPromoterSettings.class);
 
     /**
      * Get first field of class with target type to use during click source handling.

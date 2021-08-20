@@ -205,16 +205,12 @@ public class KeyPromoterAction {
     }
   }
 
-  ActionSource getSource() {
-    return mySource;
-  }
-
   public String getShortcut() {
     if (myShortcut.length() > 0) {
       return myShortcut;
     }
     if (mySource.equals(ActionSource.TOOL_WINDOW_BUTTON) && myMnemonic > 0) {
-      myShortcut = "\'" + metaKey + (char) myMnemonic + "\'";
+      myShortcut = "'" + metaKey + (char) myMnemonic + "'";
     }
     return myShortcut;
   }
