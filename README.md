@@ -1,8 +1,7 @@
 ![Downloads Badge](https://img.shields.io/jetbrains/plugin/d/9792-key-promoter-x.svg)
-[![Build Status](https://travis-ci.org/halirutan/IntelliJ-Key-Promoter.svg?branch=KeyPromoterX)](https://travis-ci.org/halirutan/IntelliJ-Key-Promoter)
-![Plugin compatibility](https://github.com/halirutan/IntelliJ-Key-Promoter-X/workflows/Plugin%20compatibility/badge.svg)
-
-[![banner](doc/img/kpxBanner.png)](https://github.com/sponsors/halirutan)
+[![Build Status](https://github.com/halirutan/IntelliJ-Key-Promoter-X/actions/workflows/build.yml/badge.svg)](https://github.com/halirutan/IntelliJ-Key-Promoter-X/actions/workflows/build.yml)
+[![Slack](https://img.shields.io/badge/Slack-%23plugin--keypromoter--x-blue)](https://plugins.jetbrains.com/slack)
+[![Banner](doc/img/kpxBanner.png)](https://github.com/sponsors/halirutan)
 
 ---
 I'm grateful this project is currently sponsored by 
