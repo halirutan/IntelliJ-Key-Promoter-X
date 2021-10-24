@@ -1,9 +1,14 @@
 # Key Promoter X Changelog
 
 ## [Unreleased]
+
 ### Added
 
+- Build for IntelliJ Platform version 213
+
 ### Changed
+
+- Update sponsors
 
 ### Deprecated
 
@@ -12,6 +17,7 @@
 ### Fixed
 
 ### Security
+
 ## [2021.2]
 
 ### Added
