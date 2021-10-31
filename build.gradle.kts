@@ -4,7 +4,7 @@ fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
     java
-    id("org.jetbrains.intellij") version "1.1.6"
+    id("org.jetbrains.intellij") version "1.2.1"
     id("org.jetbrains.changelog") version "1.1.2"
 }
 
@@ -25,7 +25,7 @@ sourceSets {
 intellij {
     pluginName.set(properties("kpxPluginName"))
     version.set(properties("platformVersion"))
-    type.set("platformType")
+    type.set(properties("platformType"))
     downloadSources.set(properties("platformDownloadSources").toBoolean())
     updateSinceUntilBuild.set(true)
 }
