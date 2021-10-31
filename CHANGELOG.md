@@ -16,6 +16,8 @@
 
 ### Fixed
 
+- Fix missing properties call in build script
+
 ### Security
 
 ## [2021.2]
