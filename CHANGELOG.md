@@ -8,6 +8,7 @@
 
 - Build for IntelliJ Platform version 221
 - Update version of Gradle and Changelog plugins
+- Removed awful hack to inspect tool window buttons
 
 ### Deprecated
 

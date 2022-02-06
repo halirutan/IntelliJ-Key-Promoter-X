@@ -12,14 +12,15 @@
 
 package de.halirutan.keypromoterx;
 
+import com.intellij.ide.actions.ActivateToolWindowAction;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.impl.ActionButton;
 import com.intellij.openapi.actionSystem.impl.ActionMenuItem;
 import com.intellij.openapi.actionSystem.impl.actionholder.ActionRef;
+import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.impl.StripeButton;
-import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -123,25 +124,14 @@ public class KeyPromoterAction {
   /**
    * Information extraction for buttons of tool-windows
    *
-   * @param source source of the action
+   * @param stripeButton stripeButton of the action
    */
-  private void analyzeStripeButton(StripeButton source) {
+  private void analyzeStripeButton(StripeButton stripeButton) {
     mySource = ActionSource.TOOL_WINDOW_BUTTON;
-    myDescription = source.getText();
-    myMnemonic = source.getMnemonic2();
-    if (myMnemonic > 0) {
-      myDescription = myDescription.replaceFirst("\\d: ", "");
-    }
-
-    // Ugly hack to work around that the "Problems" tool-window does not follow the default naming of tool-windows.
-    // Hint: The ActionID is actually "ActivateProblemsViewToolWindow"
-    if ("Problems".equals(myDescription)) {
-      myDescription = "ProblemsView";
-    }
-    // This is hack, but for IDEA stripe buttons it doesn't seem possible to extract the IdeaActionID.
-    // We turn e.g. "9: Version Control" to "ActivateVersionControlToolWindow" which seems to work for all tool windows
-    // in a similar way.
-    myIdeaActionID = KeyPromoterBundle.message("kp.stripe.actionID", StringUtils.replace(myDescription, " ", ""));
+    final ToolWindow toolWindow = stripeButton.getToolWindow();
+    myDescription = toolWindow.getStripeTitle();
+    myMnemonic = stripeButton.getMnemonic2();
+    myIdeaActionID = ActivateToolWindowAction.getActionIdForToolWindow(toolWindow.getId());
     myShortcut = KeyPromoterUtils.getKeyboardShortcutsText(myIdeaActionID);
   }
 
