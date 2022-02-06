@@ -1,11 +1,9 @@
-import org.jetbrains.changelog.closure
-
 fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
     java
-    id("org.jetbrains.intellij") version "1.2.1"
-    id("org.jetbrains.changelog") version "1.1.2"
+    id("org.jetbrains.intellij") version "1.3.1"
+    id("org.jetbrains.changelog") version "1.3.1"
 }
 
 group = properties("kpxPluginGroup")
@@ -31,15 +29,15 @@ intellij {
 }
 
 changelog {
-    version = properties("kpxPluginVersion")
-    path = "${project.projectDir}/CHANGELOG.md"
-    header = closure { "[${properties("kpxPluginVersion")}]" }
+    version.set(properties("kpxPluginVersion"))
+    path.set("${project.projectDir}/CHANGELOG.md")
+    header.set("[${properties("kpxPluginVersion")}]")
     // 2019, 2019.2, 2020.1.2
-    headerParserRegex = """\d+(\.\d+)+""".toRegex()
-    itemPrefix = "-"
-    keepUnreleasedSection = true
-    unreleasedTerm = "[Unreleased]"
-    groups = listOf("Added", "Changed", "Deprecated", "Removed", "Fixed", "Security")
+    headerParserRegex.set("""\d+(\.\d+)+""".toRegex())
+    itemPrefix.set("-")
+    keepUnreleasedSection.set(true)
+    unreleasedTerm.set("[Unreleased]")
+    groups.set(listOf("Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"))
 }
 
 /**

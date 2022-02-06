@@ -1,9 +1,13 @@
 # Key Promoter X Changelog
 
 ## [Unreleased]
+
 ### Added
 
 ### Changed
+
+- Build for IntelliJ Platform version 221
+- Update version of Gradle and Changelog plugins
 
 ### Deprecated
 
@@ -12,6 +16,7 @@
 ### Fixed
 
 ### Security
+
 ## [2021.3]
 
 ### Added
