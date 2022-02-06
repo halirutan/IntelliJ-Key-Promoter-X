@@ -16,6 +16,9 @@
 
 ### Fixed
 
+- Issue that showed a notification for creating a shortcut, when there was already a mouse-shortcut defined and the same
+  action was invoked (see [Issue #76](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/76)).
+
 ### Security
 
 ## [2021.3]
