@@ -28,59 +28,70 @@ import java.util.Arrays;
  */
 class KeyPromoterUtils {
 
-    private static final KeymapManager keyMapManager = KeymapManager.getInstance();
-    private static final KeyPromoterSettings mySettings = ApplicationManager.getApplication().getService(KeyPromoterSettings.class);
+  private static final KeymapManager keyMapManager = KeymapManager.getInstance();
+  private static final KeyPromoterSettings mySettings = ApplicationManager.getApplication().getService(KeyPromoterSettings.class);
 
-    /**
-     * Get first field of class with target type to use during click source handling.
-     *
-     * @param aClass      class to inspect
-     * @param targetClass target class to check field to plug
-     * @return field
-     */
-    static Field getFieldOfType(Class<?> aClass, Class<?> targetClass) {
-        do {
-            Field[] declaredFields = aClass.getDeclaredFields();
-            for (Field declaredField : declaredFields) {
-                if (declaredField.getType().equals(targetClass)) {
-                    declaredField.setAccessible(true);
-                    return declaredField;
-                }
-            }
-        } while ((aClass = aClass.getSuperclass()) != null);
-        return null;
+  /**
+   * Get first field of class with target type to use during click source handling.
+   *
+   * @param aClass      class to inspect
+   * @param targetClass target class to check field to plug
+   * @return field
+   */
+  static Field getFieldOfType(Class<?> aClass, Class<?> targetClass) {
+    do {
+      Field[] declaredFields = aClass.getDeclaredFields();
+      for (Field declaredField : declaredFields) {
+        if (declaredField.getType().equals(targetClass)) {
+          declaredField.setAccessible(true);
+          return declaredField;
+        }
+      }
+    } while ((aClass = aClass.getSuperclass()) != null);
+    return null;
+  }
+
+  /**
+   * Uses the current keymap to find if there is a mouse shortcut for an action.
+   *
+   * @return true if a mouse shortcut exists in the keymap
+   */
+  public static boolean hasMouseShortcut(String actionId) {
+    final Keymap activeKeymap = keyMapManager.getActiveKeymap();
+    return Arrays.stream(activeKeymap.getShortcuts(actionId)).anyMatch(shortcut -> !shortcut.isKeyboard());
+  }
+
+  /**
+   * Uses an actionID to access the key-map of IDEA and find possible short-cuts
+   *
+   * @param myIdeaActionID ActionID to look the shortcut up
+   * @return a string combining one or more shortcuts
+   */
+  static String getKeyboardShortcutsText(String myIdeaActionID) {
+    final Keymap activeKeymap = keyMapManager.getActiveKeymap();
+    Shortcut[] shortcuts;
+    if (mySettings.isShowKeyboardShortcutsOnly()) {
+      shortcuts = Arrays.stream(
+          activeKeymap.getShortcuts(myIdeaActionID)
+      ).filter(Shortcut::isKeyboard).toArray(Shortcut[]::new);
+    } else {
+      shortcuts = activeKeymap.getShortcuts(myIdeaActionID);
     }
 
-    /**
-     * Uses an actionID to access the key-map of IDEA and find possible short-cuts
-     * @param myIdeaActionID ActionID to look the shortcut up
-     * @return a string combining one or more shortcuts
-     */
-    static String getKeyboardShortcutsText(String myIdeaActionID) {
-        final Keymap activeKeymap = keyMapManager.getActiveKeymap();
-        Shortcut[] shortcuts;
-        if (mySettings.isShowKeyboardShortcutsOnly()) {
-            shortcuts = Arrays.stream(
-                activeKeymap.getShortcuts(myIdeaActionID)
-            ).filter(Shortcut::isKeyboard).toArray(Shortcut[]::new);
-        } else {
-            shortcuts = activeKeymap.getShortcuts(myIdeaActionID);
-        }
 
-
-        if (shortcuts.length == 0) {
-            return "";
-        }
-
-        StringBuilder buffer = new StringBuilder();
-        for (int i = 0; i < shortcuts.length; i++) {
-            Shortcut shortcut = shortcuts[i];
-            if (i > 0) {
-                buffer.append(" or ");
-            }
-            buffer.append("'").append(KeymapUtil.getShortcutText(shortcut)).append("'");
-        }
-        return buffer.toString();
+    if (shortcuts.length == 0) {
+      return "";
     }
+
+    StringBuilder buffer = new StringBuilder();
+    for (int i = 0; i < shortcuts.length; i++) {
+      Shortcut shortcut = shortcuts[i];
+      if (i > 0) {
+        buffer.append(" or ");
+      }
+      buffer.append("'").append(KeymapUtil.getShortcutText(shortcut)).append("'");
+    }
+    return buffer.toString();
+  }
 
 }

@@ -169,7 +169,9 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
       if (keyPromoterSettings.getProposeToCreateShortcutCount() > 0 &&
           withoutShortcutStats.get(ideaActionID) % keyPromoterSettings.getProposeToCreateShortcutCount() == 0
       ) {
-        KeyPromoterNotification.askToCreateShortcut(action);
+        if (!(type == ActionType.MouseAction && KeyPromoterUtils.hasMouseShortcut(ideaActionID))) {
+          KeyPromoterNotification.askToCreateShortcut(action);
+        }
 
       }
     }
