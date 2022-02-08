@@ -25,4 +25,3 @@ If applicable, add screenshots to help explain your problem.
 **Please also provide:**
  - OS: [e.g. Mac OS X, Linux, Windows]
  - IntelliJ Product [e.g. PyCharm 2019.1.3]
- - Wolfram Plugin Version [e.g. 2019.2]
