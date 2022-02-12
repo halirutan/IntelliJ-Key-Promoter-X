@@ -42,7 +42,7 @@ public class KeyPromoterAction {
       System.getProperty("os.name").contains("OS X") ? KeyPromoterBundle.message("kp.meta.osx") :
           KeyPromoterBundle.message("kp.meta.default");
   // Fields with actions of supported classes
-  private static final Map<Class, Field> myClassFields = new HashMap<>(5);
+  private static final Map<Class<?>, Field> myClassFields = new HashMap<>(5);
 
   private ActionSource mySource = ActionSource.INVALID;
   private int myMnemonic = 0;
@@ -110,7 +110,7 @@ public class KeyPromoterAction {
     final Field actionField = findActionField(source, ActionRef.class);
     if (actionField != null) {
       try {
-        final ActionRef o = (ActionRef) actionField.get(source);
+        final ActionRef<?> o = (ActionRef<?>) actionField.get(source);
         final AnAction action = o.getAction();
         if (action != null) {
           fixValuesFromAction(action);
@@ -196,7 +196,7 @@ public class KeyPromoterAction {
   }
 
   public String getShortcut() {
-    if (myShortcut.length() > 0) {
+    if (myShortcut != null && myShortcut.length() > 0) {
       return myShortcut;
     }
     if (mySource.equals(ActionSource.TOOL_WINDOW_BUTTON) && myMnemonic > 0) {

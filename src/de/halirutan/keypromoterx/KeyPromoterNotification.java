@@ -14,10 +14,12 @@ package de.halirutan.keypromoterx;
 
 import com.intellij.notification.*;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.keymap.impl.ui.EditKeymapsDialog;
+import com.intellij.openapi.ui.DialogWrapper;
 import de.halirutan.keypromoterx.statistic.KeyPromoterStatistics;
 import org.jetbrains.annotations.NotNull;
+
+import static com.intellij.openapi.application.ApplicationManager.getApplication;
 
 /**
  * A custom notification class that allows for creating 1. tips if a short cut was missed and 2. a balloon asking if
@@ -44,31 +46,19 @@ public class KeyPromoterNotification {
     notification.notify(null);
   }
 
-
-  static void showTip(KeyPromoterAction action, int count) {
+  static void showTip(KeyPromoterAction action, int count, ShowMode mode) {
+    String title = KeyPromoterBundle.message("kp.notification.group");
     String message = KeyPromoterBundle.message("kp.notification.tip", action.getDescription(), count);
-    final Notification notification = GROUP.createNotification(KeyPromoterBundle.message(
-                "kp.notification.group"),
-            message,
-            NotificationType.INFORMATION)
-            .setIcon(KeyPromoterIcons.KP_ICON)
-            .addAction(new EditKeymapAction(action, action.getShortcut()))
-                                           .addAction(new SuppressTipAction(action));
-    notification.notify(null);
+
+    mode.showTip(title, message, action);
   }
 
-  static void askToCreateShortcut(KeyPromoterAction action) {
-    Notification notification = GROUP.createNotification(
-        KeyPromoterBundle.message("kp.notification.group"),
-        KeyPromoterBundle.message("kp.notification.ask.new.shortcut", action.getDescription()),
-            NotificationType.INFORMATION
-    )
-                                     .setIcon(KeyPromoterIcons.KP_ICON)
-                                     .addAction(new EditKeymapAction(action))
-                                     .addAction(new SuppressTipAction(action));
-    notification.notify(null);
-  }
+  static void askToCreateShortcut(KeyPromoterAction action, ShowMode mode) {
+    String title = KeyPromoterBundle.message("kp.notification.group");
+    String message = KeyPromoterBundle.message("kp.notification.ask.new.shortcut", action.getDescription());
 
+    mode.askToCreateShortcut(title, message, action);
+  }
 
   /**
    * Provides click-able links to IDEA actions. On click, the keymap editor is opened showing the exact line where
@@ -90,12 +80,12 @@ public class KeyPromoterNotification {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e, @NotNull Notification notification) {
       EditKeymapsDialog dialog = new EditKeymapsDialog(null, myAction.getIdeaActionID());
-      ApplicationManager.getApplication().invokeLater(dialog::show);
+      getApplication().invokeLater(dialog::show);
     }
   }
 
   private static class SuppressTipAction extends NotificationAction {
-    private final KeyPromoterStatistics statistics = ApplicationManager.getApplication().getService(KeyPromoterStatistics.class);
+    private final KeyPromoterStatistics statistics = getApplication().getService(KeyPromoterStatistics.class);
     private final KeyPromoterAction myAction;
 
     SuppressTipAction(KeyPromoterAction action) {
@@ -110,5 +100,47 @@ public class KeyPromoterNotification {
     }
   }
 
+  public enum ShowMode {
+    NOTIFICATION {
+      @Override
+      public void showTip(String title, String message, KeyPromoterAction action) {
+        Notification notification = GROUP.createNotification(title, message, NotificationType.INFORMATION)
+                .setIcon(KeyPromoterIcons.KP_ICON)
+                .addAction(new EditKeymapAction(action, action.getShortcut()))
+                .addAction(new SuppressTipAction(action));
+        notification.notify(null);
+      }
+
+      @Override
+      public void askToCreateShortcut(String title, String message, KeyPromoterAction action) {
+        Notification notification = GROUP.createNotification(title, message, NotificationType.INFORMATION)
+                .setIcon(KeyPromoterIcons.KP_ICON)
+                .addAction(new EditKeymapAction(action))
+                .addAction(new SuppressTipAction(action));
+        notification.notify(null);
+      }
+    },
+    DIALOG {
+      @Override
+      public void showTip(String title, String message, KeyPromoterAction action) {
+        DialogWrapper dialog = KeyPromoterDialogFactory.tipDialog(title, message, action);
+        getApplication().invokeLater(dialog::show);
+      }
+
+      @Override
+      public void askToCreateShortcut(String title, String message, KeyPromoterAction action) {
+        DialogWrapper dialog = KeyPromoterDialogFactory.askToCreateShortcutDialog(title, message, action);
+        getApplication().invokeLater(dialog::show);
+      }
+    };
+
+    public static ShowMode showModeFromSettings(KeyPromoterSettings settings) {
+      return settings.hardMode ? DIALOG : NOTIFICATION;
+    }
+
+    public abstract void showTip(String title, String message, KeyPromoterAction action);
+
+    public abstract void askToCreateShortcut(String title, String message, KeyPromoterAction action);
+  }
 
 }

@@ -77,8 +77,12 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
    */
   public boolean disabledInDistractionFreeMode = false;
 
-  public String installedVersion = "1.0";
+  /**
+   * Whether to show notification with dialogs that need to be closed to continue using the IDE
+   */
+  public boolean hardMode;
 
+  public String installedVersion = "1.0";
 
   boolean isShowKeyboardShortcutsOnly() {
     return showKeyboardShortcutsOnly;
@@ -136,7 +140,6 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
     this.proposeToCreateShortcutCount = proposeToCreateShortcutCount;
   }
 
-
   int getShowTipsClickCount() {
     return showTipsClickCount;
   }
@@ -161,8 +164,16 @@ public class KeyPromoterSettings implements PersistentStateComponent<KeyPromoter
     this.disabledInPresentationMode = disabledInPresentationMode;
   }
 
+  public void setHardMode(boolean hardMode) {
+    this.hardMode = hardMode;
+  }
+
   public boolean isDisabledInDistractionFreeMode() {
     return disabledInDistractionFreeMode;
+  }
+
+  public boolean isHardMode() {
+    return hardMode;
   }
 
   public void setDisabledInDistractionFreeMode(boolean disabledInDistractionFreeMode) {

@@ -62,6 +62,7 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
   private JCheckBox myShowKeyboardShortcutsOnly;
   private JCheckBox myDisabledInPresentationMode;
   private JCheckBox myDisabledInDistractionFreeMode;
+  private JCheckBox myHardMode;
   private JTextPane myPopupTemplate;
 
   private KeyPromoterSettings keyPromoterSettings = ApplicationManager.getApplication().getService(KeyPromoterSettings.class);
@@ -107,6 +108,7 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
     if (!myShowClickCount.getValue().equals(keyPromoterSettings.getShowTipsClickCount())) return true;
     if (myDisabledInPresentationMode.isSelected() != keyPromoterSettings.isDisabledInPresentationMode()) return true;
     if (myDisabledInDistractionFreeMode.isSelected() != keyPromoterSettings.isDisabledInDistractionFreeMode()) return true;
+    if (myHardMode.isSelected() != keyPromoterSettings.isHardMode()) return true;
 
     return false;
   }
@@ -120,6 +122,7 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
     keyPromoterSettings.setShowKeyboardShortcutsOnly(myShowKeyboardShortcutsOnly.isSelected());
     keyPromoterSettings.setDisabledInPresentationMode(myDisabledInPresentationMode.isSelected());
     keyPromoterSettings.setDisabledInDistractionFreeMode(myDisabledInDistractionFreeMode.isSelected());
+    keyPromoterSettings.setHardMode(myHardMode.isSelected());
     keyPromoterSettings
             .setProposeToCreateShortcutCount(Integer.parseInt(myProposeToCreateShortcutCount.getValue().toString()));
     keyPromoterSettings.setShowTipsClickCount(Integer.parseInt(myShowClickCount.getValue().toString()));
@@ -134,6 +137,7 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
     myShowKeyboardShortcutsOnly.setSelected(keyPromoterSettings.isShowKeyboardShortcutsOnly());
     myDisabledInPresentationMode.setSelected(keyPromoterSettings.isDisabledInPresentationMode());
     myDisabledInDistractionFreeMode.setSelected(keyPromoterSettings.isDisabledInDistractionFreeMode());
+    myHardMode.setSelected(keyPromoterSettings.isHardMode());
     myProposeToCreateShortcutCount.setValue(keyPromoterSettings.getProposeToCreateShortcutCount());
     myShowClickCount.setValue(keyPromoterSettings.getShowTipsClickCount());
   }

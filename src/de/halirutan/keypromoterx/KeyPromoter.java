@@ -44,6 +44,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static de.halirutan.keypromoterx.KeyPromoterNotification.ShowMode.showModeFromSettings;
+
 /**
  * The main component that is registered in plugin.xml. It will take care of catching UI events
  * and transfers them to {@link KeyPromoterAction} for inspection. Depending on the type of action (tool-window button,
@@ -72,7 +74,6 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
   private final KeyPromoterSettings keyPromoterSettings = ApplicationManager.getApplication().getService(KeyPromoterSettings.class);
   private static final String distractionFreeModeKey = "editor.distraction.free.mode";
   private boolean mouseDrag = false;
-
 
   public KeyPromoter() {
     Topics.subscribe(AnActionListener.TOPIC, this, this);
@@ -156,7 +157,7 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
         statsService.registerAction(action);
         int count = statsService.get(action).count;
         if (count % keyPromoterSettings.getShowTipsClickCount() == 0) {
-          KeyPromoterNotification.showTip(action, statsService.get(action).getCount());
+          KeyPromoterNotification.showTip(action, statsService.get(action).getCount(), showModeFromSettings(keyPromoterSettings));
         }
       } else if (type == ActionType.KeyboardAction) {
         statsService.registerShortcutUsed(action);
@@ -170,9 +171,8 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
           withoutShortcutStats.get(ideaActionID) % keyPromoterSettings.getProposeToCreateShortcutCount() == 0
       ) {
         if (!(type == ActionType.MouseAction && KeyPromoterUtils.hasMouseShortcut(ideaActionID))) {
-          KeyPromoterNotification.askToCreateShortcut(action);
+          KeyPromoterNotification.askToCreateShortcut(action, showModeFromSettings(keyPromoterSettings));
         }
-
       }
     }
   }
