@@ -28,6 +28,7 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.EventListener;
+import java.util.Objects;
 
 /**
  * Provides a custom JBList for displaying how often a button was pressed that could have been replaced by a shortcut.
@@ -148,11 +149,7 @@ public class SuppressedList extends JBList<StatisticsItem> implements PropertyCh
 
                 if (action != null) {
                     final Icon icon = action.getTemplatePresentation().getIcon();
-                    if (icon != null) {
-                        setIcon(icon);
-                    } else {
-                        setIcon(KeyPromoterIcons.KP_ICON);
-                    }
+                    setIcon(Objects.requireNonNullElse(icon, KeyPromoterIcons.KP_ICON));
                 }
             }
             return this;

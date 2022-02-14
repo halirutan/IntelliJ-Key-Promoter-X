@@ -19,8 +19,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.impl.ActionButton;
 import com.intellij.openapi.actionSystem.impl.ActionMenuItem;
 import com.intellij.openapi.actionSystem.impl.actionholder.ActionRef;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.impl.StripeButton;
+import com.intellij.toolWindow.StripeButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,7 +41,7 @@ public class KeyPromoterAction {
       System.getProperty("os.name").contains("OS X") ? KeyPromoterBundle.message("kp.meta.osx") :
           KeyPromoterBundle.message("kp.meta.default");
   // Fields with actions of supported classes
-  private static final Map<Class, Field> myClassFields = new HashMap<>(5);
+  private static final Map<Class<?>, Field> myClassFields = new HashMap<>(5);
 
   private ActionSource mySource = ActionSource.INVALID;
   private int myMnemonic = 0;
@@ -92,9 +91,7 @@ public class KeyPromoterAction {
    */
   private void analyzeActionButton(ActionButton source) {
     final AnAction action = source.getAction();
-    if (action != null) {
-      fixValuesFromAction(action);
-    }
+    fixValuesFromAction(action);
     mySource = ActionSource.MAIN_TOOLBAR;
   }
 
@@ -107,14 +104,12 @@ public class KeyPromoterAction {
     mySource = ActionSource.MENU_ENTRY;
     myDescription = source.getText();
     myMnemonic = source.getMnemonic();
-    final Field actionField = findActionField(source, ActionRef.class);
+    final Field actionField = findActionField(source);
     if (actionField != null) {
       try {
-        final ActionRef o = (ActionRef) actionField.get(source);
+        final ActionRef<?> o = (ActionRef<?>) actionField.get(source);
         final AnAction action = o.getAction();
-        if (action != null) {
-          fixValuesFromAction(action);
-        }
+        fixValuesFromAction(action);
       } catch (Exception e) {
         // happens..
       }
@@ -128,10 +123,9 @@ public class KeyPromoterAction {
    */
   private void analyzeStripeButton(StripeButton stripeButton) {
     mySource = ActionSource.TOOL_WINDOW_BUTTON;
-    final ToolWindow toolWindow = stripeButton.getToolWindow();
-    myDescription = toolWindow.getStripeTitle();
+    myDescription = stripeButton.getText();
     myMnemonic = stripeButton.getMnemonic2();
-    myIdeaActionID = ActivateToolWindowAction.getActionIdForToolWindow(toolWindow.getId());
+    myIdeaActionID = ActivateToolWindowAction.getActionIdForToolWindow(stripeButton.getId());
     myShortcut = KeyPromoterUtils.getKeyboardShortcutsText(myIdeaActionID);
   }
 
@@ -151,14 +145,12 @@ public class KeyPromoterAction {
    * Extracts a private field from a class so that we can access it for getting information
    *
    * @param source Object that contains the field we are interested in
-   * @param target Class of the field we try to extract
-   *
    * @return The field that was found
    */
-  private Field findActionField(Object source, Class<?> target) {
+  private Field findActionField(Object source) {
     Field field;
     if (!myClassFields.containsKey(source.getClass())) {
-      field = KeyPromoterUtils.getFieldOfType(source.getClass(), target);
+      field = KeyPromoterUtils.getFieldOfType(source.getClass(), ActionRef.class);
       if (field == null) {
         return null;
       }

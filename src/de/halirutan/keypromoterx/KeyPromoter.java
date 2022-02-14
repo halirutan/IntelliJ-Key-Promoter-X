@@ -31,7 +31,7 @@ import com.intellij.openapi.actionSystem.ex.AnActionListener;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.wm.impl.StripeButton;
+import com.intellij.toolWindow.StripeButton;
 import de.halirutan.keypromoterx.statistic.KeyPromoterStatistics;
 import org.jetbrains.annotations.NotNull;
 
