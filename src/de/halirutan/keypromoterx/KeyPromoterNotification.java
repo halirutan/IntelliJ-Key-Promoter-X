@@ -48,9 +48,8 @@ public class KeyPromoterNotification {
 
   static void showTip(KeyPromoterAction action, int count, ShowMode mode) {
     String title = KeyPromoterBundle.message("kp.notification.group");
-    String message = KeyPromoterBundle.message("kp.notification.tip", action.getDescription(), count);
 
-    mode.showTip(title, message, action);
+    mode.showTip(title, action, count);
   }
 
   static void askToCreateShortcut(KeyPromoterAction action, ShowMode mode) {
@@ -103,33 +102,22 @@ public class KeyPromoterNotification {
   public enum ShowMode {
     NOTIFICATION {
       @Override
-      public void showTip(String title, String message, KeyPromoterAction action) {
+      public void showTip(String title, KeyPromoterAction action, int count) {
+        String message = KeyPromoterBundle.message("kp.notification.tip", action.getDescription(), count);
+
         Notification notification = GROUP.createNotification(title, message, NotificationType.INFORMATION)
                 .setIcon(KeyPromoterIcons.KP_ICON)
                 .addAction(new EditKeymapAction(action, action.getShortcut()))
                 .addAction(new SuppressTipAction(action));
         notification.notify(null);
       }
-
-      @Override
-      public void askToCreateShortcut(String title, String message, KeyPromoterAction action) {
-        Notification notification = GROUP.createNotification(title, message, NotificationType.INFORMATION)
-                .setIcon(KeyPromoterIcons.KP_ICON)
-                .addAction(new EditKeymapAction(action))
-                .addAction(new SuppressTipAction(action));
-        notification.notify(null);
-      }
     },
     DIALOG {
       @Override
-      public void showTip(String title, String message, KeyPromoterAction action) {
-        DialogWrapper dialog = KeyPromoterDialogFactory.tipDialog(title, message, action);
-        getApplication().invokeLater(dialog::show);
-      }
+      public void showTip(String title, KeyPromoterAction action, int count) {
+        String message = KeyPromoterBundle.message("kp.dialog.tip", action.getDescription(), count, action.getShortcut());
 
-      @Override
-      public void askToCreateShortcut(String title, String message, KeyPromoterAction action) {
-        DialogWrapper dialog = KeyPromoterDialogFactory.askToCreateShortcutDialog(title, message, action);
+        DialogWrapper dialog = new KeyPromoterDialog(title, message, action);
         getApplication().invokeLater(dialog::show);
       }
     };
@@ -138,9 +126,14 @@ public class KeyPromoterNotification {
       return settings.hardMode ? DIALOG : NOTIFICATION;
     }
 
-    public abstract void showTip(String title, String message, KeyPromoterAction action);
+    public abstract void showTip(String title, KeyPromoterAction action, int count);
 
-    public abstract void askToCreateShortcut(String title, String message, KeyPromoterAction action);
+    public void askToCreateShortcut(String title, String message, KeyPromoterAction action) {
+      Notification notification = GROUP.createNotification(title, message, NotificationType.INFORMATION)
+              .setIcon(KeyPromoterIcons.KP_ICON)
+              .addAction(new EditKeymapAction(action))
+              .addAction(new SuppressTipAction(action));
+      notification.notify(null);
+    }
   }
-
 }
