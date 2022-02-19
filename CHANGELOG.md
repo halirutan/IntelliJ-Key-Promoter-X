@@ -1,9 +1,20 @@
 # Key Promoter X Changelog
 
 ## [Unreleased]
-
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [2022.1.1]
+### Added
 - Another try to build for IntelliJ Platform version 221
 - Update version of Gradle and Changelog plugins
 - Removed awful hack to inspect tool window buttons
@@ -15,7 +26,6 @@
 ### Removed
 
 ### Fixed
-
 - Recognizing the stripe buttons for tool windows as they moved from package `com.intellij.openapi.wm.impl`
   to `com.intellij.toolWindow`
 - Issue that showed a notification for creating a shortcut, when there was already a mouse-shortcut defined and the same
@@ -23,25 +33,17 @@
 
 ### Security
 
-## [2022.1]
-
-### Added
-
-### Changed
-
-- Build for IntelliJ Platform version 221
-- Update version of Gradle and Changelog plugins
-- Removed awful hack to inspect tool window buttons
-
-### Deprecated
-
-### Removed
-
-### Fixed
-- Issue that showed a notification for creating a shortcut, when there was already a mouse-shortcut defined and the same
-  action was invoked (see [Issue #76](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/76)).
-
-### Security
+## [2020.1]
+- Add scrollbars in the toolwindow for bottom
+  placement ([Issue 55](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/55))
+- Revert back to non-dynamic plugin for now
+- Fix icon sizes
+- Make extension reloadable without requiring a restart of the IDE
+- Fix all deprecation issues
+- Fix bug that prevents settings from being
+  saved ([Issue 51](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/51))
+- Include "Organization" requirement for plugins
+- Make compatible with 2020.1 EAP products
 
 ## [2019.3]
 - Make compatible with 2019.3 EAP products
@@ -89,15 +91,3 @@
 - Fix bug to catch tool-window buttons successfully
 - Re-implemented the algorithm that catches button clicks and extracts their information
 - Change to internal notification system instead of a custom AWT window
-
-## [2020.1]
-- Add scrollbars in the toolwindow for bottom
-  placement ([Issue 55](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/55))
-- Revert back to non-dynamic plugin for now
-- Fix icon sizes
-- Make extension reloadable without requiring a restart of the IDE
-- Fix all deprecation issues
-- Fix bug that prevents settings from being
-  saved ([Issue 51](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/51))
-- Include "Organization" requirement for plugins
-- Make compatible with 2020.1 EAP products
