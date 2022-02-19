@@ -53,19 +53,6 @@ import java.util.Map;
  */
 public class KeyPromoter implements AWTEventListener, AnActionListener, Disposable {
 
-  /**
-   * Transfers the event to {@link KeyPromoterAction} and inspects the results. Then, depending on the result and the
-   * Key Promoter X settings, a balloon is shown with the shortcut tip and the statistic is updated.
-   *
-   * @param e event that is handled
-   */
-  private void handleMouseEvent(AWTEvent e) {
-    if (e.getSource() instanceof StripeButton && keyPromoterSettings.isToolWindowButtonsEnabled()) {
-      KeyPromoterAction action = new KeyPromoterAction(e);
-      showTip(action, ActionType.MouseAction);
-    }
-  }
-
   private final Map<String, Integer> withoutShortcutStats = Collections.synchronizedMap(new HashMap<>());
   private final KeyPromoterStatistics statsService = ApplicationManager.getApplication().getService(KeyPromoterStatistics.class);
   // Presentation and stats fields.
@@ -100,6 +87,19 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
         handleMouseEvent(e);
       }
       mouseDrag = false;
+    }
+  }
+
+  /**
+   * Transfers the event to {@link KeyPromoterAction} and inspects the results. Then, depending on the result and the
+   * Key Promoter X settings, a balloon is shown with the shortcut tip and the statistic is updated.
+   *
+   * @param e event that is handled
+   */
+  private void handleMouseEvent(AWTEvent e) {
+    if (e.getSource() instanceof StripeButton && keyPromoterSettings.isToolWindowButtonsEnabled()) {
+      KeyPromoterAction action = new KeyPromoterAction(e);
+      showTip(action, ActionType.MouseAction);
     }
   }
 
