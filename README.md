@@ -11,23 +11,24 @@ I'm grateful this project is currently sponsored by
 and receives $4/month from
 [Daniel Babiak](https://github.com/dbabiak),
 [Stefan Hagen](https://github.com/sthagen),
-[Vitaliy Kudryk](https://github.com/kudrykv),
 [jlash13](https://github.com/jlash13),
 [Mark McCorkle](https://github.com/mccorkle),
-[Indrek Toom](https://github.com/m2ger)
-[OpenTrainTimes Ltd.](https://github.com/opentraintimes)
+[Indrek Toom](https://github.com/m2ger),
+[OpenTrainTimes Ltd.](https://github.com/opentraintimes),
+[incubyteco](https://github.com/incubyteco),
 $2/month from
 [Mac Adamarczuk](https://github.com/macalac),
 [Frank Harper](https://github.com/franklinharper),
 [Christopher Kolstad](https://github.com/chriswk),
 [Sudhir Jonathan](https://github.com/sudhirj),
 [Hasnain Baxamoosa](https://github.com/hbaxamoosa),
-[Karl Spies](https://github.com/datenbrille)
-[Ryan Quinn](https://github.com/ryanwilliamquinn)
-[Cristian Radulescu](https://github.com/cristianradulescu)
-[Brian Levis](https://github.com/brianlevis)
-[Ignat Beresnev](https://github.com/IgnatBeresnev)
-and $1/month from [23 other people](https://github.com/sponsors/halirutan).
+[Karl Spies](https://github.com/datenbrille),
+[Ryan Quinn](https://github.com/ryanwilliamquinn),
+[Cristian Radulescu](https://github.com/cristianradulescu),
+[Brian Levis](https://github.com/brianlevis),
+[Ignat Beresnev](https://github.com/IgnatBeresnev),
+[PCoetzeeDev](https://github.com/PCoetzeeDev),
+and $1/month from [24 other people](https://github.com/sponsors/halirutan).
 
 - [Become a GitHub Sponsor and support the Key Promoter X development](https://github.com/sponsors/halirutan)
 
