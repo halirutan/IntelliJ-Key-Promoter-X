@@ -188,7 +188,7 @@ public class KeyPromoterAction {
   }
 
   public String getShortcut() {
-    if (myShortcut.length() > 0) {
+    if (myShortcut != null && myShortcut.length() > 0) {
       return myShortcut;
     }
     if (mySource.equals(ActionSource.TOOL_WINDOW_BUTTON) && myMnemonic > 0) {
