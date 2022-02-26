@@ -1,7 +1,12 @@
 # Key Promoter X Changelog
 
 ## [Unreleased]
+
 ### Added
+
+- Hard Mode that shows a dialog that needs to be closed using the same shortcut that was missed.
+  ([Issue 50](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/50),
+  [PR 90](https://github.com/halirutan/IntelliJ-Key-Promoter-X/pull/90)).
 
 ### Changed
 

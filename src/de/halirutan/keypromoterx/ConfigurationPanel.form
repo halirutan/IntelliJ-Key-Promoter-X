@@ -136,6 +136,7 @@
             </constraints>
             <properties>
               <text value="Show only Keyboard Shortcuts"/>
+              <toolTipText value=""/>
             </properties>
           </component>
           <component id="8588d" class="javax.swing.JCheckBox" binding="myDisabledInPresentationMode">
@@ -144,6 +145,7 @@
             </constraints>
             <properties>
               <text value="Disable in Presentation Mode"/>
+              <toolTipText value=""/>
             </properties>
           </component>
           <component id="570fc" class="javax.swing.JCheckBox" binding="myDisabledInDistractionFreeMode">
@@ -159,7 +161,8 @@
               <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Enable Hard Mode: notifications must be closed to continue using the IDE"/>
+              <text value="Enable Hard Mode"/>
+              <toolTipText value="Forces you to close notifications using the missed shortcut"/>
             </properties>
           </component>
         </children>
