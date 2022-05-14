@@ -1,19 +1,7 @@
 # Key Promoter X Changelog
 
 ## [Unreleased]
-
 ### Added
-
-- Hard Mode that shows a dialog that needs to be closed using the same shortcut that was missed.
-  ([Issue 50](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/50),
-  [PR 90](https://github.com/halirutan/IntelliJ-Key-Promoter-X/pull/90)).
-
-
-## [2022.1.1]
-### Added
-- Another try to build for IntelliJ Platform version 221
-- Update version of Gradle and Changelog plugins
-- Removed awful hack to inspect tool window buttons
 
 ### Changed
 
@@ -22,12 +10,14 @@
 ### Removed
 
 ### Fixed
-- Recognizing the stripe buttons for tool windows as they moved from package `com.intellij.openapi.wm.impl`
-  to `com.intellij.toolWindow`
-- Issue that showed a notification for creating a shortcut, when there was already a mouse-shortcut defined and the same
-  action was invoked (see [Issue #76](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/76)).
 
 ### Security
+
+## [2022.1.2]
+### Added
+- Hard Mode that shows a dialog that needs to be closed using the same shortcut that was missed.
+  ([Issue 50](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/50),
+  [PR 90](https://github.com/halirutan/IntelliJ-Key-Promoter-X/pull/90)).
 
 ## [2020.1]
 - Add scrollbars in the toolwindow for bottom
