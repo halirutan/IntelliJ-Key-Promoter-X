@@ -8,15 +8,6 @@
   ([Issue 50](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/50),
   [PR 90](https://github.com/halirutan/IntelliJ-Key-Promoter-X/pull/90)).
 
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
 
 ## [2022.1.1]
 ### Added
