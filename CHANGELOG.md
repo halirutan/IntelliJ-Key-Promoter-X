@@ -1,17 +1,10 @@
 # Key Promoter X Changelog
 
 ## [Unreleased]
+
 ### Added
 
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
+- Add support for IntelliJ versions 2022.2
 
 ## [2022.1.2]
 ### Added
