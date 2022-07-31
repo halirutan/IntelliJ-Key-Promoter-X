@@ -27,6 +27,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Provides a way to extract the idea action from an AWT event. This is the class where the magic happens. We try hard
@@ -48,6 +49,10 @@ public class KeyPromoterAction {
   private String myShortcut = "";
   private String myDescription = "";
   private String myIdeaActionID = "";
+
+  private static final Set<String> MUTED_ACTIONS = Set.of(
+      "RiderUnitTestPendingTestsFilterAction"
+  );
 
   /**
    * Constructor used when have to fall back to inspect an AWT event instead of actions that are directly provided
@@ -215,6 +220,18 @@ public class KeyPromoterAction {
         myIdeaActionID != null &&
         !Objects.equals(myDescription, "") &&
         !Objects.equals(myIdeaActionID, "");
+  }
+
+  /**
+   * Mutes some actions that shouldn't be presented.
+   *
+   * @return True if it doesn't make sense to display anything
+   */
+  boolean isMutedByDefault() {
+    if (MUTED_ACTIONS.contains(myIdeaActionID)) {
+      return true;
+    }
+    return ("EditorCloneCaretBelow".equals(myIdeaActionID) || "EditorCloneCaretAbove".equals(myIdeaActionID)) && myShortcut.isEmpty();
   }
 
   enum ActionSource {

@@ -147,6 +147,7 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
         || disabledInDistractionFreeMode()
         || SnoozeNotifier.isSnoozed()
         || type == ActionType.Unknown
+        || action.isMutedByDefault()
     ) {
       return;
     }
