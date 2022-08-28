@@ -22,8 +22,6 @@
 
 package de.halirutan.keypromoterx;
 
-import com.intellij.application.Topics;
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.ui.Messages;
 import de.halirutan.keypromoterx.statistic.KeyPromoterStatistics;
@@ -39,7 +37,7 @@ import javax.swing.*;
  * @author athiele, Patrick Scheibe
  */
 @SuppressWarnings("unused")
-class KeyPromoterToolWindowPanel implements Disposable, SnoozeNotifier.Handler {
+class KeyPromoterToolWindowPanel implements SnoozeNotifier.Handler {
 
   private final KeyPromoterStatistics statService = ApplicationManager.getApplication().getService(KeyPromoterStatistics.class);
   private JPanel panel;
@@ -51,7 +49,8 @@ class KeyPromoterToolWindowPanel implements Disposable, SnoozeNotifier.Handler {
 
   KeyPromoterToolWindowPanel() {
     resetStatisticsButton.addActionListener(e -> resetStats());
-    Topics.subscribe(SnoozeNotifier.Handler.SNOOZE_TOPIC, this, this);
+    snoozeCheckBox.setSelected(SnoozeNotifier.isSnoozed());
+    SnoozeNotifier.addHandler(this);
     snoozeCheckBox.addItemListener(e -> SnoozeNotifier.setSnoozed(snoozeCheckBox.isSelected()));
   }
 
@@ -72,11 +71,6 @@ class KeyPromoterToolWindowPanel implements Disposable, SnoozeNotifier.Handler {
   private void createUIComponents() {
     statisticsList = new StatisticsList();
     suppressedList = new SuppressedList();
-  }
-
-  @Override
-  public void dispose() {
-
   }
 
   @Override

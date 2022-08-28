@@ -40,7 +40,7 @@ import com.intellij.util.messages.Topic;
  */
 class SnoozeNotifier {
   private static boolean isSnoozed = false;
-  private static MessageBus messageBus = ApplicationManager.getApplication().getMessageBus();
+  private static final MessageBus messageBus = ApplicationManager.getApplication().getMessageBus();
 
   static boolean isSnoozed() {
     return isSnoozed;
@@ -52,6 +52,10 @@ class SnoozeNotifier {
       final Handler snoozeNotifier = messageBus.syncPublisher(Handler.SNOOZE_TOPIC);
       snoozeNotifier.snoozeAction(isSnoozed);
     }
+  }
+
+  static void addHandler(Handler h) {
+    messageBus.connect().subscribe(Handler.SNOOZE_TOPIC, h);
   }
 
   /**

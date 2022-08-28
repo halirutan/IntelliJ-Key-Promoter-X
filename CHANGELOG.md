@@ -18,6 +18,8 @@
 
 ### Fixed
 
+- Fix rare issue to initialize Snooze Setting correctly when opening new window
+- Error regarding disposition of the tool window
 - Issue regarding unit test filters in Rider (
   Issue [87](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/87))
 - Issue where "Insert Caret Above" would show a notification although the documented shortcut was used

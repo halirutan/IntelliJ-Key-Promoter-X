@@ -30,7 +30,7 @@ import static com.intellij.openapi.application.ApplicationManager.getApplication
 public class KeyPromoterNotification {
 
   private static final NotificationGroup GROUP = NotificationGroupManager.getInstance().getNotificationGroup(
-          KeyPromoterBundle.message("kp.notification.group")
+      KeyPromoterBundle.message("kp.notification.group")
   );
 
   public static void showStartupNotification() {
@@ -38,11 +38,12 @@ public class KeyPromoterNotification {
                 "kp.notification.group"),
             KeyPromoterBundle.message("kp.notification.startup"),
             NotificationType.INFORMATION)
-            .setIcon(KeyPromoterIcons.KP_ICON)
-            .addAction(new BrowseNotificationAction(
-                    KeyPromoterBundle.message("kp.notification.startup.link.name"),
-                    KeyPromoterBundle.message("kp.notification.startup.link"))
-            );
+        .setImportant(false)
+        .setIcon(KeyPromoterIcons.KP_ICON)
+        .addAction(new BrowseNotificationAction(
+            KeyPromoterBundle.message("kp.notification.startup.link.name"),
+            KeyPromoterBundle.message("kp.notification.startup.link"))
+        );
     notification.notify(null);
   }
 
@@ -106,9 +107,9 @@ public class KeyPromoterNotification {
         String message = KeyPromoterBundle.message("kp.notification.tip", action.getDescription(), count);
 
         Notification notification = GROUP.createNotification(title, message, NotificationType.INFORMATION)
-                .setIcon(KeyPromoterIcons.KP_ICON)
-                .addAction(new EditKeymapAction(action, action.getShortcut()))
-                .addAction(new SuppressTipAction(action));
+            .setIcon(KeyPromoterIcons.KP_ICON)
+            .addAction(new EditKeymapAction(action, action.getShortcut()))
+            .addAction(new SuppressTipAction(action));
         notification.notify(null);
       }
     },
@@ -130,9 +131,9 @@ public class KeyPromoterNotification {
 
     public void askToCreateShortcut(String title, String message, KeyPromoterAction action) {
       Notification notification = GROUP.createNotification(title, message, NotificationType.INFORMATION)
-              .setIcon(KeyPromoterIcons.KP_ICON)
-              .addAction(new EditKeymapAction(action))
-              .addAction(new SuppressTipAction(action));
+          .setIcon(KeyPromoterIcons.KP_ICON)
+          .addAction(new EditKeymapAction(action))
+          .addAction(new SuppressTipAction(action));
       notification.notify(null);
     }
   }

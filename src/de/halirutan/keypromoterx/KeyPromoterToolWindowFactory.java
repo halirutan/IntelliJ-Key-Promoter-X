@@ -48,7 +48,6 @@ public class KeyPromoterToolWindowFactory implements ToolWindowFactory, DumbAwar
         toolWindowContent.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         Content content = contentFactory.createContent(toolWindowContent, "", false);
         content.setPreferredFocusableComponent(toolWindowContent);
-        content.setDisposer(toolWindowBuilder);
         toolWindow.getContentManager().addContent(content);
     }
 }
