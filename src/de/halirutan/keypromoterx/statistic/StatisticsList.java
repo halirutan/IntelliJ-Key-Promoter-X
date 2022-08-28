@@ -21,15 +21,15 @@ import de.halirutan.keypromoterx.KeyPromoterBundle;
 import de.halirutan.keypromoterx.KeyPromoterIcons;
 
 import javax.swing.*;
+import javax.swing.event.MouseInputListener;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 /**
  * Provides a custom JBList for displaying how often a button was pressed that could have been replaced by a shortcut.
  * The list is backed by {@link KeyPromoterStatistics} that keeps the values persistent through restarts.
- *
- * @author Patrick Scheibe
  */
 public class StatisticsList extends JBList<StatisticsItem> implements PropertyChangeListener {
     private static final long serialVersionUID = 20212;
@@ -42,6 +42,45 @@ public class StatisticsList extends JBList<StatisticsItem> implements PropertyCh
         myStats.registerPropertyChangeSupport(this);
         setCellRenderer(new StatisticsItemCellRenderer());
         updateStats();
+        addMouseListener(new MouseInputListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() > 1) {
+                    suppressItem();
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseDragged(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+            }
+        });
+    }
+
+    private void suppressItem() {
+        final StatisticsItem selectedValue = getSelectedValue();
+        if (selectedValue != null) {
+            myStats.suppressItem(selectedValue);
+        }
     }
 
     @Override

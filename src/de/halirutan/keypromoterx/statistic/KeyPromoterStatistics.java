@@ -154,14 +154,41 @@ public class KeyPromoterStatistics implements PersistentStateComponent<KeyPromot
 
   /**
    * Puts an item from the suppress list back into the statistics.
+   * Used by the UI when a suppressed list is double-clicked.
    *
    * @param item Item to unsuppress
    */
   @Transient
   void unsuppressItem(StatisticsItem item) {
-    final StatisticsItem statisticsItem = suppressed.remove(item.getDescription());
+    final StatisticsItem statisticsItem;
+    synchronized (suppressed) {
+      statisticsItem = suppressed.remove(item.getDescription());
+    }
     if (statisticsItem != null && statisticsItem.count > 0) {
-      statistics.putIfAbsent(statisticsItem.getDescription(), statisticsItem);
+      synchronized (statistics) {
+        statistics.putIfAbsent(statisticsItem.getDescription(), statisticsItem);
+      }
+    }
+    myChangeSupport.firePropertyChange(SUPPRESS, null, null);
+    myChangeSupport.firePropertyChange(STATISTIC, null, null);
+  }
+
+  /**
+   * Puts an item from the statistics list into the suppressed list.
+   * Used by the UI when a statistics list is double-clicked.
+   *
+   * @param item Item to suppress
+   */
+  @Transient
+  void suppressItem(StatisticsItem item) {
+    final StatisticsItem statisticsItem;
+    synchronized (statistics) {
+      statisticsItem = statistics.remove(item.getDescription());
+    }
+    if (statisticsItem != null) {
+      synchronized (suppressed) {
+        suppressed.putIfAbsent(statisticsItem.getDescription(), statisticsItem);
+      }
     }
     myChangeSupport.firePropertyChange(SUPPRESS, null, null);
     myChangeSupport.firePropertyChange(STATISTIC, null, null);

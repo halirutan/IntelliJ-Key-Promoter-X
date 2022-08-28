@@ -1,12 +1,16 @@
 # Key Promoter X Changelog
 
 ## [Unreleased]
+
 ### Added
+
+- Possibility to double click on statistics items to put them on the ignore list
+  ([Issue 96](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/96))
 
 ### Changed
 
 - Fix deprecated call in tool window
-- Update to IntelliJ Gradle plugin version 1.7.0
+- Update to IntelliJ Gradle plugin version 1.8.1
 
 ### Deprecated
 
