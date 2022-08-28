@@ -2,7 +2,7 @@ fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
     java
-    id("org.jetbrains.intellij") version "1.7.0"
+    id("org.jetbrains.intellij") version "1.8.1"
     id("org.jetbrains.changelog") version "1.3.1"
 }
 
@@ -54,6 +54,9 @@ fun htmlFixer(filename: String): String {
 }
 
 tasks {
+    wrapper {
+        gradleVersion = properties("gradleVersion")
+    }
 
     buildSearchableOptions {
         enabled = false
