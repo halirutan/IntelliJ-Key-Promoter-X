@@ -1,14 +1,24 @@
 # Key Promoter X Changelog
 
 ## [Unreleased]
-
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [2022.3]
+### Added
 - Possibility to double click on statistics items to put them on the ignore list
   ([Issue 96](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/96))
 
 ### Changed
-
 - Fix deprecated call in tool window
 - Update to IntelliJ Gradle plugin version 1.8.1
 
@@ -17,7 +27,6 @@
 ### Removed
 
 ### Fixed
-
 - Fix rare issue to initialize Snooze Setting correctly when opening new window
 - Error regarding disposition of the tool window
 - Issue regarding unit test filters in Rider (
@@ -27,14 +36,7 @@
 
 ### Security
 
-## [2022.2]
-
-### Added
-
-- Add support for IntelliJ versions 2022.2
-
 ## [2019.2]
-
 - Make Key Promoter X work on EAP versions like PhpStorm 2019.2
 - Increase minimum required IntelliJ version to get rid of deprecated code
 - "Do not show again" action dismisses the tip
