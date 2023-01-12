@@ -1,9 +1,11 @@
+import org.jetbrains.changelog.Changelog
+
 fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
     java
-    id("org.jetbrains.intellij") version "1.9.0"
-    id("org.jetbrains.changelog") version "1.3.1"
+    id("org.jetbrains.intellij") version "1.11.0"
+    id("org.jetbrains.changelog") version "2.0.0"
 }
 
 group = properties("kpxPluginGroup")
@@ -70,8 +72,8 @@ tasks {
 
     withType<JavaCompile> {
         options.encoding = "UTF-8"
-//        sourceCompatibility = JavaVersion.VERSION_17
-//        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = "17"
+        targetCompatibility = "17"
         options.compilerArgs.add("-Xlint:all")
     }
 
@@ -79,11 +81,15 @@ tasks {
         pluginDescription.set(htmlFixer("resources/META-INF/description.html"))
         sinceBuild.set(properties("kpxPluginSinceBuild"))
         untilBuild.set(properties("kpxPluginUntilBuild"))
-        changeNotes.set(
-                provider {
-                    changelog.getLatest().toHTML()
-                }
-        )
+
+        changeNotes.set(provider {
+            with(changelog) {
+                renderItem(
+                        getOrNull(properties("kpxPluginVersion")) ?: getLatest(),
+                        Changelog.OutputType.HTML,
+                )
+            }
+        })
     }
 
     runPluginVerifier {
