@@ -82,7 +82,12 @@ public class KeyPromoterAction {
    * @param source the source of the action
    */
   KeyPromoterAction(AnAction action, AnActionEvent event, ActionSource source) {
-    myIdeaActionID = ActionManager.getInstance().getId(action);
+    if (source == ActionSource.TOOL_WINDOW_BUTTON) {
+      String toolWindowName = action.getTemplateText() != null ? action.getTemplateText().replaceAll(" ", "") : "";
+      myIdeaActionID = KeyPromoterBundle.message("kp.toolwindow.id", toolWindowName);
+    } else {
+      myIdeaActionID = ActionManager.getInstance().getId(action);
+    }
     myDescription = event.getPresentation().getText();
     mySource = source;
     myShortcut = KeyPromoterUtils.getKeyboardShortcutsText(myIdeaActionID);

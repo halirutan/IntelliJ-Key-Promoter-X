@@ -118,7 +118,12 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
 
     final String place = event.getPlace();
     KeyPromoterAction kpAction;
-    if ("MainMenu".equals(place)) {
+    if ("ToolwindowToolbar".equals(place)) {
+      if (keyPromoterSettings.isToolWindowButtonsEnabled()) {
+        kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.TOOL_WINDOW_BUTTON);
+        showTip(kpAction, type);
+      }
+    } else if ("MainMenu".equals(place)) {
       if (keyPromoterSettings.isMenusEnabled()) {
         kpAction = new KeyPromoterAction(action, event, KeyPromoterAction.ActionSource.MENU_ENTRY);
         showTip(kpAction, type);

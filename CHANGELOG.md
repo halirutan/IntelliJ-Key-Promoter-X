@@ -13,6 +13,8 @@
 - Issue with notifications on Win11 where the shortcut and the suppress action is not directly visible in the
   notification
   ([Issue 100](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/100))
+- Possible fix for tool window buttons not firing a Key Promoter notification with the new UI
+  ([Issue 101](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/101))
 
 ### Security
 
