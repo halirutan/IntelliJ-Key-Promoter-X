@@ -10,6 +10,9 @@
 ### Removed
 
 ### Fixed
+- Issue with notifications on Win11 where the shortcut and the suppress action is not directly visible in the
+  notification
+  ([Issue 100](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/100))
 
 ### Security
 

@@ -48,8 +48,11 @@ public class KeyPromoterNotification {
   }
 
   static void showTip(KeyPromoterAction action, int count, ShowMode mode) {
-    String title = KeyPromoterBundle.message("kp.notification.group");
-
+    String title = "";
+    switch (mode) {
+      case NOTIFICATION -> title = KeyPromoterBundle.message("kp.notification.tip.title", action.getDescription());
+      case DIALOG -> title = KeyPromoterBundle.message("kp.notification.group");
+    }
     mode.showTip(title, action, count);
   }
 
@@ -104,11 +107,12 @@ public class KeyPromoterNotification {
     NOTIFICATION {
       @Override
       public void showTip(String title, KeyPromoterAction action, int count) {
-        String message = KeyPromoterBundle.message("kp.notification.tip", action.getDescription(), count);
+        String countMessage = count > 1 ? count + " times" : count + " time";
+        String message = KeyPromoterBundle.message("kp.notification.tip.message", action.getShortcut(), countMessage);
 
         Notification notification = GROUP.createNotification(title, message, NotificationType.INFORMATION)
             .setIcon(KeyPromoterIcons.KP_ICON)
-            .addAction(new EditKeymapAction(action, action.getShortcut()))
+            .addAction(new EditKeymapAction(action, KeyPromoterBundle.message("kp.notification.edit.shortcut")))
             .addAction(new SuppressTipAction(action));
         notification.notify(null);
       }
