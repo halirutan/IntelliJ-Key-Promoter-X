@@ -1,14 +1,23 @@
 # Key Promoter X Changelog
 
 ## [Unreleased]
+
 ### Added
 
 ### Changed
-- Update build system
 
 ### Deprecated
 
 ### Removed
+
+### Fixed
+
+### Security
+
+## [2022.3.1]
+
+### Changed
+- Update build system
 
 ### Fixed
 - Issue with notifications on Win11 where the shortcut and the suppress action is not directly visible in the
@@ -17,30 +26,19 @@
 - Possible fix for tool window buttons not firing a Key Promoter notification with the new UI
   ([Issue 101](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/101))
 
-### Security
-
-## [2022.3]
-### Added
-- Possibility to double click on statistics items to put them on the ignore list
-  ([Issue 96](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/96))
-
-### Changed
-- Fix deprecated call in tool window
-- Update to IntelliJ Gradle plugin version 1.8.1
-
-### Deprecated
-
-### Removed
-
-### Fixed
-- Fix rare issue to initialize Snooze Setting correctly when opening new window
-- Error regarding disposition of the tool window
-- Issue regarding unit test filters in Rider (
-  Issue [87](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/87))
-- Issue where "Insert Caret Above" would show a notification although the documented shortcut was used
-  (Issue [92](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/92))
-
-### Security
+## [2019.3]
+- Make compatible with 2019.3 EAP products
+- Fix display of Run and Debug actions which will from now not display the specific run configuration and therefore
+  count all these as one entry ([Issue 44](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/44))
+- Fix regression where editor popup action won't show
+  up ([Issue 43](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/42))
+- Add features that lets you snooze the KPX
+  notifications ([Issue 42](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/42))
+- Add features that lets you turn off KPX in Presentation and Distraction Free
+  Mode ([Issue 39](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/39))
+- Fix instances where the KPX would not recognize a mouse-click.
+  See [this IDEA issue.](https://youtrack.jetbrains.com/issue/IDEA-219133)
+- Fix wrong icon for actions without icon ([Issue 37](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/37))
 
 ## [2019.2]
 - Make Key Promoter X work on EAP versions like PhpStorm 2019.2
@@ -86,17 +84,3 @@
   saved ([Issue 51](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/51))
 - Include "Organization" requirement for plugins
 - Make compatible with 2020.1 EAP products
-
-## [2019.3]
-- Make compatible with 2019.3 EAP products
-- Fix display of Run and Debug actions which will from now not display the specific run configuration and therefore
-  count all these as one entry ([Issue 44](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/44))
-- Fix regression where editor popup action won't show
-  up ([Issue 43](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/42))
-- Add features that lets you snooze the KPX
-  notifications ([Issue 42](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/42))
-- Add features that lets you turn off KPX in Presentation and Distraction Free
-  Mode ([Issue 39](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/39))
-- Fix instances where the KPX would not recognize a mouse-click.
-  See [this IDEA issue.](https://youtrack.jetbrains.com/issue/IDEA-219133)
-- Fix wrong icon for actions without icon ([Issue 37](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/37))
