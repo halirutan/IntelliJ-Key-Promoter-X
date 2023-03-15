@@ -6,13 +6,13 @@
 
 ### Changed
 
-### Deprecated
-
-### Removed
+- Update GH actions for building and deploying the plugin
+- Update plugin build setup to match with the recent IntelliJ Plugin Template
 
 ### Fixed
 
-### Security
+- Tool window buttons are working now with the new UI
+  ([Issue 101](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/101))
 
 ## [2022.3.1]
 
