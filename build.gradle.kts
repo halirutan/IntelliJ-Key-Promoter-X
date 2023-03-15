@@ -38,15 +38,8 @@ intellij {
 }
 
 changelog {
-    version.set(properties("pluginVersion"))
-    path.set("${project.projectDir}/CHANGELOG.md")
-    header.set("[${properties("pluginVersion")}]")
-    // 2019, 2019.2, 2020.1.2
-    headerParserRegex.set("""\d+(\.\d+)+""".toRegex())
-    itemPrefix.set("-")
-    keepUnreleasedSection.set(true)
-    unreleasedTerm.set("[Unreleased]")
-    groups.set(listOf("Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"))
+    groups.empty()
+    repositoryUrl.set(properties("pluginRepositoryUrl"))
 }
 
 /**
