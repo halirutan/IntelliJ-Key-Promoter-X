@@ -4,6 +4,8 @@
 
 ### Added
 
+- Support for JetBrains IDEs version 2023.1
+
 ### Changed
 
 - Update GH actions for building and deploying the plugin
