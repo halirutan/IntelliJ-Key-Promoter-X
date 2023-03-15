@@ -10,8 +10,8 @@ plugins {
     id("org.jetbrains.changelog") version "2.0.0"
 }
 
-group = properties("kpxPluginGroup").get()
-version = properties("kpxPluginVersion").get()
+group = properties("pluginGroup").get()
+version = properties("pluginVersion").get()
 
 repositories {
     mavenCentral()
@@ -31,16 +31,16 @@ sourceSets {
 }
 
 intellij {
-    pluginName.set(properties("kpxPluginName"))
+    pluginName.set(properties("pluginName"))
     version.set(properties("platformVersion"))
     type.set(properties("platformType"))
     updateSinceUntilBuild.set(true)
 }
 
 changelog {
-    version.set(properties("kpxPluginVersion"))
+    version.set(properties("pluginVersion"))
     path.set("${project.projectDir}/CHANGELOG.md")
-    header.set("[${properties("kpxPluginVersion")}]")
+    header.set("[${properties("pluginVersion")}]")
     // 2019, 2019.2, 2020.1.2
     headerParserRegex.set("""\d+(\.\d+)+""".toRegex())
     itemPrefix.set("-")
@@ -78,11 +78,11 @@ tasks {
 
     patchPluginXml {
         pluginDescription.set(htmlFixer("resources/META-INF/description.html"))
-        sinceBuild.set(properties("kpxPluginSinceBuild"))
-        untilBuild.set(properties("kpxPluginUntilBuild"))
+        sinceBuild.set(properties("pluginSinceBuild"))
+        untilBuild.set(properties("pluginUntilBuild"))
 
         val changelog = project.changelog
-        changeNotes.set(properties("kpxPluginVersion").map { pluginVersion ->
+        changeNotes.set(properties("pluginVersion").map { pluginVersion ->
             with(changelog) {
                 renderItem(
                         (getOrNull(pluginVersion) ?: getUnreleased())
@@ -95,7 +95,7 @@ tasks {
     }
 
     runPluginVerifier {
-        val versions = properties("kpxPluginVerifierIdeVersions")
+        val versions = properties("pluginVerifierIdeVersions")
                 .get()
                 .split(",")
                 .map(String::trim)
