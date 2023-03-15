@@ -1,15 +1,17 @@
 import org.jetbrains.changelog.Changelog
 
-fun properties(key: String) = project.findProperty(key).toString()
+// fun properties(key: String) = project.findProperty(key).toString()
+fun properties(key: String) = providers.gradleProperty(key)
+fun environment(key: String) = providers.environmentVariable(key)
 
 plugins {
     java
-    id("org.jetbrains.intellij") version "1.12.0"
+    id("org.jetbrains.intellij") version "1.13.2"
     id("org.jetbrains.changelog") version "2.0.0"
 }
 
-group = properties("kpxPluginGroup")
-version = properties("kpxPluginVersion")
+group = properties("kpxPluginGroup").get()
+version = properties("kpxPluginVersion").get()
 
 repositories {
     mavenCentral()
@@ -32,7 +34,6 @@ intellij {
     pluginName.set(properties("kpxPluginName"))
     version.set(properties("platformVersion"))
     type.set(properties("platformType"))
-    downloadSources.set(properties("platformDownloadSources").toBoolean())
     updateSinceUntilBuild.set(true)
 }
 
@@ -63,7 +64,7 @@ fun htmlFixer(filename: String): String {
 
 tasks {
     wrapper {
-        gradleVersion = properties("gradleVersion")
+        gradleVersion = properties("gradleVersion").get()
     }
 
     buildSearchableOptions {
@@ -80,10 +81,13 @@ tasks {
         sinceBuild.set(properties("kpxPluginSinceBuild"))
         untilBuild.set(properties("kpxPluginUntilBuild"))
 
-        changeNotes.set(provider {
+        val changelog = project.changelog
+        changeNotes.set(properties("kpxPluginVersion").map { pluginVersion ->
             with(changelog) {
                 renderItem(
-                        getOrNull(properties("kpxPluginVersion")) ?: getLatest(),
+                        (getOrNull(pluginVersion) ?: getUnreleased())
+                                .withHeader(false)
+                                .withEmptySections(false),
                         Changelog.OutputType.HTML,
                 )
             }
@@ -92,6 +96,7 @@ tasks {
 
     runPluginVerifier {
         val versions = properties("kpxPluginVerifierIdeVersions")
+                .get()
                 .split(",")
                 .map(String::trim)
                 .filter(String::isNotEmpty)
@@ -106,15 +111,14 @@ tasks {
         dependsOn("patchChangelog")
         token.set(System.getenv("PUBLISH_TOKEN"))
         // Use beta versions like 2020.3-beta-1
-        channels.set(
-                listOf(
-                        properties("kpxPluginVersion")
-                                .split('-')
-                                .getOrElse(1) { "default" }
-                                .split('.')
-                                .first()
-                )
-        )
+        channels.set(properties("pluginVersion").map {
+            listOf(it
+                    .split('-')
+                    .getOrElse(1) { "default" }
+                    .split('.')
+                    .first()
+            )
+        })
     }
 }
 

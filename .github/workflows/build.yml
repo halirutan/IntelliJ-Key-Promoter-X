@@ -1,111 +1,58 @@
-# GitHub Actions Workflow created for testing and preparing the plugin release in following steps:
+# GitHub Actions Workflow is created for testing and preparing the plugin release in the following steps:
 # - validate Gradle Wrapper,
-# - run test and verifyPlugin tasks,
-# - run buildPlugin task and prepare artifact for the further tests,
-# - run IntelliJ Plugin Verifier,
+# - run 'test' and 'verifyPlugin' tasks,
+# - run 'buildPlugin' task and prepare artifact for the further tests,
+# - run 'runPluginVerifier' task,
 # - create a draft release.
 #
 # Workflow is triggered on push and pull_request events.
 #
-# Docs:
-# - GitHub Actions: https://help.github.com/en/actions
-# - IntelliJ Plugin Verifier GitHub Action: https://github.com/ChrisCarini/intellij-platform-plugin-verifier-action
+# GitHub Actions reference: https://help.github.com/en/actions
 #
 ## JBIJPPTPL
 
 name: Build
-on: [ push, pull_request ]
+on:
+  # Trigger the workflow on pushes to only the 'main' branch (this avoids duplicate checks being run e.g. for dependabot pull requests)
+  push:
+    branches: [ main ]
+  # Trigger the workflow on any pull request
+  pull_request:
+
 jobs:
 
   # Run Gradle Wrapper Validation Action to verify the wrapper's checksum
-  gradleValidation:
-    name: Gradle Wrapper
+  # Run verifyPlugin, IntelliJ Plugin Verifier, and test Gradle tasks
+  # Build plugin and provide the artifact for the next workflow jobs
+  build:
+    name: Build
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.properties.outputs.version }}
+      changelog: ${{ steps.properties.outputs.changelog }}
     steps:
+
+      # Free GitHub Actions Environment Disk Space
+      - name: Maximize Build Space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
 
       # Check out current repository
       - name: Fetch Sources
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Validate wrapper
       - name: Gradle Wrapper Validation
-        uses: gradle/wrapper-validation-action@v1.0.3
+        uses: gradle/wrapper-validation-action@v1.0.6
 
-  # Run verifyPlugin and test Gradle tasks
-  test:
-    name: Test
-    needs: gradleValidation
-    runs-on: ubuntu-latest
-    steps:
-
-      # Setup Java 11 environment for the next steps
+      # Setup Java 17 environment for the next steps
       - name: Setup Java
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
-          java-version: 11
-
-      # Check out current repository
-      - name: Fetch Sources
-        uses: actions/checkout@v2
-
-      # Cache Gradle dependencies
-      - name: Setup Gradle Dependencies Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
-
-      # Cache Gradle Wrapper
-      - name: Setup Gradle Wrapper Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-
-      # Run detekt, ktlint and tests
-      - name: Run Linters and Test
-        run: ./gradlew check
-
-      # Run verifyPlugin Gradle task
-      - name: Verify Plugin
-        run: ./gradlew verifyPlugin
-
-  # Build plugin with buildPlugin Gradle task and provide the artifact for the next workflow jobs
-  # Requires test job to be passed
-  build:
-    name: Build
-    needs: test
-    runs-on: ubuntu-latest
-    outputs:
-      name: ${{ steps.properties.outputs.name }}
-      version: ${{ steps.properties.outputs.version }}
-      changelog: ${{ steps.properties.outputs.changelog }}
-      artifact: ${{ steps.properties.outputs.artifact }}
-    steps:
-
-      # Setup Java 11 environment for the next steps
-      - name: Setup Java
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
-
-      # Check out current repository
-      - name: Fetch Sources
-        uses: actions/checkout@v2
-
-      # Cache Gradle Dependencies
-      - name: Setup Gradle Dependencies Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
-
-      # Cache Gradle Wrapper
-      - name: Setup Gradle Wrapper Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+          distribution: zulu
+          java-version: 17
 
       # Set environment variables
       - name: Export Properties
@@ -114,134 +61,107 @@ jobs:
         run: |
           PROPERTIES="$(./gradlew properties --console=plain -q)"
           VERSION="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
-          NAME="$(echo "$PROPERTIES" | grep "^kpxPluginName:" | cut -f2- -d ' ')"
+          NAME="$(echo "$PROPERTIES" | grep "^pluginName:" | cut -f2- -d ' ')"
           CHANGELOG="$(./gradlew getChangelog --unreleased --no-header --console=plain -q)"
-          CHANGELOG="${CHANGELOG//'%'/'%25'}"
-          CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
-          CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
-          ARTIFACT="${NAME}-${VERSION}.zip"
 
-          echo "::set-output name=version::$VERSION"
-          echo "::set-output name=name::$NAME"
-          echo "::set-output name=changelog::$CHANGELOG"
-          echo "::set-output name=artifact::$ARTIFACT"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "name=$NAME" >> $GITHUB_OUTPUT
+          echo "pluginVerifierHomeDir=~/.pluginVerifier" >> $GITHUB_OUTPUT
+          
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
-      # Build artifact using buildPlugin Gradle task
-      - name: Build Plugin
-        run: ./gradlew buildPlugin
+          ./gradlew listProductsReleases # prepare list of IDEs for Plugin Verifier
 
-      # Upload plugin artifact to make it available in the next jobs
-      - name: Upload artifact
-        uses: actions/upload-artifact@v1
+      # Run tests
+      - name: Run Tests
+        run: ./gradlew check
+
+      # Collect Tests Result of failed tests
+      - name: Collect Tests Result
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v3
         with:
-          name: plugin-artifact
-          path: ./build/distributions/${{ needs.build.outputs.artifact }}
+          name: tests-result
+          path: ${{ github.workspace }}/build/reports/tests
 
-    # Verify built plugin using IntelliJ Plugin Verifier tool
-    # Requires build job to be passed
-    # TODO: Reactivate verification once the issue with 2021.2 is resolved
-  verify:
-    name: Verify
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-
-      # Setup Java 11 environment for the next steps
-      - name: Setup Java
-        uses: actions/setup-java@v1
+      # Upload Kover report to CodeCov
+      - name: Upload Code Coverage Report
+        uses: codecov/codecov-action@v3
         with:
-          java-version: 11
-
-      # Check out current repository
-      - name: Fetch Sources
-        uses: actions/checkout@v2
-
-      # Cache Gradle Dependencies
-      - name: Setup Gradle Dependencies Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
-
-      # Cache Gradle Wrapper
-      - name: Setup Gradle Wrapper Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-
-      # Set environment variables
-      - name: Export Properties
-        id: properties
-        shell: bash
-        run: |
-          PROPERTIES="$(./gradlew properties --console=plain -q)"
-          IDE_VERSIONS="$(echo "$PROPERTIES" | grep "^kpxPluginVerifierIdeVersions:" | base64)"
-
-          echo "::set-output name=ideVersions::$IDE_VERSIONS"
-          echo "::set-output name=pluginVerifierHomeDir::~/.pluginVerifier"
+          files: ${{ github.workspace }}/build/reports/kover/xml/report.xml
 
       # Cache Plugin Verifier IDEs
       - name: Setup Plugin Verifier IDEs Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ steps.properties.outputs.pluginVerifierHomeDir }}/ides
-          key: ${{ runner.os }}-plugin-verifier-${{ steps.properties.outputs.ideVersions }}
+          key: plugin-verifier-${{ hashFiles('build/listProductsReleases.txt') }}
 
-      # Run IntelliJ Plugin Verifier action using GitHub Action
-      - name: Verify Plugin
-        run: ./gradlew runPluginVerifier -Pplugin.verifier.home.dir=${{ steps.properties.outputs.pluginVerifierHomeDir }}
+      # Run Verify Plugin task and IntelliJ Plugin Verifier tool
+      - name: Run Plugin Verification tasks
+        run: ./gradlew runPluginVerifier -Dplugin.verifier.home.dir=${{ steps.properties.outputs.pluginVerifierHomeDir }}
+
+      # Collect Plugin Verifier Result
+      - name: Collect Plugin Verifier Result
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: pluginVerifier-result
+          path: ${{ github.workspace }}/build/reports/pluginVerifier
+
+      # Prepare plugin archive content for creating artifact
+      - name: Prepare Plugin Artifact
+        id: artifact
+        shell: bash
+        run: |
+          cd ${{ github.workspace }}/build/distributions
+          FILENAME=`ls *.zip`
+          unzip "$FILENAME" -d content
+
+          echo "filename=${FILENAME:0:-4}" >> $GITHUB_OUTPUT
+
+      # Store already-built plugin as an artifact for downloading
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.artifact.outputs.filename }}
+          path: ./build/distributions/content/*/*
 
   # Prepare a draft release for GitHub Releases page for the manual verification
   # If accepted and published, release workflow would be triggered
   releaseDraft:
     name: Release Draft
     if: github.event_name != 'pull_request'
-    needs: [ build ] # [ build, verify ]
+    needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
 
       # Check out current repository
       - name: Fetch Sources
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      # Remove old release drafts by using the curl request for the available releases with draft flag
+      # Remove old release drafts by using the curl request for the available releases with a draft flag
       - name: Remove Old Release Drafts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          curl -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/$GITHUB_REPOSITORY/releases \
-            | tr '\r\n' ' ' \
-            | jq '.[] | select(.draft == true) | .id' \
-            | xargs -I '{}' \
-          curl -X DELETE -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/$GITHUB_REPOSITORY/releases/{}
+          gh api repos/{owner}/{repo}/releases \
+            --jq '.[] | select(.draft == true) | .id' \
+            | xargs -I '{}' gh api -X DELETE repos/{owner}/{repo}/releases/{}
 
-      # Create new release draft - which is not publicly visible and requires manual acceptance
+      # Create a new release draft which is not publicly visible and requires manual acceptance
       - name: Create Release Draft
-        id: createDraft
-        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ needs.build.outputs.version }}
-          release_name: v${{ needs.build.outputs.version }}
-          body: ${{ needs.build.outputs.changelog }}
-          draft: true
-
-      # Download plugin artifact provided by the previous job
-      - name: Download Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: plugin-artifact
-
-      # Upload artifact as a release asset
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.createDraft.outputs.upload_url }}
-          asset_path: ./${{ needs.build.outputs.artifact }}
-          asset_name: ${{ needs.build.outputs.artifact }}
-          asset_content_type: application/zip
+        run: |
+          gh release create v${{ needs.build.outputs.version }} \
+            --draft \
+            --title "v${{ needs.build.outputs.version }}" \
+            --notes "$(cat << 'EOM'
+          ${{ needs.build.outputs.changelog }}
+          EOM
+          )"
