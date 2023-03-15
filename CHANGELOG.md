@@ -28,7 +28,7 @@
 - Possible fix for tool window buttons not firing a Key Promoter notification with the new UI
   ([Issue 101](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/101))
 
-## [2019.3]
+## [2019.3.0]
 - Make compatible with 2019.3 EAP products
 - Fix display of Run and Debug actions which will from now not display the specific run configuration and therefore
   count all these as one entry ([Issue 44](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/44))
@@ -42,7 +42,7 @@
   See [this IDEA issue.](https://youtrack.jetbrains.com/issue/IDEA-219133)
 - Fix wrong icon for actions without icon ([Issue 37](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/37))
 
-## [2019.2]
+## [2019.2.0]
 - Make Key Promoter X work on EAP versions like PhpStorm 2019.2
 - Increase minimum required IntelliJ version to get rid of deprecated code
 - "Do not show again" action dismisses the tip
@@ -75,7 +75,7 @@
 - Re-implemented the algorithm that catches button clicks and extracts their information
 - Change to internal notification system instead of a custom AWT window
 
-## [2020.1]
+## [2020.1.0]
 - Add scrollbars in the toolwindow for bottom
   placement ([Issue 55](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/55))
 - Revert back to non-dynamic plugin for now
