@@ -10,7 +10,7 @@ I'm grateful this project is currently sponsored by
 
 and
 
-[![appwrite](https://appwrite.io/images/appwrite.svg)](https://appwrite.io/)
+[![appwrite](https://avatars.githubusercontent.com/u/25003669?s=200&v=4)](https://appwrite.io/)
 
 and receives $4/month from
 [jlash13](https://github.com/jlash13),
