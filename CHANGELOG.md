@@ -4,7 +4,7 @@
 
 ### Added
 
-- Support for JetBrains IDEs version 2023.1
+- Support for JetBrains IDEs version 2023.2
 
 ### Changed
 

@@ -18,11 +18,10 @@ and receives $4/month from
 $2/month from
 [Mac Adamarczuk](https://github.com/macalac),
 [Frank Harper](https://github.com/franklinharper),
-[Christopher Kolstad](https://github.com/chriswk),
 [Hasnain Baxamoosa](https://github.com/hbaxamoosa),
 [Brian Levis](https://github.com/brianlevis),
 [PCoetzeeDev](https://github.com/PCoetzeeDev),
-and $1/month from [18 other people](https://github.com/sponsors/halirutan).
+and $1/month from [16 other people](https://github.com/sponsors/halirutan).
 
 - [Become a GitHub Sponsor and support the Key Promoter X development](https://github.com/sponsors/halirutan)
 
