@@ -6,8 +6,8 @@ fun environment(key: String) = providers.environmentVariable(key)
 
 plugins {
     java
-    id("org.jetbrains.intellij") version "1.13.2"
-    id("org.jetbrains.changelog") version "2.0.0"
+    id("org.jetbrains.intellij") version "1.15.0"
+    id("org.jetbrains.changelog") version "2.1.2"
 }
 
 group = properties("pluginGroup").get()
