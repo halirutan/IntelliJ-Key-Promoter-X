@@ -2,17 +2,16 @@
 
 ## [Unreleased]
 
-### Added
+## [2023.2.0] - 2023-07-30
 
+### Added
 - Support for JetBrains IDEs version 2023.2
 
 ### Changed
-
 - Update GH actions for building and deploying the plugin
 - Update plugin build setup to match with the recent IntelliJ Plugin Template
 
 ### Fixed
-
 - Tool window buttons are working now with the new UI
   ([Issue 101](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/101))
 
@@ -86,3 +85,10 @@
   saved ([Issue 51](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/51))
 - Include "Organization" requirement for plugins
 - Make compatible with 2020.1 EAP products
+
+[Unreleased]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2023.2.0...HEAD
+[2023.2.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2022.3.1...v2023.2.0
+[2022.3.1]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2019.3.0...v2022.3.1
+[2020.1.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/commits/v2020.1.0
+[2019.3.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2019.2.0...v2019.3.0
+[2019.2.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2020.1.0...v2019.2.0
