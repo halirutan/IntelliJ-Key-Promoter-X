@@ -5,9 +5,9 @@ fun properties(key: String) = providers.gradleProperty(key)
 fun environment(key: String) = providers.environmentVariable(key)
 
 plugins {
-    java
-    id("org.jetbrains.intellij") version "1.15.0"
-    id("org.jetbrains.changelog") version "2.1.2"
+    id("java") // Java support
+    alias(libs.plugins.gradleIntelliJPlugin) // Gradle IntelliJ Plugin
+    alias(libs.plugins.changelog) // Gradle Changelog Plugin
 }
 
 group = properties("pluginGroup").get()
@@ -15,6 +15,10 @@ version = properties("pluginVersion").get()
 
 repositories {
     mavenCentral()
+}
+
+dependencies {
+    implementation(libs.annotations)
 }
 
 java {

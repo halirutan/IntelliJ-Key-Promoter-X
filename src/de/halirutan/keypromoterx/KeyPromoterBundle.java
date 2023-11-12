@@ -38,13 +38,13 @@ import java.util.ResourceBundle;
 public class KeyPromoterBundle {
 
   @NonNls
-  private static final String PATH_TO_BUNDLE = "de.halirutan.keypromoterx.messages.KeyPromoterBundle";
+  private static final String PATH_TO_BUNDLE = "messages.KeyPromoterBundle";
   private static Reference<ResourceBundle> ourBundle;
 
   private KeyPromoterBundle() {
   }
 
-  public static String message(@NotNull @PropertyKey(resourceBundle = "de.halirutan.keypromoterx.messages.KeyPromoterBundle") String key, @NotNull Object... params) {
+  public static String message(@NotNull @PropertyKey(resourceBundle = "messages.KeyPromoterBundle") String key, @NotNull Object... params) {
     return AbstractBundle.message(getBundle(), key, params);
   }
 

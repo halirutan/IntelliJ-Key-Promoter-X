@@ -1,0 +1,8 @@
+{
+  "icons": {
+    "expui": {
+      "kpx.svg": "icons/kpx.svg",
+      "kpxToolwindow.svg": "icons/kpxToolwindow.svg"
+    }
+  }
+}
