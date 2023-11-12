@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+### Added
+
+- Support for JetBrains IDEs version 2023.3
+
+### Fixed
+
+- Icons for new UI
+  ([Issue 101](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/104))
+
 ## [2023.2.0] - 2023-07-30
 
 ### Added
