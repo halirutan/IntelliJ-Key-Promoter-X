@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2023.3.0] - 2023-11-12
+
 ### Added
 
 - Support for JetBrains IDEs version 2023.3
@@ -14,22 +16,27 @@
 ## [2023.2.0] - 2023-07-30
 
 ### Added
+
 - Support for JetBrains IDEs version 2023.2
 
 ### Changed
+
 - Update GH actions for building and deploying the plugin
 - Update plugin build setup to match with the recent IntelliJ Plugin Template
 
 ### Fixed
+
 - Tool window buttons are working now with the new UI
   ([Issue 101](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/101))
 
 ## [2022.3.1]
 
 ### Changed
+
 - Update build system
 
 ### Fixed
+
 - Issue with notifications on Win11 where the shortcut and the suppress action is not directly visible in the
   notification
   ([Issue 100](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/100))
@@ -37,6 +44,7 @@
   ([Issue 101](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/101))
 
 ## [2019.3.0]
+
 - Make compatible with 2019.3 EAP products
 - Fix display of Run and Debug actions which will from now not display the specific run configuration and therefore
   count all these as one entry ([Issue 44](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/44))
@@ -51,6 +59,7 @@
 - Fix wrong icon for actions without icon ([Issue 37](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/37))
 
 ## [2019.2.0]
+
 - Make Key Promoter X work on EAP versions like PhpStorm 2019.2
 - Increase minimum required IntelliJ version to get rid of deprecated code
 - "Do not show again" action dismisses the tip
@@ -84,6 +93,7 @@
 - Change to internal notification system instead of a custom AWT window
 
 ## [2020.1.0]
+
 - Add scrollbars in the toolwindow for bottom
   placement ([Issue 55](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/55))
 - Revert back to non-dynamic plugin for now
@@ -95,7 +105,8 @@
 - Include "Organization" requirement for plugins
 - Make compatible with 2020.1 EAP products
 
-[Unreleased]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2023.2.0...HEAD
+[Unreleased]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2023.3.0...HEAD
+[2023.3.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2023.2.0...v2023.3.0
 [2023.2.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2022.3.1...v2023.2.0
 [2022.3.1]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2019.3.0...v2022.3.1
 [2020.1.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/commits/v2020.1.0
