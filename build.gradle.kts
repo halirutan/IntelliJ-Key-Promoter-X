@@ -4,9 +4,9 @@ fun properties(key: String) = providers.gradleProperty(key)
 fun environment(key: String) = providers.environmentVariable(key)
 
 plugins {
-    id("java") // Java support
-    alias(libs.plugins.gradleIntelliJPlugin) // Gradle IntelliJ Plugin
-    alias(libs.plugins.changelog) // Gradle Changelog Plugin
+    id("java")
+    alias(libs.plugins.gradleIntelliJPlugin)
+    alias(libs.plugins.changelog)
 }
 
 group = properties("pluginGroup").get()
@@ -42,7 +42,7 @@ sourceSets {
 }
 
 intellijPlatform {
-    buildSearchableOptions = false
+    buildSearchableOptions = true
     instrumentCode = false
     projectName = project.name
 

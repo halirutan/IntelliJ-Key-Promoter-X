@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Added
+
+- Rework build system to use IntelliJ Platform Gradle Plugin 2.x
+
+### Fixed
+
+- Add support for JetBrains IDEs 2024.1
+
 ## [2023.3.0] - 2023-11-12
 
 ### Added
