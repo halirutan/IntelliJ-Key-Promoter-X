@@ -25,6 +25,7 @@ dependencies {
         val type = properties("platformType").get()
         val version = properties("platformVersion").get()
         create(type, version)
+        instrumentationTools()
     }
 }
 
@@ -43,12 +44,13 @@ sourceSets {
 
 intellijPlatform {
     buildSearchableOptions = true
-    instrumentCode = false
+    instrumentCode = true
     projectName = project.name
 
     pluginConfiguration {
         id = properties("pluginGroup")
         name = properties("pluginName")
+//        name = "Key Promoter X"
         version = properties("pluginVersion")
         description = htmlFixer("resources/META-INF/description.html")
         changeNotes = properties("pluginVersion").map { pluginVersion ->
