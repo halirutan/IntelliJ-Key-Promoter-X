@@ -39,6 +39,7 @@ intellij {
     version.set(properties("platformVersion"))
     type.set(properties("platformType"))
     updateSinceUntilBuild.set(true)
+    downloadSources = true
 }
 
 changelog {

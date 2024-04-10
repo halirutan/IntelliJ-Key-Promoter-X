@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Add support for JetBrains IDEs 2024.1
+- Update description
+
 ## [2023.3.0] - 2023-11-12
 
 ### Added
