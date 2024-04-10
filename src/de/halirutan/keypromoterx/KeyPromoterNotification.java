@@ -38,7 +38,8 @@ public class KeyPromoterNotification {
                 "kp.notification.group"),
             KeyPromoterBundle.message("kp.notification.startup"),
             NotificationType.INFORMATION)
-        .setImportant(false)
+        .setImportant(true)
+        .setImportantSuggestion(true)
         .setIcon(KeyPromoterIcons.KP_ICON)
         .addAction(new BrowseNotificationAction(
             KeyPromoterBundle.message("kp.notification.startup.link.name"),
