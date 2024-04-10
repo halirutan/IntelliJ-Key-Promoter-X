@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2024.1.0] - 2024-04-10
+
 ### Fixed
 
 - Add support for JetBrains IDEs 2024.1
@@ -110,7 +112,8 @@
 - Include "Organization" requirement for plugins
 - Make compatible with 2020.1 EAP products
 
-[Unreleased]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2023.3.0...HEAD
+[Unreleased]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2024.1.0...HEAD
+[2024.1.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2023.3.0...v2024.1.0
 [2023.3.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2023.2.0...v2023.3.0
 [2023.2.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2022.3.1...v2023.2.0
 [2022.3.1]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2019.3.0...v2022.3.1
