@@ -75,18 +75,7 @@ intellijPlatform {
 
         ideaVersion {
             sinceBuild = properties("pluginSinceBuild")
-            untilBuild = properties("pluginUntilBuild")
-        }
-    }
-
-    verifyPlugin {
-        val versions = properties("pluginVerifierIdeVersions")
-            .get()
-            .split(",")
-            .map(String::trim)
-            .filter(String::isNotEmpty)
-        ides {
-            versions.map { ide(it) }
+            untilBuild = provider { null }
         }
     }
 
@@ -101,6 +90,12 @@ intellijPlatform {
                 .split('.')
                 .first()
             )
+        }
+    }
+
+    verifyPlugin {
+        ides {
+            recommended()
         }
     }
 
