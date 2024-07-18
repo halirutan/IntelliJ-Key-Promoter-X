@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Add support for 2024 EAP
+
 ## [2024.1.0] - 2024-04-10
 
 ### Fixed

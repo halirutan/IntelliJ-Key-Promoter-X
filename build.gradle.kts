@@ -1,10 +1,12 @@
 import org.jetbrains.changelog.Changelog
+import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 fun properties(key: String) = providers.gradleProperty(key)
 fun environment(key: String) = providers.environmentVariable(key)
 
 plugins {
     id("java")
+    alias(libs.plugins.kotlin)
     alias(libs.plugins.gradleIntelliJPlugin)
     alias(libs.plugins.changelog)
 }
@@ -26,6 +28,9 @@ dependencies {
         val version = properties("platformVersion").get()
         create(type, version)
         instrumentationTools()
+        pluginVerifier()
+        zipSigner()
+        testFramework(TestFrameworkType.Platform)
     }
 }
 
@@ -50,7 +55,6 @@ intellijPlatform {
     pluginConfiguration {
         id = properties("pluginGroup")
         name = properties("pluginName")
-//        name = "Key Promoter X"
         version = properties("pluginVersion")
         description = htmlFixer("resources/META-INF/description.html")
         changeNotes = properties("pluginVersion").map { pluginVersion ->
@@ -129,6 +133,7 @@ tasks {
         options.encoding = "UTF-8"
         options.compilerArgs.add("-Xlint:all")
     }
+
 
     publishPlugin {
         dependsOn("patchChangelog")
