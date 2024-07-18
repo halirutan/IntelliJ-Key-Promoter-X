@@ -48,7 +48,7 @@ sourceSets {
 }
 
 intellijPlatform {
-    buildSearchableOptions = true
+    buildSearchableOptions = false
     instrumentCode = true
     projectName = project.name
 
