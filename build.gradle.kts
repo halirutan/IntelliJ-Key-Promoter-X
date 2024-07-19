@@ -53,7 +53,6 @@ intellijPlatform {
     projectName = project.name
 
     pluginConfiguration {
-        id = properties("pluginGroup")
         name = properties("pluginName")
         version = properties("pluginVersion")
         description = htmlFixer("resources/META-INF/description.html")
