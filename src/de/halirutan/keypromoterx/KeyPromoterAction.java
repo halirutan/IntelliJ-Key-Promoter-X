@@ -135,7 +135,7 @@ public class KeyPromoterAction {
     mySource = ActionSource.TOOL_WINDOW_BUTTON;
     myDescription = stripeButton.getText();
     myMnemonic = stripeButton.getMnemonic2();
-    myIdeaActionID = ActivateToolWindowAction.getActionIdForToolWindow(stripeButton.getId());
+    myIdeaActionID = ActivateToolWindowAction.Manager.getActionIdForToolWindow(stripeButton.getId());
     myShortcut = KeyPromoterUtils.getKeyboardShortcutsText(myIdeaActionID);
   }
 
@@ -186,7 +186,7 @@ public class KeyPromoterAction {
    * Used to adjust Run and Debug descriptions so that the don't contain the name of the run-configuration
    */
   private void fixDescription() {
-    if (myDescription == null || myDescription.length() == 0) {
+    if (myDescription == null || myDescription.isEmpty()) {
       return;
     }
     if ("Debug".equals(myIdeaActionID) || "DebugClass".equals(myIdeaActionID)) {
@@ -198,7 +198,7 @@ public class KeyPromoterAction {
   }
 
   public String getShortcut() {
-    if (myShortcut != null && myShortcut.length() > 0) {
+    if (myShortcut != null && !myShortcut.isEmpty()) {
       return myShortcut;
     }
     if (mySource.equals(ActionSource.TOOL_WINDOW_BUTTON) && myMnemonic > 0) {

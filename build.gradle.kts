@@ -1,13 +1,14 @@
 import org.jetbrains.changelog.Changelog
+import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
-// fun properties(key: String) = project.findProperty(key).toString()
 fun properties(key: String) = providers.gradleProperty(key)
 fun environment(key: String) = providers.environmentVariable(key)
 
 plugins {
-    id("java") // Java support
-    alias(libs.plugins.gradleIntelliJPlugin) // Gradle IntelliJ Plugin
-    alias(libs.plugins.changelog) // Gradle Changelog Plugin
+    id("java")
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.gradleIntelliJPlugin)
+    alias(libs.plugins.changelog)
 }
 
 group = properties("pluginGroup").get()
@@ -15,10 +16,22 @@ version = properties("pluginVersion").get()
 
 repositories {
     mavenCentral()
+    intellijPlatform {
+        defaultRepositories()
+    }
 }
 
 dependencies {
     implementation(libs.annotations)
+    intellijPlatform {
+        val type = properties("platformType").get()
+        val version = properties("platformVersion").get()
+        create(type, version)
+        instrumentationTools()
+        pluginVerifier()
+        zipSigner()
+        testFramework(TestFrameworkType.Platform)
+    }
 }
 
 java {
@@ -34,12 +47,58 @@ sourceSets {
     }
 }
 
-intellij {
-    pluginName.set(properties("pluginName"))
-    version.set(properties("platformVersion"))
-    type.set(properties("platformType"))
-    updateSinceUntilBuild.set(true)
-    downloadSources = true
+intellijPlatform {
+    buildSearchableOptions = false
+    instrumentCode = true
+    projectName = project.name
+
+    pluginConfiguration {
+        id = properties("pluginGroup")
+        name = properties("pluginName")
+        version = properties("pluginVersion")
+        description = htmlFixer("resources/META-INF/description.html")
+        changeNotes = properties("pluginVersion").map { pluginVersion ->
+            with(changelog) {
+                renderItem(
+                    (getOrNull(pluginVersion) ?: getUnreleased())
+                        .withHeader(false)
+                        .withEmptySections(false),
+                    Changelog.OutputType.HTML,
+                )
+            }
+        }
+
+        vendor {
+            name = "halirutan"
+            url = "https://github.com/halirutan/IntelliJ-Key-Promoter-X"
+        }
+
+        ideaVersion {
+            sinceBuild = properties("pluginSinceBuild")
+            untilBuild = provider { null }
+        }
+    }
+
+    publishing {
+        token = System.getenv("PUBLISH_TOKEN")
+
+        // Use beta versions like 2020.3-beta-1
+        channels = properties("pluginVersion").map {
+            listOf(it
+                .split('-')
+                .getOrElse(1) { "default" }
+                .split('.')
+                .first()
+            )
+        }
+    }
+
+    verifyPlugin {
+        ides {
+            recommended()
+        }
+    }
+
 }
 
 changelog {
@@ -65,58 +124,14 @@ tasks {
         gradleVersion = properties("gradleVersion").get()
     }
 
-    buildSearchableOptions {
-        enabled = false
-    }
-
     withType<JavaCompile> {
         options.encoding = "UTF-8"
         options.compilerArgs.add("-Xlint:all")
     }
 
-    patchPluginXml {
-        pluginDescription.set(htmlFixer("resources/META-INF/description.html"))
-        sinceBuild.set(properties("pluginSinceBuild"))
-        untilBuild.set(properties("pluginUntilBuild"))
-
-        val changelog = project.changelog
-        changeNotes.set(properties("pluginVersion").map { pluginVersion ->
-            with(changelog) {
-                renderItem(
-                        (getOrNull(pluginVersion) ?: getUnreleased())
-                                .withHeader(false)
-                                .withEmptySections(false),
-                        Changelog.OutputType.HTML,
-                )
-            }
-        })
-    }
-
-    runPluginVerifier {
-        val versions = properties("pluginVerifierIdeVersions")
-                .get()
-                .split(",")
-                .map(String::trim)
-                .filter(String::isNotEmpty)
-        // Kinda useless since the pluginVerifier will cry out
-        // anyway, but may not setting a version will be implemented at some point.
-        if (versions.isNotEmpty()) {
-            ideVersions.set(versions)
-        }
-    }
 
     publishPlugin {
         dependsOn("patchChangelog")
-        token.set(System.getenv("PUBLISH_TOKEN"))
-        // Use beta versions like 2020.3-beta-1
-        channels.set(properties("pluginVersion").map {
-            listOf(it
-                    .split('-')
-                    .getOrElse(1) { "default" }
-                    .split('.')
-                    .first()
-            )
-        })
     }
 }
 

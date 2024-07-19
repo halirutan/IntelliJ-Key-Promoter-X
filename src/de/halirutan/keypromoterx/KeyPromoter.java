@@ -22,7 +22,6 @@
 
 package de.halirutan.keypromoterx;
 
-import com.intellij.application.Topics;
 import com.intellij.ide.ui.UISettings;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -32,6 +31,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.toolWindow.StripeButton;
+import com.intellij.util.messages.MessageBus;
 import de.halirutan.keypromoterx.statistic.KeyPromoterStatistics;
 import org.jetbrains.annotations.NotNull;
 
@@ -63,7 +63,8 @@ public class KeyPromoter implements AWTEventListener, AnActionListener, Disposab
   private boolean mouseDrag = false;
 
   public KeyPromoter() {
-    Topics.subscribe(AnActionListener.TOPIC, this, this);
+    MessageBus messageBus = ApplicationManager.getApplication().getMessageBus();
+    messageBus.connect(this).subscribe(AnActionListener.TOPIC, this);
     long eventMask = AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK | AWTEvent.WINDOW_EVENT_MASK | AWTEvent.WINDOW_STATE_EVENT_MASK;
     Toolkit.getDefaultToolkit().addAWTEventListener(this, eventMask);
   }
