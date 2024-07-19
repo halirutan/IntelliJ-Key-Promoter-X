@@ -5,6 +5,7 @@
 ### Added
 
 - Add support for 2024 EAP
+- Fix API deprecations
 
 ## [2024.1.0] - 2024-04-10
 
