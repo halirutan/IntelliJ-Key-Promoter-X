@@ -10,12 +10,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.awt.BorderLayout;
+import java.awt.*;
 
 import static com.intellij.openapi.application.ApplicationManager.getApplication;
 
 public class KeyPromoterDialog extends DialogWrapper {
-    private static final KeyPromoterSettings mySettings = getApplication().getService(KeyPromoterSettings.class);
 
     private final KeyPromoterAction action;
     private final JLabel label;
@@ -48,6 +47,7 @@ public class KeyPromoterDialog extends DialogWrapper {
 
     @Override
     public void show() {
+        KeyPromoterSettings mySettings = getApplication().getService(KeyPromoterSettings.class);
         if (mySettings.hardMode) {
             getApplication().invokeLater(super::show);
         }

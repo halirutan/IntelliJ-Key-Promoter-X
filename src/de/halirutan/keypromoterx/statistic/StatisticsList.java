@@ -26,12 +26,14 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.Serial;
 
 /**
  * Provides a custom JBList for displaying how often a button was pressed that could have been replaced by a shortcut.
  * The list is backed by {@link KeyPromoterStatistics} that keeps the values persistent through restarts.
  */
 public class StatisticsList extends JBList<StatisticsItem> implements PropertyChangeListener {
+    @Serial
     private static final long serialVersionUID = 20212;
     private final DefaultListModel<StatisticsItem> myModel;
     private final KeyPromoterStatistics myStats = ApplicationManager.getApplication().getService(KeyPromoterStatistics.class);
@@ -113,6 +115,7 @@ public class StatisticsList extends JBList<StatisticsItem> implements PropertyCh
      * Provides custom rendering of items in the Key Promoter X statistic tool-window.
      */
     static class StatisticsItemCellRenderer extends JLabel implements ListCellRenderer<StatisticsItem> {
+        @Serial
         private static final long serialVersionUID = 20212;
 
         @Override
@@ -129,7 +132,7 @@ public class StatisticsList extends JBList<StatisticsItem> implements PropertyCh
             setIcon(KeyPromoterIcons.KP_ICON);
             setForeground(foreground);
             setBorder(JBUI.Borders.empty(2, 10));
-            if (value.ideaActionID != null && !"".equals(value.ideaActionID)) {
+            if (value.ideaActionID != null && !value.ideaActionID.isEmpty()) {
                 final AnAction action = ActionManager.getInstance().getAction(value.ideaActionID);
                 if (action != null) {
                     final Icon icon = action.getTemplatePresentation().getIcon();

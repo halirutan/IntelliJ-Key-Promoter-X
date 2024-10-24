@@ -28,9 +28,6 @@ import java.util.Arrays;
  */
 class KeyPromoterUtils {
 
-  private static final KeymapManager keyMapManager = KeymapManager.getInstance();
-  private static final KeyPromoterSettings mySettings = ApplicationManager.getApplication().getService(KeyPromoterSettings.class);
-
   /**
    * Get first field of class with target type to use during click source handling.
    *
@@ -38,7 +35,7 @@ class KeyPromoterUtils {
    * @param targetClass target class to check field to plug
    * @return field
    */
-  static Field getFieldOfType(Class<?> aClass, Class<?> targetClass) {
+  static Field getFieldOfType(Class<?> aClass, @SuppressWarnings("SameParameterValue") Class<?> targetClass) {
     do {
       Field[] declaredFields = aClass.getDeclaredFields();
       for (Field declaredField : declaredFields) {
@@ -57,6 +54,7 @@ class KeyPromoterUtils {
    * @return true if a mouse shortcut exists in the keymap
    */
   public static boolean hasMouseShortcut(String actionId) {
+    KeymapManager keyMapManager = KeymapManager.getInstance();
     final Keymap activeKeymap = keyMapManager.getActiveKeymap();
     return Arrays.stream(activeKeymap.getShortcuts(actionId)).anyMatch(shortcut -> !shortcut.isKeyboard());
   }
@@ -68,8 +66,10 @@ class KeyPromoterUtils {
    * @return a string combining one or more shortcuts
    */
   static String getKeyboardShortcutsText(String myIdeaActionID) {
+    KeymapManager keyMapManager = KeymapManager.getInstance();
     final Keymap activeKeymap = keyMapManager.getActiveKeymap();
     Shortcut[] shortcuts;
+    KeyPromoterSettings mySettings = ApplicationManager.getApplication().getService(KeyPromoterSettings.class);
     if (mySettings.isShowKeyboardShortcutsOnly()) {
       shortcuts = Arrays.stream(
           activeKeymap.getShortcuts(myIdeaActionID)

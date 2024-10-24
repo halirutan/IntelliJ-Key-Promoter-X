@@ -29,12 +29,23 @@ import static com.intellij.openapi.application.ApplicationManager.getApplication
  */
 public class KeyPromoterNotification {
 
-  private static final NotificationGroup GROUP = NotificationGroupManager.getInstance().getNotificationGroup(
-      KeyPromoterBundle.message("kp.notification.group")
-  );
+  /**
+   * Gets the Key Promoter X notification group on demand.
+   *
+   * @return Key Promoter X notification group
+   */
+  private static NotificationGroup getKeyPromoterNotificationGroup() {
+    return NotificationGroupManager.getInstance().getNotificationGroup(
+        KeyPromoterBundle.message("kp.notification.group"));
+  }
 
+  /**
+   * Displays a startup notification for the Key Promoter plugin.
+   * This notification informs the user with a message from the Key Promoter bundle.
+   * It also sets the notification as important and includes a suggestion link.
+   */
   public static void showStartupNotification() {
-    final Notification notification = GROUP.createNotification(KeyPromoterBundle.message(
+    final Notification notification = getKeyPromoterNotificationGroup().createNotification(KeyPromoterBundle.message(
                 "kp.notification.group"),
             KeyPromoterBundle.message("kp.notification.startup"),
             NotificationType.INFORMATION)
@@ -48,7 +59,14 @@ public class KeyPromoterNotification {
     notification.notify(null);
   }
 
-  static void showTip(KeyPromoterAction action, int count, ShowMode mode) {
+  /**
+   * Displays a notification based on the provided action, count, and show mode.
+   *
+   * @param action The KeyPromoterAction that triggered the notification.
+   * @param count  The frequency or count related to the action.
+   * @param mode   The mode for showing the notification, either as a notification or a dialog.
+   */
+  static void displayNotification(KeyPromoterAction action, int count, ShowMode mode) {
     String title = "";
     switch (mode) {
       case NOTIFICATION -> title = KeyPromoterBundle.message("kp.notification.tip.title", action.getDescription());
@@ -57,6 +75,12 @@ public class KeyPromoterNotification {
     mode.showTip(title, action, count);
   }
 
+  /**
+   * Prompts the user to create a shortcut for a given KeyPromoterAction.
+   *
+   * @param action The KeyPromoterAction for which the user is being prompted.
+   * @param mode The display mode which determines how the prompt will be shown.
+   */
   static void askToCreateShortcut(KeyPromoterAction action, ShowMode mode) {
     String title = KeyPromoterBundle.message("kp.notification.group");
     String message = KeyPromoterBundle.message("kp.notification.ask.new.shortcut", action.getDescription());
@@ -88,22 +112,10 @@ public class KeyPromoterNotification {
     }
   }
 
-  private static class SuppressTipAction extends NotificationAction {
-    private final KeyPromoterStatistics statistics = getApplication().getService(KeyPromoterStatistics.class);
-    private final KeyPromoterAction myAction;
-
-    SuppressTipAction(KeyPromoterAction action) {
-      super(KeyPromoterBundle.message("kp.notification.disable.message"));
-      myAction = action;
-    }
-
-    @Override
-    public void actionPerformed(@NotNull AnActionEvent e, @NotNull Notification notification) {
-      statistics.suppressItem(myAction);
-      notification.expire();
-    }
-  }
-
+  /**
+   * Enum representing different modes to show tips in the Key Promoter plugin.
+   * It has two modes: NOTIFICATION and DIALOG.
+   */
   public enum ShowMode {
     NOTIFICATION {
       @Override
@@ -111,7 +123,7 @@ public class KeyPromoterNotification {
         String countMessage = count > 1 ? count + " times" : count + " time";
         String message = KeyPromoterBundle.message("kp.notification.tip.message", action.getShortcut(), countMessage);
 
-        Notification notification = GROUP.createNotification(title, message, NotificationType.INFORMATION)
+        Notification notification = getKeyPromoterNotificationGroup().createNotification(title, message, NotificationType.INFORMATION)
             .setIcon(KeyPromoterIcons.KP_ICON)
             .addAction(new EditKeymapAction(action, KeyPromoterBundle.message("kp.notification.edit.shortcut")))
             .addAction(new SuppressTipAction(action));
@@ -135,11 +147,32 @@ public class KeyPromoterNotification {
     public abstract void showTip(String title, KeyPromoterAction action, int count);
 
     public void askToCreateShortcut(String title, String message, KeyPromoterAction action) {
-      Notification notification = GROUP.createNotification(title, message, NotificationType.INFORMATION)
+      Notification notification = getKeyPromoterNotificationGroup().createNotification(title, message, NotificationType.INFORMATION)
           .setIcon(KeyPromoterIcons.KP_ICON)
           .addAction(new EditKeymapAction(action))
           .addAction(new SuppressTipAction(action));
       notification.notify(null);
+    }
+  }
+
+  /**
+   * SuppressTipAction is an action that allows users to suppress tips from the Key Promoter plugin.
+   * When triggered, this action will mark the provided KeyPromoterAction as suppressed in the statistics.
+   * This effectively stops further notifications related to this action from being shown.
+   */
+  private static class SuppressTipAction extends NotificationAction {
+    private final KeyPromoterStatistics statistics = getApplication().getService(KeyPromoterStatistics.class);
+    private final KeyPromoterAction myAction;
+
+    SuppressTipAction(KeyPromoterAction action) {
+      super(KeyPromoterBundle.message("kp.notification.disable.message"));
+      myAction = action;
+    }
+
+    @Override
+    public void actionPerformed(@NotNull AnActionEvent e, @NotNull Notification notification) {
+      statistics.suppressItem(myAction);
+      notification.expire();
     }
   }
 }

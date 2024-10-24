@@ -15,18 +15,11 @@
     <vendor>halirutan</vendor>
     <depends>com.intellij.modules.lang</depends>
 
-    <application-components>
-        <component>
-            <implementation-class>de.halirutan.keypromoterx.KeyPromoter</implementation-class>
-        </component>
-    </application-components>
-
     <extensions defaultExtensionNs="com.intellij">
         <notificationGroup
                 displayType="BALLOON"
                 id="Key Promoter X"
         />
-
         <postStartupActivity implementation="de.halirutan.keypromoterx.KeyPromoterXStartupNotification"/>
         <applicationService serviceImplementation="de.halirutan.keypromoterx.statistic.KeyPromoterStatistics"/>
         <applicationService serviceImplementation="de.halirutan.keypromoterx.KeyPromoterSettings"/>
@@ -36,4 +29,11 @@
         <applicationConfigurable id="keyPromoterConfiguration" displayName="Key Promoter X"
                                  instance="de.halirutan.keypromoterx.KeyPromoterConfiguration" groupId="tools"/>
     </extensions>
+
+    <applicationListeners>
+        <listener class="de.halirutan.keypromoterx.KeyPromoterAWTListener"
+                  topic="com.intellij.ide.AppLifecycleListener"/>
+        <listener class="de.halirutan.keypromoterx.KeyPromoterActionListener"
+                  topic="com.intellij.openapi.actionSystem.ex.AnActionListener"/>
+    </applicationListeners>
 </idea-plugin>

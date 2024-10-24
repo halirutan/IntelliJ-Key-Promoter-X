@@ -142,9 +142,6 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
     myShowClickCount.setValue(keyPromoterSettings.getShowTipsClickCount());
   }
 
-  public void disposeUIResources() {
-  }
-
   public KeyPromoterSettings getSettings() {
     return keyPromoterSettings;
   }

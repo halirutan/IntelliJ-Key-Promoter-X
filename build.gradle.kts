@@ -2,7 +2,6 @@ import org.jetbrains.changelog.Changelog
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 fun properties(key: String) = providers.gradleProperty(key)
-fun environment(key: String) = providers.environmentVariable(key)
 
 plugins {
     id("java")
@@ -24,9 +23,7 @@ repositories {
 dependencies {
     implementation(libs.annotations)
     intellijPlatform {
-        val type = properties("platformType").get()
-        val version = properties("platformVersion").get()
-        create(type, version)
+        create(properties("platformType"), properties("platformVersion"))
         instrumentationTools()
         pluginVerifier()
         zipSigner()
@@ -92,7 +89,7 @@ intellijPlatform {
         }
     }
 
-    verifyPlugin {
+    pluginVerification {
         ides {
             recommended()
         }

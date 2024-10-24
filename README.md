@@ -4,16 +4,15 @@
 [![Banner](doc/img/kpxBanner.png)](https://github.com/sponsors/halirutan)
 
 ---
-I'm grateful this project is currently receives sponsorship of $4/month from
-[jlash13](https://github.com/jlash13),
+
+I'm grateful this project is currently receives sponsorship of \$4/month from
 [Indrek Toom](https://github.com/m2ger),
-$2/month from
+\$2/month from
 [Mac Adamarczuk](https://github.com/macalac),
 [Frank Harper](https://github.com/franklinharper),
-[Hasnain Baxamoosa](https://github.com/hbaxamoosa),
-[Brian Levis](https://github.com/brianlevis),
 [PCoetzeeDev](https://github.com/PCoetzeeDev),
-and $1/month from [14 other people](https://github.com/sponsors/halirutan).
+[baffler](https://github.com/baffler)
+and \$1/month from [13 other people](https://github.com/sponsors/halirutan).
 
 - [Become a GitHub Sponsor and support the Key Promoter X development](https://github.com/sponsors/halirutan)
 

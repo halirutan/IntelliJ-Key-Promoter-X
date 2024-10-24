@@ -3,11 +3,9 @@
 annotations = "24.1.0"
 
 # plugins
-kotlin = "1.9.23"
-changelog = "2.2.0"
-gradleIntelliJPlugin = "2.0.0-RC1"
-qodana = "0.1.13"
-kover = "0.7.6"
+changelog = "2.2.1"
+gradleIntelliJPlugin = "2.1.0"
+kotlin = "1.9.25"
 
 [libraries]
 annotations = { group = "org.jetbrains", name = "annotations", version.ref = "annotations" }
@@ -16,5 +14,3 @@ annotations = { group = "org.jetbrains", name = "annotations", version.ref = "an
 changelog = { id = "org.jetbrains.changelog", version.ref = "changelog" }
 gradleIntelliJPlugin = { id = "org.jetbrains.intellij.platform", version.ref = "gradleIntelliJPlugin" }
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
-qodana = { id = "org.jetbrains.qodana", version.ref = "qodana" }

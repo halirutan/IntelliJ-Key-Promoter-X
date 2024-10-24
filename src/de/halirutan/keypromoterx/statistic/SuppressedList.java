@@ -27,6 +27,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.Serial;
 import java.util.EventListener;
 import java.util.Objects;
 
@@ -37,6 +38,7 @@ import java.util.Objects;
  * @author Patrick Scheibe
  */
 public class SuppressedList extends JBList<StatisticsItem> implements PropertyChangeListener, EventListener {
+    @Serial
     private static final long serialVersionUID = 20212;
     private final KeyPromoterStatistics myStats = ApplicationManager.getApplication().getService(KeyPromoterStatistics.class);
     private final DefaultListModel<StatisticsItem> myModel;
@@ -111,6 +113,7 @@ public class SuppressedList extends JBList<StatisticsItem> implements PropertyCh
      * Provides custom rendering of items in the Key Promoter X statistic tool-window.
      */
     static class SuppressedItemCellRenderer extends JLabel implements ListCellRenderer<StatisticsItem> {
+        @Serial
         private static final long serialVersionUID = 20212;
 
         SuppressedItemCellRenderer() {
@@ -144,7 +147,7 @@ public class SuppressedList extends JBList<StatisticsItem> implements PropertyCh
 
             setForeground(foreground);
             setBorder(JBUI.Borders.empty(2, 10));
-            if (value.ideaActionID != null && !"".equals(value.ideaActionID)) {
+            if (value.ideaActionID != null && !value.ideaActionID.isEmpty()) {
                 final AnAction action = ActionManager.getInstance().getAction(value.ideaActionID);
 
                 if (action != null) {

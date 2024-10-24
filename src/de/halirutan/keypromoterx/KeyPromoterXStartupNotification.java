@@ -28,17 +28,20 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.startup.StartupActivity;
+import com.intellij.openapi.startup.ProjectActivity;
 import com.intellij.util.text.VersionComparatorUtil;
+import kotlin.Unit;
+import kotlin.coroutines.Continuation;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Provides an information balloon at the start of the IDE when a new version is installed.
  */
-public class KeyPromoterXStartupNotification implements StartupActivity, DumbAware {
+public class KeyPromoterXStartupNotification implements ProjectActivity, DumbAware {
+
   @Override
-  public void runActivity(@NotNull Project project) {
-    if (ApplicationManager.getApplication().isUnitTestMode()) return;
+  public Object execute(@NotNull Project project, @NotNull Continuation<? super Unit> continuation) {
+    if (ApplicationManager.getApplication().isUnitTestMode()) return null;
 
     final KeyPromoterSettings settings = ApplicationManager.getApplication().getService(KeyPromoterSettings.class);
     final String installedVersion = settings.getInstalledVersion();
@@ -52,6 +55,7 @@ public class KeyPromoterXStartupNotification implements StartupActivity, DumbAwa
         settings.setInstalledVersion(plugin.getVersion());
       }
     }
+    return null;
   }
 
 }
