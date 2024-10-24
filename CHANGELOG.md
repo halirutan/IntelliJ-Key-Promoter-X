@@ -6,6 +6,16 @@
 
 - Add support for 2024 EAP
 - Fix API deprecations
+- Introduced separate instantiation for handling Platform actions and raw AWT events
+- Enabled the plugin to be a dynamic plugin which no longer requires a restart when updating
+- Added `KeyPromoterAWTListener` for listening to AWT events.
+- Added `KeyPromoterActionListener` for listening to action events.
+
+### Fixed
+
+- Modified multiple locations to ensure services are acquired dynamically
+- Update build system and dependencies
+- Updated the `plugin.xml` to use application listeners instead of application components
 
 ## [2024.1.0] - 2024-04-10
 

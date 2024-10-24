@@ -1,11 +1,12 @@
 # GitHub Actions Workflow is created for testing and preparing the plugin release in the following steps:
-# - validate Gradle Wrapper,
-# - run 'test' and 'verifyPlugin' tasks,
-# - run 'buildPlugin' task and prepare artifact for the further tests,
-# - run 'runPluginVerifier' task,
-# - create a draft release.
+# - Validate Gradle Wrapper.
+# - Run 'test' and 'verifyPlugin' tasks.
+# - Run Qodana inspections.
+# - Run the 'buildPlugin' task and prepare artifact for further tests.
+# - Run the 'runPluginVerifier' task.
+# - Create a draft release.
 #
-# Workflow is triggered on push and pull_request events.
+# The workflow is triggered on push and pull_request events.
 #
 # GitHub Actions reference: https://help.github.com/en/actions
 #
@@ -54,9 +55,7 @@ jobs:
 
       # Setup Gradle
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-home-cache-cleanup: true
+        uses: gradle/actions/setup-gradle@v4
 
       # Set environment variables
       - name: Export Properties
@@ -116,9 +115,7 @@ jobs:
 
       # Setup Gradle
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-home-cache-cleanup: true
+        uses: gradle/actions/setup-gradle@v4
 
       # Run tests
       - name: Run Tests
@@ -165,9 +162,7 @@ jobs:
 
       # Setup Gradle
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-home-cache-cleanup: true
+        uses: gradle/actions/setup-gradle@v4
 
       # Cache Plugin Verifier IDEs
       - name: Setup Plugin Verifier IDEs Cache
