@@ -116,9 +116,8 @@ public class StatisticsList extends JBList<StatisticsItem> implements PropertyCh
   static class StatisticsItemCellRenderer extends JBLabel implements ListCellRenderer<StatisticsItem> {
 
     @Serial
-    private static final long serialVersionUID = 20212;
+    private static final long serialVersionUID = 20241;
     private final static HashMap<String, Icon> iconCache = new HashMap<>();
-    //    private final Logger logger = Logger.getInstance(StatisticsItemCellRenderer.class);
     private static final String message = "%s for %s (%dx missed, %dx used)";
 
     private Icon getCachedIcon(String id) {
