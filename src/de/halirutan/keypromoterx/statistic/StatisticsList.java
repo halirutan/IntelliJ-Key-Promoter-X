@@ -13,7 +13,6 @@
 package de.halirutan.keypromoterx.statistic;
 
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.ui.JBUI;
@@ -35,7 +34,6 @@ import java.util.HashMap;
 public class StatisticsList extends JBList<StatisticsItem> implements PropertyChangeListener {
   @Serial
   private static final long serialVersionUID = 20212;
-  private final Logger logger = Logger.getInstance(StatisticsItemCellRenderer.class);
   private final DefaultListModel<StatisticsItem> myModel;
   private final KeyPromoterStatistics myStats = ApplicationManager.getApplication().getService(KeyPromoterStatistics.class);
 
@@ -105,7 +103,6 @@ public class StatisticsList extends JBList<StatisticsItem> implements PropertyCh
   }
 
   private void updateStats() {
-    logger.warn("Update stats");
     myModel.removeAllElements();
     for (StatisticsItem statisticsItem : myStats.getStatisticItems()) {
       myModel.addElement(statisticsItem);
@@ -121,7 +118,8 @@ public class StatisticsList extends JBList<StatisticsItem> implements PropertyCh
     @Serial
     private static final long serialVersionUID = 20212;
     private final static HashMap<String, Icon> iconCache = new HashMap<>();
-    private final Logger logger = Logger.getInstance(StatisticsItemCellRenderer.class);
+    //    private final Logger logger = Logger.getInstance(StatisticsItemCellRenderer.class);
+    private static final String message = "%s for %s (%dx missed, %dx used)";
 
     private Icon getCachedIcon(String id) {
       if (iconCache.containsKey(id)) {
@@ -134,27 +132,16 @@ public class StatisticsList extends JBList<StatisticsItem> implements PropertyCh
 
     @Override
     public JLabel getListCellRendererComponent(JList<? extends StatisticsItem> list, StatisticsItem value, int index, boolean isSelected, boolean cellHasFocus) {
-      long startTime = System.nanoTime();
       final Color foreground = list.getForeground();
-      setText(value.getShortcut() + " for " + value.getDescription() + "(" + value.count + "x missed, " + value.hits + "x used)");
+      setText(message.formatted(value.getShortcut(), value.getDescription(), value.count, value.hits));
       setForeground(foreground);
       setBorder(JBUI.Borders.empty(2, 10));
 
-      long iconRetrievalStart = System.nanoTime();
       if (value.ideaActionID != null && !value.ideaActionID.isEmpty()) {
         setIcon(getCachedIcon(value.ideaActionID));
       } else {
         setIcon(KeyPromoterIcons.KP_ICON);
       }
-      long iconRetrievalEnd = System.nanoTime();
-
-      long endTime = System.nanoTime();
-      long runtime = endTime - startTime;
-      long actionManagerRuntime = iconRetrievalEnd - iconRetrievalStart;
-      logger.warn("Render\"" + value.ideaActionID + "\" item: "
-          + runtime
-          + "ns (" + actionManagerRuntime + "ns"
-          + " = " + Math.round((100.0 * actionManagerRuntime) / runtime) + "%)");
       return this;
     }
   }

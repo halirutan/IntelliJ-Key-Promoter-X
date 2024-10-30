@@ -36,7 +36,7 @@ import java.util.HashMap;
  */
 public class SuppressedList extends JBList<StatisticsItem> implements PropertyChangeListener, EventListener {
   @Serial
-  private static final long serialVersionUID = 20212;
+  private static final long serialVersionUID = 20241;
   private final KeyPromoterStatistics myStats = ApplicationManager.getApplication().getService(KeyPromoterStatistics.class);
   private final DefaultListModel<StatisticsItem> myModel;
 
@@ -93,9 +93,9 @@ public class SuppressedList extends JBList<StatisticsItem> implements PropertyCh
    */
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-//    if (evt.getPropertyName().equals(KeyPromoterStatistics.SUPPRESS)) {
-//      updateData();
-//    }
+    if (evt.getPropertyName().equals(KeyPromoterStatistics.SUPPRESS)) {
+      updateData();
+    }
   }
 
   private void updateData() {
@@ -120,6 +120,8 @@ public class SuppressedList extends JBList<StatisticsItem> implements PropertyCh
     private static final long serialVersionUID = 20241;
 
     private final static HashMap<String, Icon> iconCache = new HashMap<>();
+    private static final String messageTemplate = "%s for %s";
+    private static final String tooltipTemplate = "%s for %s (%dx missed, %dx used)";
 
     SuppressedItemCellRenderer() {
       setOpaque(true);
@@ -137,15 +139,14 @@ public class SuppressedList extends JBList<StatisticsItem> implements PropertyCh
     public Component getListCellRendererComponent(JList<? extends StatisticsItem> list, StatisticsItem value, int index, boolean isSelected, boolean cellHasFocus) {
       final Color foreground = list.getForeground();
       final Color background = list.getBackground();
-      String message = "%s for %s".formatted(value.getShortcut(), value.getDescription());
-      setText(message.formatted());
+      setText(messageTemplate.formatted(value.getShortcut(), value.getDescription()));
       if (isSelected) {
         setBackground(JBColor.GRAY);
       } else {
         setBackground(background);
       }
 
-      final String tooltip = "%s for %s (%dx missed, %dx used)</html>".formatted(
+      final String tooltip = tooltipTemplate.formatted(
           value.getShortcut(),
           value.description,
           value.count,
@@ -164,6 +165,4 @@ public class SuppressedList extends JBList<StatisticsItem> implements PropertyCh
       return this;
     }
   }
-
-
 }
