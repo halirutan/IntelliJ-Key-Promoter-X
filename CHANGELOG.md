@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+- Fix possible performance problem in
+  Rider ([RIDER-118966](https://youtrack.jetbrains.com/issue/RIDER-118966/Long-pauses-on-copy-paste))
+
 ### Added
 
 - Add support for 2024 EAP
