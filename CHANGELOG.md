@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2024.2.2] - 2024-11-13
+
 - Fix possible performance problem in
   Rider ([RIDER-118966](https://youtrack.jetbrains.com/issue/RIDER-118966/Long-pauses-on-copy-paste))
 
@@ -130,7 +132,8 @@
 - Include "Organization" requirement for plugins
 - Make compatible with 2020.1 EAP products
 
-[Unreleased]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2024.1.0...HEAD
+[Unreleased]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2024.2.2...HEAD
+[2024.2.2]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2024.1.0...v2024.2.2
 [2024.1.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2023.3.0...v2024.1.0
 [2023.3.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2023.2.0...v2023.3.0
 [2023.2.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2022.3.1...v2023.2.0
