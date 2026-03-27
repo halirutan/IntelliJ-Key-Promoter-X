@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Update Gradle build and libraries to work with version 2026
+
 ## [2024.2.2] - 2024-11-13
 
 - Fix possible performance problem in
