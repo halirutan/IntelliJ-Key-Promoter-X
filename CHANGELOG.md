@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Update Gradle build and libraries to work with version 2026
+- Fix long-standing issue where the splitter in the tool window is never in the actual IDE color theme.
 
 ## [2024.2.2] - 2024-11-13
 

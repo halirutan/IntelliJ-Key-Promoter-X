@@ -3,3 +3,5 @@
 .gradle/
 build/
 .intellijPlatform
+.opencode
+AGENTS.md
