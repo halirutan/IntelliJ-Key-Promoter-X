@@ -24,8 +24,7 @@ repositories {
 dependencies {
     implementation(libs.annotations)
     intellijPlatform {
-        create(properties("platformType"), properties("platformVersion"))
-        instrumentationTools()
+        intellijIdea(properties("platformVersion"))
         pluginVerifier()
         zipSigner()
         testFramework(TestFrameworkType.Platform)
@@ -34,7 +33,7 @@ dependencies {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
