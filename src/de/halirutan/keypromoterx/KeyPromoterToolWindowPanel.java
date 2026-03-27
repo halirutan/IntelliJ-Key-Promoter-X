@@ -24,12 +24,17 @@ package de.halirutan.keypromoterx;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.ui.JBSplitter;
+import com.intellij.uiDesigner.core.AbstractLayout;
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.util.ui.JBUI;
 import de.halirutan.keypromoterx.statistic.KeyPromoterStatistics;
 import de.halirutan.keypromoterx.statistic.StatisticsItem;
 import de.halirutan.keypromoterx.statistic.StatisticsList;
 import de.halirutan.keypromoterx.statistic.SuppressedList;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Controlling class of the tool-window
@@ -52,6 +57,7 @@ class KeyPromoterToolWindowPanel implements SnoozeNotifier.Handler {
     snoozeCheckBox.setSelected(SnoozeNotifier.isSnoozed());
     SnoozeNotifier.addHandler(this);
     snoozeCheckBox.addItemListener(e -> SnoozeNotifier.setSnoozed(snoozeCheckBox.isSelected()));
+    replaceSplitPaneWithIdeSplitter();
   }
 
   @SuppressWarnings("WeakerAccess")
@@ -71,6 +77,30 @@ class KeyPromoterToolWindowPanel implements SnoozeNotifier.Handler {
   private void createUIComponents() {
     statisticsList = new StatisticsList();
     suppressedList = new SuppressedList();
+  }
+
+  private void replaceSplitPaneWithIdeSplitter() {
+    Container parent = splitPane.getParent();
+    LayoutManager layout = parent.getLayout();
+    if (!(layout instanceof AbstractLayout abstractLayout)) {
+      return;
+    }
+
+    GridConstraints constraints = abstractLayout.getConstraintsForComponent(splitPane);
+    JComponent firstComponent = (JComponent) splitPane.getLeftComponent();
+    JComponent secondComponent = (JComponent) splitPane.getRightComponent();
+    boolean vertical = splitPane.getOrientation() == JSplitPane.VERTICAL_SPLIT;
+
+    JBSplitter splitter = new JBSplitter(vertical, 0.5f);
+    splitter.setHonorComponentsMinimumSize(true);
+    splitter.setFirstComponent(firstComponent);
+    splitter.setSecondComponent(secondComponent);
+    splitter.getDivider().setBackground(JBUI.CurrentTheme.Separator.color());
+
+    parent.remove(splitPane);
+    parent.add(splitter, constraints);
+    parent.revalidate();
+    parent.repaint();
   }
 
   @Override
