@@ -195,6 +195,9 @@ public class KeyPromoterAction {
     if ("Run".equals(myIdeaActionID) || "RunClass".equals(myIdeaActionID)) {
       myDescription = myDescription.replaceFirst("Run '.*'", "Run");
     }
+    if ("Rerun".equals(myIdeaActionID) || "RerunClass".equals(myIdeaActionID)) {
+      myDescription = myDescription.replaceFirst("Rerun '.*'", "Rerun");
+    }
   }
 
   public String getShortcut() {
