@@ -1,12 +1,10 @@
 pluginManagement {
     repositories {
-        maven("https://oss.sonatype.org/content/repositories/snapshots/")
+        maven("https://central.sonatype.com/repository/maven-snapshots/")
         gradlePluginPortal()
     }
 }
 
 plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.7.0"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
-
-rootProject.name = "Key Promoter X"

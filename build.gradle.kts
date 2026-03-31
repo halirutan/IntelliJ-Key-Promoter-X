@@ -1,18 +1,16 @@
 import org.jetbrains.changelog.Changelog
-import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
-fun properties(key: String) = providers.gradleProperty(key)
-
 plugins {
-    id("java")
-    alias(libs.plugins.kotlin)
-    alias(libs.plugins.gradleIntelliJPlugin)
-    alias(libs.plugins.changelog)
+    kotlin("jvm") version "2.3.0"
+    id("org.jetbrains.intellij.platform") version "2.13.2-SNAPSHOT"
+    id("org.jetbrains.changelog") version "2.5.0"
 }
 
-group = properties("pluginGroup").get()
-version = properties("pluginVersion").get()
+group = "de.halirutan.keypromoterx"
+version = "2026.1"
+
+val repoURL = "https://github.com/halirutan/IntelliJ-Key-Promoter-X"
 
 repositories {
     mavenCentral()
@@ -22,18 +20,10 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.annotations)
     intellijPlatform {
-        intellijIdea(properties("platformVersion"))
+        intellijIdea("2026.1")
         pluginVerifier()
-        zipSigner()
         testFramework(TestFrameworkType.Platform)
-    }
-}
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
@@ -50,10 +40,9 @@ intellijPlatform {
     projectName = project.name
 
     pluginConfiguration {
-        name = properties("pluginName")
-        version = properties("pluginVersion")
+        name = "Key Promoter X"
         description = htmlFixer("resources/META-INF/description.html")
-        changeNotes = properties("pluginVersion").map { pluginVersion ->
+        changeNotes = project.version.toString().let { pluginVersion ->
             with(changelog) {
                 renderItem(
                     (getOrNull(pluginVersion) ?: getUnreleased())
@@ -66,11 +55,11 @@ intellijPlatform {
 
         vendor {
             name = "halirutan"
-            url = properties("pluginRepositoryUrl")
+            url = repoURL
         }
 
         ideaVersion {
-            sinceBuild = properties("pluginSinceBuild")
+            sinceBuild = "241"
             untilBuild = provider { null }
         }
     }
@@ -79,27 +68,19 @@ intellijPlatform {
         token = System.getenv("PUBLISH_TOKEN")
 
         // Use beta versions like 2020.3-beta-1
-        channels = properties("pluginVersion").map {
-            listOf(it
+        channels = listOf(
+            version.toString()
                 .split('-')
                 .getOrElse(1) { "default" }
                 .split('.')
                 .first()
-            )
-        }
+        )
     }
-
-    pluginVerification {
-        ides {
-            recommended()
-        }
-    }
-
 }
 
 changelog {
     groups.empty()
-    repositoryUrl.set(properties("pluginRepositoryUrl"))
+    repositoryUrl.set(repoURL)
 }
 
 /**
@@ -114,19 +95,3 @@ fun htmlFixer(filename: String): String {
     }
     return ""
 }
-
-tasks {
-    wrapper {
-        gradleVersion = properties("gradleVersion").get()
-    }
-
-    withType<JavaCompile> {
-        options.encoding = "UTF-8"
-        options.compilerArgs.add("-Xlint:all")
-    }
-
-    val runRider by intellijPlatformTesting.runIde.registering {
-        type = IntelliJPlatformType.Rider
-    }
-}
-
