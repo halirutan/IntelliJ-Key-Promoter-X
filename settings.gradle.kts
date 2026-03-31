@@ -1,3 +1,5 @@
+rootProject.name = "Key Promoter X"
+
 pluginManagement {
     repositories {
         maven("https://central.sonatype.com/repository/maven-snapshots/")

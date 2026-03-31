@@ -22,8 +22,10 @@
 
 package de.halirutan.keypromoterx;
 
+import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.JBSplitter;
 import com.intellij.uiDesigner.core.AbstractLayout;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -51,9 +53,16 @@ class KeyPromoterToolWindowPanel implements SnoozeNotifier.Handler {
   private JList<StatisticsItem> suppressedList;
   private JCheckBox snoozeCheckBox;
   private JSplitPane splitPane;
+  private JButton supportButton;
+  private JPanel actionsPanel;
 
   KeyPromoterToolWindowPanel() {
+    actionsPanel.setBorder(IdeBorderFactory.createTitledBorder(KeyPromoterBundle.message("kp.toolwindow.panel.title")));
     resetStatisticsButton.addActionListener(e -> resetStats());
+
+    supportButton.setText(KeyPromoterBundle.message("kp.toolwindow.support.title"));
+    supportButton.setToolTipText(KeyPromoterBundle.message("kp.notification.startup"));
+    supportButton.addActionListener(e -> openSupportPage());
     snoozeCheckBox.setSelected(SnoozeNotifier.isSnoozed());
     SnoozeNotifier.addHandler(this);
     snoozeCheckBox.addItemListener(e -> SnoozeNotifier.setSnoozed(snoozeCheckBox.isSelected()));
@@ -72,6 +81,10 @@ class KeyPromoterToolWindowPanel implements SnoozeNotifier.Handler {
         Messages.getQuestionIcon()) == Messages.YES) {
       statService.resetStatistic();
     }
+  }
+
+  private void openSupportPage() {
+    BrowserUtil.browse(KeyPromoterBundle.message("kp.notification.startup.link"));
   }
 
   private void createUIComponents() {
