@@ -17,6 +17,7 @@
         <notificationGroup
                 displayType="BALLOON"
                 id="Key Promoter X"
+                isLogByDefault="false"
         />
         <postStartupActivity implementation="de.halirutan.keypromoterx.KeyPromoterXStartupNotification"/>
         <applicationService serviceImplementation="de.halirutan.keypromoterx.statistic.KeyPromoterStatistics"/>
