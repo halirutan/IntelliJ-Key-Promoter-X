@@ -2,7 +2,6 @@ import org.jetbrains.changelog.Changelog
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 plugins {
-    kotlin("jvm") version "2.3.0"
     id("org.jetbrains.intellij.platform") version "2.13.2-SNAPSHOT"
     id("org.jetbrains.changelog") version "2.5.0"
 }
@@ -22,7 +21,6 @@ repositories {
 dependencies {
     intellijPlatform {
         intellijIdea("2026.1")
-        pluginVerifier()
         testFramework(TestFrameworkType.Platform)
     }
 }
@@ -37,7 +35,6 @@ sourceSets {
 intellijPlatform {
     buildSearchableOptions = false
     instrumentCode = true
-    projectName = project.name
 
     pluginConfiguration {
         name = "Key Promoter X"
@@ -60,7 +57,6 @@ intellijPlatform {
 
         ideaVersion {
             sinceBuild = "241"
-            untilBuild = provider { null }
         }
     }
 
