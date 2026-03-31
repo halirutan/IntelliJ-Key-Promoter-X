@@ -95,7 +95,7 @@ class KeyPromoterToolWindowPanel implements SnoozeNotifier.Handler {
     splitter.setHonorComponentsMinimumSize(true);
     splitter.setFirstComponent(firstComponent);
     splitter.setSecondComponent(secondComponent);
-    splitter.getDivider().setBackground(JBUI.CurrentTheme.Separator.color());
+    splitter.getDivider().setBackground(JBUI.CurrentTheme.CustomFrameDecorations.separatorForeground());
 
     parent.remove(splitPane);
     parent.add(splitter, constraints);
