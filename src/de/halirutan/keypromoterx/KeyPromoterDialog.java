@@ -19,12 +19,13 @@ public class KeyPromoterDialog extends DialogWrapper {
     private final KeyPromoterAction action;
     private final JLabel label;
 
+    @SuppressWarnings("this-escape")
     public KeyPromoterDialog(String title, String message, KeyPromoterAction action) {
         super(true); // use current window as parent
         this.action = action;
         this.label = new JLabel(message, SwingConstants.CENTER);
-        setTitle(title);
         init();
+        setTitle(title);
     }
 
     @Override
