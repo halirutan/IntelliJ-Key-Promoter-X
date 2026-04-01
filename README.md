@@ -38,7 +38,7 @@ This makes it easier to replace repetitive mouse actions with shortcuts and grad
 workflow.
 Currently, it supports toolbar buttons, menu actions, tool windows, and actions inside those tool windows.
 
-![Teaser video](doc/img/kpx-demo.apng)
+![Teaser video](doc/img/keypromoter-demo.apng)
 
 ## ![Docs][doc-image] Features and Documentation
 
