@@ -3,9 +3,15 @@
 ## [Unreleased]
 
 - Update Gradle build and libraries to work with version 2026
-- Fix long-standing issue where the splitter in the tool window is never in the actual IDE color theme.
+- Fix long-standing issue where the splitter in the tool window is never in the actual IDE color theme (
+  issue [#135](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/135))
 - Fix border color around actions panel
 - Introduce sponsors button
+- Key Promoter now doesn't overwrite the status bar anymore (fix
+  for [#97](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/97))
+- Fix for multiple-entry bug with "Rerun" action (fix
+  for [#130](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/130)
+  and [#138](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/138))
 
 ## [2024.2.2] - 2024-11-13
 
