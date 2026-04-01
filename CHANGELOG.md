@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2026.1.0] - 2026-04-01
+
 - Update Gradle build and libraries to work with version 2026
 - Fix long-standing issue where the splitter in the tool window is never in the actual IDE color theme (
   issue [#135](https://github.com/halirutan/IntelliJ-Key-Promoter-X/issues/135))
@@ -143,7 +145,8 @@
 - Include "Organization" requirement for plugins
 - Make compatible with 2020.1 EAP products
 
-[Unreleased]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2024.2.2...HEAD
+[Unreleased]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2026.1.0...HEAD
+[2026.1.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2024.2.2...v2026.1.0
 [2024.2.2]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2024.1.0...v2024.2.2
 [2024.1.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2023.3.0...v2024.1.0
 [2023.3.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2023.2.0...v2023.3.0
