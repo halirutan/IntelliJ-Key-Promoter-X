@@ -24,7 +24,7 @@ dependencies {
         testFramework(TestFrameworkType.Platform)
         // Verifier 1.385 introduced a reopenable JAR filesystem rework that crashes parallel
         // verifyPlugin with java.nio.file.ClosedFileSystemException. Pin the last good release.
-        pluginVerifier("1.384")
+        pluginVerifier("1.383")
     }
 }
 
