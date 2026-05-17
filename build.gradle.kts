@@ -2,7 +2,7 @@ import org.jetbrains.changelog.Changelog
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 plugins {
-    id("org.jetbrains.intellij.platform") version "2.15.0"
+    id("org.jetbrains.intellij.platform") version "2.16.0"
     id("org.jetbrains.changelog") version "2.5.0"
 }
 
@@ -22,6 +22,9 @@ dependencies {
     intellijPlatform {
         intellijIdea("2026.1")
         testFramework(TestFrameworkType.Platform)
+        // Verifier 1.385 introduced a reopenable JAR filesystem rework that crashes parallel
+        // verifyPlugin with java.nio.file.ClosedFileSystemException. Pin the last good release.
+        pluginVerifier("1.384")
     }
 }
 
