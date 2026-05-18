@@ -22,9 +22,10 @@ dependencies {
     intellijPlatform {
         intellijIdea("2026.1")
         testFramework(TestFrameworkType.Platform)
-        // Verifier 1.385 introduced a reopenable JAR filesystem rework that crashes parallel
-        // verifyPlugin with java.nio.file.ClosedFileSystemException. Pin the last good release.
-        pluginVerifier("1.383")
+        // Pinned: unpinned resolves to latest. >=1.385 races on parallel verify
+        // (ClosedFileSystemException); <1.385 can't read 2026.x layout (false fails).
+        // 1.401 = last known-good.
+        pluginVerifier("1.401")
     }
 }
 
