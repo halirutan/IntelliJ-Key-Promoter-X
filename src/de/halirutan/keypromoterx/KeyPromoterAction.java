@@ -19,6 +19,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.impl.ActionButton;
 import com.intellij.openapi.actionSystem.impl.ActionMenuItem;
 import com.intellij.openapi.actionSystem.impl.actionholder.ActionRef;
+import com.intellij.openapi.application.ApplicationInfo;
 import com.intellij.toolWindow.StripeButton;
 
 import javax.swing.*;
@@ -83,7 +84,12 @@ public class KeyPromoterAction {
    */
   KeyPromoterAction(AnAction action, AnActionEvent event, ActionSource source) {
     if (source == ActionSource.TOOL_WINDOW_BUTTON) {
-      String toolWindowName = action.getTemplateText() != null ? action.getTemplateText().replaceAll(" ", "") : "";
+      String templateText = action.getTemplateText();
+      // Fix Rider "Explorer" Tool Window Button
+      if ("RD".equals(ApplicationInfo.getInstance().getBuild().getProductCode()) && "Explorer".equals(templateText)) {
+        templateText = "Project";
+      }
+      String toolWindowName = templateText != null ? templateText.replace(" ", "") : "";
       myIdeaActionID = KeyPromoterBundle.message("kp.toolwindow.id", toolWindowName);
     } else {
       myIdeaActionID = ActionManager.getInstance().getId(action);

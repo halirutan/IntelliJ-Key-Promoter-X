@@ -4,6 +4,7 @@
 
 - Fix API usage in startup message to avoid deprecation and internal warnings
 - Add support for user error reporting
+- Fix Rider "Explorer" issue where the tool window button didn't show up in Key Promoter X
 
 ## [2026.1.0] - 2026-04-01
 
