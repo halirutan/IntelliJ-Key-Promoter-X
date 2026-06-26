@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Fix API usage in startup message to avoid deprecation and internal warnings
+
 ## [2026.1.0] - 2026-04-01
 
 - Update Gradle build and libraries to work with version 2026

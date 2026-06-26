@@ -22,10 +22,9 @@
 
 package de.halirutan.keypromoterx;
 
-import com.intellij.ide.plugins.IdeaPluginDescriptor;
-import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.extensions.PluginId;
+import com.intellij.openapi.extensions.PluginAware;
+import com.intellij.openapi.extensions.PluginDescriptor;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.ProjectActivity;
@@ -34,27 +33,32 @@ import kotlin.Unit;
 import kotlin.coroutines.Continuation;
 import org.jetbrains.annotations.NotNull;
 
+
 /**
  * Provides an information balloon at the start of the IDE when a new version is installed.
  */
-public class KeyPromoterXStartupNotification implements ProjectActivity, DumbAware {
+public class KeyPromoterXStartupNotification implements ProjectActivity, DumbAware, PluginAware {
+
+  private PluginDescriptor myPluginDescriptor;
+
+  @Override
+  public void setPluginDescriptor(@NotNull PluginDescriptor pluginDescriptor) {
+    myPluginDescriptor = pluginDescriptor;
+  }
 
   @Override
   public Object execute(@NotNull Project project, @NotNull Continuation<? super Unit> continuation) {
-    if (ApplicationManager.getApplication().isUnitTestMode()) return null;
+    if (ApplicationManager.getApplication().isUnitTestMode() || myPluginDescriptor == null) return null;
 
     final KeyPromoterSettings settings = ApplicationManager.getApplication().getService(KeyPromoterSettings.class);
-    final String installedVersion = settings.getInstalledVersion();
+    final String storedVersion = settings.getInstalledVersion();
+    final String currentVersion = myPluginDescriptor.getVersion();
 
-    final IdeaPluginDescriptor plugin = PluginManager.getInstance().findEnabledPlugin(PluginId.getId("Key Promoter X"));
-    if (installedVersion != null && plugin != null) {
-      final int compare = VersionComparatorUtil.compare(installedVersion, plugin.getVersion());
-//      if (true) { // TODO: Don't forget to remove that! For proofreading.
-      if (compare < 0) {
+//  if (true) { // TODO: Don't forget to remove that! For proofreading.
+    if (storedVersion != null && VersionComparatorUtil.compare(currentVersion, storedVersion) > 0) {
         KeyPromoterNotification.showStartupNotification();
-        settings.setInstalledVersion(plugin.getVersion());
-      }
     }
+    settings.setInstalledVersion(currentVersion);
     return null;
   }
 
