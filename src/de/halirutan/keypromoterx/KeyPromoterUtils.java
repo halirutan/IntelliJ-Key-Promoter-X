@@ -20,6 +20,8 @@ import com.intellij.openapi.keymap.KeymapUtil;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Provides some utility functions.
@@ -68,30 +70,15 @@ class KeyPromoterUtils {
   static String getKeyboardShortcutsText(String myIdeaActionID) {
     KeymapManager keyMapManager = KeymapManager.getInstance();
     final Keymap activeKeymap = keyMapManager.getActiveKeymap();
-    Shortcut[] shortcuts;
     KeyPromoterSettings mySettings = ApplicationManager.getApplication().getService(KeyPromoterSettings.class);
+    Stream<Shortcut> shortcutStream = Arrays.stream(activeKeymap.getShortcuts(myIdeaActionID));
+
     if (mySettings.isShowKeyboardShortcutsOnly()) {
-      shortcuts = Arrays.stream(
-          activeKeymap.getShortcuts(myIdeaActionID)
-      ).filter(Shortcut::isKeyboard).toArray(Shortcut[]::new);
-    } else {
-      shortcuts = activeKeymap.getShortcuts(myIdeaActionID);
+      shortcutStream = shortcutStream.filter(Shortcut::isKeyboard);
     }
 
-
-    if (shortcuts.length == 0) {
-      return "";
-    }
-
-    StringBuilder buffer = new StringBuilder();
-    for (int i = 0; i < shortcuts.length; i++) {
-      Shortcut shortcut = shortcuts[i];
-      if (i > 0) {
-        buffer.append(" or ");
-      }
-      buffer.append("'").append(KeymapUtil.getShortcutText(shortcut)).append("'");
-    }
-    return buffer.toString();
+    return shortcutStream
+        .map(shortcut -> "'" + KeymapUtil.getShortcutText(shortcut) + "'")
+        .collect(Collectors.joining(" or "));
   }
-
 }
