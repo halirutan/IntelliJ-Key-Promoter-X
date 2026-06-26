@@ -27,6 +27,7 @@
                     factoryClass="de.halirutan.keypromoterx.KeyPromoterToolWindowFactory"/>
         <applicationConfigurable id="keyPromoterConfiguration" displayName="Key Promoter X"
                                  instance="de.halirutan.keypromoterx.KeyPromoterConfiguration" groupId="tools"/>
+        <errorHandler implementation="com.intellij.diagnostic.JetBrainsMarketplaceErrorReportSubmitter"/>
     </extensions>
 
     <applicationListeners>

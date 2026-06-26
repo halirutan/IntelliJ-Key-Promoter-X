@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Fix API usage in startup message to avoid deprecation and internal warnings
+- Add support for user error reporting
 
 ## [2026.1.0] - 2026-04-01
 
