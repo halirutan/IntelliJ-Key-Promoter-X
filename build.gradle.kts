@@ -78,6 +78,14 @@ intellijPlatform {
     }
 }
 
+// Run config for Rider
+val runRider by intellijPlatformTesting.runIde.registering {
+    localPath = project.layout.dir(project.provider {
+        file("/home/patrick/.local/share/JetBrains/Toolbox/apps/rider")
+    })
+}
+
+
 changelog {
     groups.empty()
     repositoryUrl.set(repoURL)
