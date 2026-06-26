@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "de.halirutan.keypromoterx"
-version = "2026.1.0"
+version = "2026.1.1"
 
 val repoURL = "https://github.com/halirutan/IntelliJ-Key-Promoter-X"
 
