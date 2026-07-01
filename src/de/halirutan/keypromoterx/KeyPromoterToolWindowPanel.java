@@ -22,12 +22,12 @@
 
 package de.halirutan.keypromoterx;
 
-import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.JBSplitter;
 import com.intellij.ui.ScrollPaneFactory;
+import com.intellij.ui.components.BrowserLink;
 import com.intellij.util.ui.JBUI;
 import de.halirutan.keypromoterx.statistic.KeyPromoterStatistics;
 import de.halirutan.keypromoterx.statistic.StatisticsItem;
@@ -52,16 +52,11 @@ class KeyPromoterToolWindowPanel implements SnoozeNotifier.Handler {
   private JButton resetStatisticsButton;
   private JList<StatisticsItem> suppressedList;
   private JCheckBox snoozeCheckBox;
-  private JButton supportButton;
   private JPanel actionsPanel;
 
   KeyPromoterToolWindowPanel() {
     panel = buildUi();
     resetStatisticsButton.addActionListener(e -> resetStats());
-
-    supportButton.setText(KeyPromoterBundle.message("kp.toolwindow.support.title"));
-    supportButton.setToolTipText(KeyPromoterBundle.message("kp.notification.startup"));
-    supportButton.addActionListener(e -> openSupportPage());
     snoozeCheckBox.setSelected(SnoozeNotifier.isSnoozed());
     SnoozeNotifier.addHandler(this);
     snoozeCheckBox.addItemListener(e -> SnoozeNotifier.setSnoozed(snoozeCheckBox.isSelected()));
@@ -87,10 +82,6 @@ class KeyPromoterToolWindowPanel implements SnoozeNotifier.Handler {
     }
   }
 
-  private void openSupportPage() {
-    BrowserUtil.browse(KeyPromoterBundle.message("kp.notification.startup.link"));
-  }
-
   public JComponent getPreferredFocusableComponent() {
     return statisticsList;
   }
@@ -100,7 +91,6 @@ class KeyPromoterToolWindowPanel implements SnoozeNotifier.Handler {
     suppressedList = new SuppressedList();
     resetStatisticsButton = new JButton(KeyPromoterBundle.message("kp.toolwindow.reset.statistics"));
     resetStatisticsButton.setMnemonic(KeyEvent.VK_R);
-    supportButton = new JButton();
     snoozeCheckBox = new JCheckBox(KeyPromoterBundle.message("kp.toolwindow.snooze.notifications"));
     actionsPanel = createActionsPanel();
 
@@ -120,6 +110,21 @@ class KeyPromoterToolWindowPanel implements SnoozeNotifier.Handler {
   private JPanel createActionsPanel() {
     JPanel panel = new JPanel(new GridBagLayout());
     panel.setBorder(IdeBorderFactory.createTitledBorder(KeyPromoterBundle.message("kp.toolwindow.panel.title")));
+    BrowserLink sponsorLink = new BrowserLink(
+        KeyPromoterBundle.message("kp.toolwindow.footer.sponsor"),
+        KeyPromoterBundle.message("kp.notification.startup.link")
+    );
+    BrowserLink youTubeLink = new BrowserLink(
+        KeyPromoterBundle.message("kp.toolwindow.footer.youtube"),
+        KeyPromoterBundle.message("kp.notification.startup.linkYT")
+    );
+    JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+    footerPanel.setOpaque(false);
+    footerPanel.add(sponsorLink);
+    footerPanel.add(Box.createHorizontalStrut(JBUI.scale(6)));
+    footerPanel.add(new JLabel("|"));
+    footerPanel.add(Box.createHorizontalStrut(JBUI.scale(6)));
+    footerPanel.add(youTubeLink);
 
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = 0;
@@ -131,12 +136,13 @@ class KeyPromoterToolWindowPanel implements SnoozeNotifier.Handler {
     panel.add(resetStatisticsButton, constraints);
 
     constraints.gridy = 1;
-    panel.add(supportButton, constraints);
-
-    constraints.gridy = 2;
     constraints.fill = GridBagConstraints.NONE;
     constraints.insets = JBUI.emptyInsets();
     panel.add(snoozeCheckBox, constraints);
+
+    constraints.gridy = 2;
+    constraints.insets = JBUI.insetsTop(4);
+    panel.add(footerPanel, constraints);
 
     constraints.gridx = 1;
     constraints.gridy = 0;
