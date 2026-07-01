@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+- Rework UI components to use plain Java instead of UI Designer
+- Refactor settings UI to match modern look
+- Improve wording in plugin description
+- Remove Sponsor button and replace it with a smaller footnote
+
 ## [2026.1.1] - 2026-06-26
 
 - Fix API usage in startup message to avoid deprecation and internal warnings
