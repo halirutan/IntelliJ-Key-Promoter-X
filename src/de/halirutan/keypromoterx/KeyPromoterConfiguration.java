@@ -26,6 +26,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.options.BaseConfigurable;
 import com.intellij.openapi.options.SearchableConfigurable;
+import com.intellij.ui.TitledSeparator;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NonNls;
@@ -33,7 +34,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
@@ -70,11 +70,17 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
     return null;
   }
 
-  private static JPanel createSectionPanel(String title, boolean addInnerPadding) {
+  private static JPanel createSectionPanel() {
     JPanel panel = new JPanel(new GridBagLayout());
-    Border border = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), title);
-    panel.setBorder(addInnerPadding ? BorderFactory.createCompoundBorder(border, JBUI.Borders.empty(5)) : border);
+    panel.setAlignmentX(Component.LEFT_ALIGNMENT);
     return panel;
+  }
+
+  private static TitledSeparator createSectionHeader(String title) {
+    TitledSeparator separator = new TitledSeparator(title);
+    separator.setBorder(JBUI.Borders.emptyBottom(8));
+    separator.setAlignmentX(Component.LEFT_ALIGNMENT);
+    return separator;
   }
 
   public Icon getIcon() {
@@ -218,39 +224,23 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
     myHardMode = new JCheckBox(KeyPromoterBundle.message("kp.configurable.hard.mode"));
     myHardMode.setToolTipText(KeyPromoterBundle.message("kp.configurable.hard.mode.tooltip"));
 
-    JPanel panel = new JPanel(new GridBagLayout());
+    JPanel content = new JPanel();
+    content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+    content.add(createSectionHeader(KeyPromoterBundle.message("kp.configurable.section.general")));
+    content.add(createGeneralPanel());
+    content.add(Box.createVerticalStrut(JBUI.scale(12)));
+    content.add(createSettingsPanel());
+    content.add(Box.createVerticalStrut(JBUI.scale(12)));
+    content.add(createSectionHeader(KeyPromoterBundle.message("kp.configurable.section.enabled.for")));
+    content.add(createEnabledForPanel());
 
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.gridx = 0;
-    constraints.gridy = 0;
-    constraints.fill = GridBagConstraints.HORIZONTAL;
-    constraints.anchor = GridBagConstraints.NORTHWEST;
-    panel.add(createGeneralPanel(), constraints);
-
-    constraints.gridy = 1;
-    panel.add(createSettingsPanel(), constraints);
-
-    constraints.gridy = 2;
-    panel.add(createEnabledForPanel(), constraints);
-
-    constraints.gridx = 1;
-    constraints.gridy = 0;
-    constraints.gridheight = 3;
-    constraints.weightx = 1;
-    panel.add(Box.createHorizontalStrut(0), constraints);
-
-    constraints.gridx = 0;
-    constraints.gridy = 3;
-    constraints.gridwidth = 2;
-    constraints.gridheight = 1;
-    constraints.weighty = 1;
-    constraints.fill = GridBagConstraints.BOTH;
-    panel.add(Box.createVerticalGlue(), constraints);
+    JPanel panel = new JPanel(new BorderLayout());
+    panel.add(content, BorderLayout.NORTH);
     return panel;
   }
 
   private JPanel createGeneralPanel() {
-    JPanel panel = createSectionPanel(KeyPromoterBundle.message("kp.configurable.section.general"), false);
+    JPanel panel = createSectionPanel();
     addVerticalComponent(panel, myShowKeyboardShortcutsOnly, 0);
     addVerticalComponent(panel, myDisabledInPresentationMode, 1);
     addVerticalComponent(panel, myDisabledInDistractionFreeMode, 2);
@@ -259,7 +249,7 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
   }
 
   private JPanel createSettingsPanel() {
-    JPanel panel = createSectionPanel(KeyPromoterBundle.message("kp.configurable.section.settings"), true);
+    JPanel panel = createSectionPanel();
 
     JLabel showClickCountLabel = new JLabel(KeyPromoterBundle.message("kp.configurable.show.click.count"));
     JLabel proposeShortcutLabel = new JLabel(KeyPromoterBundle.message("kp.configurable.propose.shortcut.count"));
@@ -270,26 +260,38 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
     constraints.gridx = 0;
     constraints.gridy = 0;
     constraints.anchor = GridBagConstraints.WEST;
+    constraints.insets = JBUI.insetsBottom(6);
     panel.add(showClickCountLabel, constraints);
 
     constraints.gridy = 1;
+    constraints.insets = JBUI.emptyInsets();
     panel.add(proposeShortcutLabel, constraints);
 
     constraints.gridx = 1;
     constraints.gridy = 0;
     constraints.fill = GridBagConstraints.HORIZONTAL;
     constraints.anchor = GridBagConstraints.EAST;
+    constraints.insets = JBUI.insets(0, 12, 6, 0);
     panel.add(myShowClickCount, constraints);
 
     Dimension spinnerSize = myProposeToCreateShortcutCount.getPreferredSize();
     myProposeToCreateShortcutCount.setMinimumSize(new Dimension(JBUI.scale(40), spinnerSize.height));
     constraints.gridy = 1;
+    constraints.insets = JBUI.insetsLeft(12);
     panel.add(myProposeToCreateShortcutCount, constraints);
+
+    constraints.gridx = 2;
+    constraints.gridy = 0;
+    constraints.gridheight = 2;
+    constraints.weightx = 1;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.insets = JBUI.emptyInsets();
+    panel.add(Box.createHorizontalStrut(0), constraints);
     return panel;
   }
 
   private JPanel createEnabledForPanel() {
-    JPanel panel = createSectionPanel(KeyPromoterBundle.message("kp.configurable.section.enabled.for"), false);
+    JPanel panel = createSectionPanel();
     addVerticalComponent(panel, myMenus, 0);
     addVerticalComponent(panel, myToolbarButtons, 1);
     addVerticalComponent(panel, myToolWindowButtons, 2);
