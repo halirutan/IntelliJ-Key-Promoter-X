@@ -27,8 +27,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.JBSplitter;
-import com.intellij.uiDesigner.core.AbstractLayout;
-import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.util.ui.JBUI;
 import de.halirutan.keypromoterx.statistic.KeyPromoterStatistics;
 import de.halirutan.keypromoterx.statistic.StatisticsItem;
@@ -37,6 +36,7 @@ import de.halirutan.keypromoterx.statistic.SuppressedList;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 /**
  * Controlling class of the tool-window
@@ -47,17 +47,16 @@ import java.awt.*;
 class KeyPromoterToolWindowPanel implements SnoozeNotifier.Handler {
 
   private final KeyPromoterStatistics statService = ApplicationManager.getApplication().getService(KeyPromoterStatistics.class);
-  private JPanel panel;
+  private final JPanel panel;
   private JList<StatisticsItem> statisticsList;
   private JButton resetStatisticsButton;
   private JList<StatisticsItem> suppressedList;
   private JCheckBox snoozeCheckBox;
-  private JSplitPane splitPane;
   private JButton supportButton;
   private JPanel actionsPanel;
 
   KeyPromoterToolWindowPanel() {
-    actionsPanel.setBorder(IdeBorderFactory.createTitledBorder(KeyPromoterBundle.message("kp.toolwindow.panel.title")));
+    panel = buildUi();
     resetStatisticsButton.addActionListener(e -> resetStats());
 
     supportButton.setText(KeyPromoterBundle.message("kp.toolwindow.support.title"));
@@ -66,12 +65,17 @@ class KeyPromoterToolWindowPanel implements SnoozeNotifier.Handler {
     snoozeCheckBox.setSelected(SnoozeNotifier.isSnoozed());
     SnoozeNotifier.addHandler(this);
     snoozeCheckBox.addItemListener(e -> SnoozeNotifier.setSnoozed(snoozeCheckBox.isSelected()));
-    replaceSplitPaneWithIdeSplitter();
   }
 
   @SuppressWarnings("WeakerAccess")
   public JPanel getContent() {
     return panel;
+  }
+
+  private static JScrollPane createTitledScrollPane(JComponent component, String title) {
+    JScrollPane scrollPane = ScrollPaneFactory.createScrollPane(component);
+    scrollPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), title));
+    return scrollPane;
   }
 
   private void resetStats() {
@@ -87,33 +91,60 @@ class KeyPromoterToolWindowPanel implements SnoozeNotifier.Handler {
     BrowserUtil.browse(KeyPromoterBundle.message("kp.notification.startup.link"));
   }
 
-  private void createUIComponents() {
-    statisticsList = new StatisticsList();
-    suppressedList = new SuppressedList();
+  public JComponent getPreferredFocusableComponent() {
+    return statisticsList;
   }
 
-  private void replaceSplitPaneWithIdeSplitter() {
-    Container parent = splitPane.getParent();
-    LayoutManager layout = parent.getLayout();
-    if (!(layout instanceof AbstractLayout abstractLayout)) {
-      return;
-    }
+  private JPanel buildUi() {
+    statisticsList = new StatisticsList();
+    suppressedList = new SuppressedList();
+    resetStatisticsButton = new JButton(KeyPromoterBundle.message("kp.toolwindow.reset.statistics"));
+    resetStatisticsButton.setMnemonic(KeyEvent.VK_R);
+    supportButton = new JButton();
+    snoozeCheckBox = new JCheckBox(KeyPromoterBundle.message("kp.toolwindow.snooze.notifications"));
+    actionsPanel = createActionsPanel();
 
-    GridConstraints constraints = abstractLayout.getConstraintsForComponent(splitPane);
-    JComponent firstComponent = (JComponent) splitPane.getLeftComponent();
-    JComponent secondComponent = (JComponent) splitPane.getRightComponent();
-    boolean vertical = splitPane.getOrientation() == JSplitPane.VERTICAL_SPLIT;
-
-    JBSplitter splitter = new JBSplitter(vertical, 0.5f);
+    JBSplitter splitter = new JBSplitter(true);
     splitter.setHonorComponentsMinimumSize(true);
-    splitter.setFirstComponent(firstComponent);
-    splitter.setSecondComponent(secondComponent);
+    splitter.setFirstComponent(createTitledScrollPane(statisticsList, KeyPromoterBundle.message("kp.toolwindow.statistics.title")));
+    splitter.setSecondComponent(createTitledScrollPane(suppressedList, KeyPromoterBundle.message("kp.toolwindow.suppressed.title")));
     splitter.getDivider().setBackground(JBUI.CurrentTheme.CustomFrameDecorations.separatorForeground());
 
-    parent.remove(splitPane);
-    parent.add(splitter, constraints);
-    parent.revalidate();
-    parent.repaint();
+    JPanel content = new JPanel(new BorderLayout(0, JBUI.scale(5)));
+    content.setBorder(JBUI.Borders.empty(5));
+    content.add(splitter, BorderLayout.CENTER);
+    content.add(actionsPanel, BorderLayout.SOUTH);
+    return content;
+  }
+
+  private JPanel createActionsPanel() {
+    JPanel panel = new JPanel(new GridBagLayout());
+    panel.setBorder(IdeBorderFactory.createTitledBorder(KeyPromoterBundle.message("kp.toolwindow.panel.title")));
+
+    GridBagConstraints constraints = new GridBagConstraints();
+    constraints.gridx = 0;
+    constraints.gridy = 0;
+    constraints.anchor = GridBagConstraints.WEST;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.weightx = 0;
+    constraints.insets = JBUI.insetsBottom(2);
+    panel.add(resetStatisticsButton, constraints);
+
+    constraints.gridy = 1;
+    panel.add(supportButton, constraints);
+
+    constraints.gridy = 2;
+    constraints.fill = GridBagConstraints.NONE;
+    constraints.insets = JBUI.emptyInsets();
+    panel.add(snoozeCheckBox, constraints);
+
+    constraints.gridx = 1;
+    constraints.gridy = 0;
+    constraints.gridheight = 3;
+    constraints.weightx = 1;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    panel.add(Box.createHorizontalStrut(0), constraints);
+    return panel;
   }
 
   @Override

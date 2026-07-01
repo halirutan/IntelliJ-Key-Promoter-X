@@ -11,6 +11,7 @@
   -->
 
 <idea-plugin>
+    <resource-bundle>messages.KeyPromoterBundle</resource-bundle>
     <depends>com.intellij.modules.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
@@ -25,7 +26,8 @@
         <iconMapper mappingFile="KeyPromoterXIconMappings.json"/>
         <toolWindow id="Key Promoter X" anchor="right" icon="de.halirutan.keypromoterx.KeyPromoterIcons.KP_TOOL_WINDOW"
                     factoryClass="de.halirutan.keypromoterx.KeyPromoterToolWindowFactory"/>
-        <applicationConfigurable id="keyPromoterConfiguration" displayName="Key Promoter X"
+        <applicationConfigurable id="keyPromoterConfiguration" key="kp.configurable.display.name"
+                                 bundle="messages.KeyPromoterBundle"
                                  instance="de.halirutan.keypromoterx.KeyPromoterConfiguration" groupId="tools"/>
         <errorHandler implementation="com.intellij.diagnostic.JetBrainsMarketplaceErrorReportSubmitter"/>
     </extensions>

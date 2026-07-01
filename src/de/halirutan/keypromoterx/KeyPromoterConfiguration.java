@@ -26,13 +26,16 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.options.BaseConfigurable;
 import com.intellij.openapi.options.SearchableConfigurable;
-import com.intellij.ui.ColorPanel;
+import com.intellij.util.ui.JBUI;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
+import java.awt.event.KeyEvent;
 
 
 /**
@@ -43,27 +46,18 @@ import javax.swing.*;
 @SuppressWarnings("unused")
 public class KeyPromoterConfiguration extends BaseConfigurable implements SearchableConfigurable, PersistentStateComponent<KeyPromoterConfiguration> {
 
-  JPanel myConfigPanel;
-  private JSpinner myDisplayTime;
+  private JPanel myConfigPanel;
   private JCheckBox myAllButtons;
   private JCheckBox myToolWindowButtons;
   private JCheckBox myToolbarButtons;
   private JCheckBox myMenus;
-  private JCheckBox myFixedTipPosition;
-
-  private JSpinner myAnimationDelay;
-  private ColorPanel myTextColor;
-  private ColorPanel myBackgroundColor;
-  private ColorPanel myBorderColor;
   private JSpinner myProposeToCreateShortcutCount;
-  private JSpinner myNumberOfTipsShown;
   private JCheckBox myEditorPopupButtons;
   private JSpinner myShowClickCount;
   private JCheckBox myShowKeyboardShortcutsOnly;
   private JCheckBox myDisabledInPresentationMode;
   private JCheckBox myDisabledInDistractionFreeMode;
   private JCheckBox myHardMode;
-  private JTextPane myPopupTemplate;
 
   private KeyPromoterSettings keyPromoterSettings = ApplicationManager.getApplication().getService(KeyPromoterSettings.class);
 
@@ -76,8 +70,11 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
     return null;
   }
 
-  public String getDisplayName() {
-    return "KeyPromoter";
+  private static JPanel createSectionPanel(String title, boolean addInnerPadding) {
+    JPanel panel = new JPanel(new GridBagLayout());
+    Border border = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), title);
+    panel.setBorder(addInnerPadding ? BorderFactory.createCompoundBorder(border, JBUI.Borders.empty(5)) : border);
+    return panel;
   }
 
   public Icon getIcon() {
@@ -90,56 +87,31 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
     return null;
   }
 
+  private static JCheckBox createCheckBox(String text, int mnemonic) {
+    JCheckBox checkBox = new JCheckBox(text);
+    checkBox.setMnemonic(mnemonic);
+    return checkBox;
+  }
+
+  private static void addVerticalComponent(JPanel panel, JComponent component, int row) {
+    GridBagConstraints constraints = new GridBagConstraints();
+    constraints.gridx = 0;
+    constraints.gridy = row;
+    constraints.weightx = 1;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.anchor = GridBagConstraints.WEST;
+    panel.add(component, constraints);
+  }
+
+  public String getDisplayName() {
+    return KeyPromoterBundle.message("kp.configurable.display.name");
+  }
+
   public JComponent createComponent() {
-    return myConfigPanel;
-  }
-
-  @SuppressWarnings("RedundantIfStatement")
-  public boolean isModified() {
-    if (myMenus.isSelected() != keyPromoterSettings.isMenusEnabled()) return true;
-    if (myToolbarButtons.isSelected() != keyPromoterSettings.isToolbarButtonsEnabled()) return true;
-    if (myToolWindowButtons.isSelected() != keyPromoterSettings.isToolWindowButtonsEnabled()) return true;
-    if (myEditorPopupButtons.isSelected() != keyPromoterSettings.isEditorPopupEnabled()) return true;
-    if (myAllButtons.isSelected() != keyPromoterSettings.isAllButtonsEnabled()) return true;
-    if (myShowKeyboardShortcutsOnly.isSelected() != keyPromoterSettings.isShowKeyboardShortcutsOnly()) return true;
-    if (!myProposeToCreateShortcutCount.getValue().equals(keyPromoterSettings.getProposeToCreateShortcutCount())) {
-      return true;
+    if (myConfigPanel == null) {
+      myConfigPanel = buildUi();
     }
-    if (!myShowClickCount.getValue().equals(keyPromoterSettings.getShowTipsClickCount())) return true;
-    if (myDisabledInPresentationMode.isSelected() != keyPromoterSettings.isDisabledInPresentationMode()) return true;
-    if (myDisabledInDistractionFreeMode.isSelected() != keyPromoterSettings.isDisabledInDistractionFreeMode()) return true;
-    if (myHardMode.isSelected() != keyPromoterSettings.isHardMode()) return true;
-
-    return false;
-  }
-
-  public void apply() {
-    keyPromoterSettings.setMenusEnabled(myMenus.isSelected());
-    keyPromoterSettings.setToolbarButtonsEnabled(myToolbarButtons.isSelected());
-    keyPromoterSettings.setToolWindowButtonsEnabled(myToolWindowButtons.isSelected());
-    keyPromoterSettings.setEditorPopupEnabled(myEditorPopupButtons.isSelected());
-    keyPromoterSettings.setAllButtonsEnabled(myAllButtons.isSelected());
-    keyPromoterSettings.setShowKeyboardShortcutsOnly(myShowKeyboardShortcutsOnly.isSelected());
-    keyPromoterSettings.setDisabledInPresentationMode(myDisabledInPresentationMode.isSelected());
-    keyPromoterSettings.setDisabledInDistractionFreeMode(myDisabledInDistractionFreeMode.isSelected());
-    keyPromoterSettings.setHardMode(myHardMode.isSelected());
-    keyPromoterSettings
-            .setProposeToCreateShortcutCount(Integer.parseInt(myProposeToCreateShortcutCount.getValue().toString()));
-    keyPromoterSettings.setShowTipsClickCount(Integer.parseInt(myShowClickCount.getValue().toString()));
-  }
-
-  public void reset() {
-    myMenus.setSelected(keyPromoterSettings.isMenusEnabled());
-    myToolbarButtons.setSelected(keyPromoterSettings.isToolbarButtonsEnabled());
-    myToolWindowButtons.setSelected(keyPromoterSettings.isToolWindowButtonsEnabled());
-    myEditorPopupButtons.setSelected(keyPromoterSettings.isEditorPopupEnabled());
-    myAllButtons.setSelected(keyPromoterSettings.isAllButtonsEnabled());
-    myShowKeyboardShortcutsOnly.setSelected(keyPromoterSettings.isShowKeyboardShortcutsOnly());
-    myDisabledInPresentationMode.setSelected(keyPromoterSettings.isDisabledInPresentationMode());
-    myDisabledInDistractionFreeMode.setSelected(keyPromoterSettings.isDisabledInDistractionFreeMode());
-    myHardMode.setSelected(keyPromoterSettings.isHardMode());
-    myProposeToCreateShortcutCount.setValue(keyPromoterSettings.getProposeToCreateShortcutCount());
-    myShowClickCount.setValue(keyPromoterSettings.getShowTipsClickCount());
+    return myConfigPanel;
   }
 
   public KeyPromoterSettings getSettings() {
@@ -158,8 +130,171 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
     XmlSerializerUtil.copyBean(state, this);
   }
 
-  private void createUIComponents() {
+  @SuppressWarnings("RedundantIfStatement")
+  public boolean isModified() {
+    if (myConfigPanel == null) {
+      return false;
+    }
+    if (myMenus.isSelected() != keyPromoterSettings.isMenusEnabled()) return true;
+    if (myToolbarButtons.isSelected() != keyPromoterSettings.isToolbarButtonsEnabled()) return true;
+    if (myToolWindowButtons.isSelected() != keyPromoterSettings.isToolWindowButtonsEnabled()) return true;
+    if (myEditorPopupButtons.isSelected() != keyPromoterSettings.isEditorPopupEnabled()) return true;
+    if (myAllButtons.isSelected() != keyPromoterSettings.isAllButtonsEnabled()) return true;
+    if (myShowKeyboardShortcutsOnly.isSelected() != keyPromoterSettings.isShowKeyboardShortcutsOnly()) return true;
+    if (!myProposeToCreateShortcutCount.getValue().equals(keyPromoterSettings.getProposeToCreateShortcutCount())) {
+      return true;
+    }
+    if (!myShowClickCount.getValue().equals(keyPromoterSettings.getShowTipsClickCount())) return true;
+    if (myDisabledInPresentationMode.isSelected() != keyPromoterSettings.isDisabledInPresentationMode()) return true;
+    if (myDisabledInDistractionFreeMode.isSelected() != keyPromoterSettings.isDisabledInDistractionFreeMode()) return true;
+    if (myHardMode.isSelected() != keyPromoterSettings.isHardMode()) return true;
+
+    return false;
+  }
+
+  public void apply() {
+    if (myConfigPanel == null) {
+      return;
+    }
+    keyPromoterSettings.setMenusEnabled(myMenus.isSelected());
+    keyPromoterSettings.setToolbarButtonsEnabled(myToolbarButtons.isSelected());
+    keyPromoterSettings.setToolWindowButtonsEnabled(myToolWindowButtons.isSelected());
+    keyPromoterSettings.setEditorPopupEnabled(myEditorPopupButtons.isSelected());
+    keyPromoterSettings.setAllButtonsEnabled(myAllButtons.isSelected());
+    keyPromoterSettings.setShowKeyboardShortcutsOnly(myShowKeyboardShortcutsOnly.isSelected());
+    keyPromoterSettings.setDisabledInPresentationMode(myDisabledInPresentationMode.isSelected());
+    keyPromoterSettings.setDisabledInDistractionFreeMode(myDisabledInDistractionFreeMode.isSelected());
+    keyPromoterSettings.setHardMode(myHardMode.isSelected());
+    keyPromoterSettings
+            .setProposeToCreateShortcutCount(Integer.parseInt(myProposeToCreateShortcutCount.getValue().toString()));
+    keyPromoterSettings.setShowTipsClickCount(Integer.parseInt(myShowClickCount.getValue().toString()));
+  }
+
+  public void reset() {
+    if (myConfigPanel == null) {
+      return;
+    }
+    myMenus.setSelected(keyPromoterSettings.isMenusEnabled());
+    myToolbarButtons.setSelected(keyPromoterSettings.isToolbarButtonsEnabled());
+    myToolWindowButtons.setSelected(keyPromoterSettings.isToolWindowButtonsEnabled());
+    myEditorPopupButtons.setSelected(keyPromoterSettings.isEditorPopupEnabled());
+    myAllButtons.setSelected(keyPromoterSettings.isAllButtonsEnabled());
+    myShowKeyboardShortcutsOnly.setSelected(keyPromoterSettings.isShowKeyboardShortcutsOnly());
+    myDisabledInPresentationMode.setSelected(keyPromoterSettings.isDisabledInPresentationMode());
+    myDisabledInDistractionFreeMode.setSelected(keyPromoterSettings.isDisabledInDistractionFreeMode());
+    myHardMode.setSelected(keyPromoterSettings.isHardMode());
+    myProposeToCreateShortcutCount.setValue(keyPromoterSettings.getProposeToCreateShortcutCount());
+    myShowClickCount.setValue(keyPromoterSettings.getShowTipsClickCount());
+  }
+
+  @Override
+  public void disposeUIResources() {
+    myConfigPanel = null;
+    myMenus = null;
+    myToolbarButtons = null;
+    myToolWindowButtons = null;
+    myEditorPopupButtons = null;
+    myAllButtons = null;
+    myShowKeyboardShortcutsOnly = null;
+    myDisabledInPresentationMode = null;
+    myDisabledInDistractionFreeMode = null;
+    myHardMode = null;
+    myShowClickCount = null;
+    myProposeToCreateShortcutCount = null;
+  }
+
+  private JPanel buildUi() {
     myProposeToCreateShortcutCount = new JSpinner(new SpinnerNumberModel(0, 0, 30, 1));
     myShowClickCount = new JSpinner(new SpinnerNumberModel(1, 1, 30, 1));
+
+    myMenus = createCheckBox(KeyPromoterBundle.message("kp.configurable.menus.actions"), KeyEvent.VK_M);
+    myToolbarButtons = createCheckBox(KeyPromoterBundle.message("kp.configurable.toolbar.buttons"), KeyEvent.VK_T);
+    myToolWindowButtons = createCheckBox(KeyPromoterBundle.message("kp.configurable.tool.window.buttons"), KeyEvent.VK_W);
+    myEditorPopupButtons = createCheckBox(KeyPromoterBundle.message("kp.configurable.popup.menu.items"), KeyEvent.VK_P);
+    myAllButtons = createCheckBox(KeyPromoterBundle.message("kp.configurable.all.other.buttons"), KeyEvent.VK_A);
+    myShowKeyboardShortcutsOnly = new JCheckBox(KeyPromoterBundle.message("kp.configurable.show.keyboard.shortcuts.only"));
+    myDisabledInPresentationMode = new JCheckBox(KeyPromoterBundle.message("kp.configurable.disable.presentation.mode"));
+    myDisabledInDistractionFreeMode = new JCheckBox(KeyPromoterBundle.message("kp.configurable.disable.distraction.free.mode"));
+    myHardMode = new JCheckBox(KeyPromoterBundle.message("kp.configurable.hard.mode"));
+    myHardMode.setToolTipText(KeyPromoterBundle.message("kp.configurable.hard.mode.tooltip"));
+
+    JPanel panel = new JPanel(new GridBagLayout());
+
+    GridBagConstraints constraints = new GridBagConstraints();
+    constraints.gridx = 0;
+    constraints.gridy = 0;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.anchor = GridBagConstraints.NORTHWEST;
+    panel.add(createGeneralPanel(), constraints);
+
+    constraints.gridy = 1;
+    panel.add(createSettingsPanel(), constraints);
+
+    constraints.gridy = 2;
+    panel.add(createEnabledForPanel(), constraints);
+
+    constraints.gridx = 1;
+    constraints.gridy = 0;
+    constraints.gridheight = 3;
+    constraints.weightx = 1;
+    panel.add(Box.createHorizontalStrut(0), constraints);
+
+    constraints.gridx = 0;
+    constraints.gridy = 3;
+    constraints.gridwidth = 2;
+    constraints.gridheight = 1;
+    constraints.weighty = 1;
+    constraints.fill = GridBagConstraints.BOTH;
+    panel.add(Box.createVerticalGlue(), constraints);
+    return panel;
+  }
+
+  private JPanel createGeneralPanel() {
+    JPanel panel = createSectionPanel(KeyPromoterBundle.message("kp.configurable.section.general"), false);
+    addVerticalComponent(panel, myShowKeyboardShortcutsOnly, 0);
+    addVerticalComponent(panel, myDisabledInPresentationMode, 1);
+    addVerticalComponent(panel, myDisabledInDistractionFreeMode, 2);
+    addVerticalComponent(panel, myHardMode, 3);
+    return panel;
+  }
+
+  private JPanel createSettingsPanel() {
+    JPanel panel = createSectionPanel(KeyPromoterBundle.message("kp.configurable.section.settings"), true);
+
+    JLabel showClickCountLabel = new JLabel(KeyPromoterBundle.message("kp.configurable.show.click.count"));
+    JLabel proposeShortcutLabel = new JLabel(KeyPromoterBundle.message("kp.configurable.propose.shortcut.count"));
+    proposeShortcutLabel.setDisplayedMnemonic(KeyEvent.VK_N);
+    proposeShortcutLabel.setLabelFor(myProposeToCreateShortcutCount);
+
+    GridBagConstraints constraints = new GridBagConstraints();
+    constraints.gridx = 0;
+    constraints.gridy = 0;
+    constraints.anchor = GridBagConstraints.WEST;
+    panel.add(showClickCountLabel, constraints);
+
+    constraints.gridy = 1;
+    panel.add(proposeShortcutLabel, constraints);
+
+    constraints.gridx = 1;
+    constraints.gridy = 0;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.anchor = GridBagConstraints.EAST;
+    panel.add(myShowClickCount, constraints);
+
+    Dimension spinnerSize = myProposeToCreateShortcutCount.getPreferredSize();
+    myProposeToCreateShortcutCount.setMinimumSize(new Dimension(JBUI.scale(40), spinnerSize.height));
+    constraints.gridy = 1;
+    panel.add(myProposeToCreateShortcutCount, constraints);
+    return panel;
+  }
+
+  private JPanel createEnabledForPanel() {
+    JPanel panel = createSectionPanel(KeyPromoterBundle.message("kp.configurable.section.enabled.for"), false);
+    addVerticalComponent(panel, myMenus, 0);
+    addVerticalComponent(panel, myToolbarButtons, 1);
+    addVerticalComponent(panel, myToolWindowButtons, 2);
+    addVerticalComponent(panel, myEditorPopupButtons, 3);
+    addVerticalComponent(panel, myAllButtons, 4);
+    return panel;
   }
 }
