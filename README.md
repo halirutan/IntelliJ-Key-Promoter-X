@@ -1,7 +1,10 @@
 ![Downloads Badge](https://img.shields.io/jetbrains/plugin/d/9792-key-promoter-x.svg)
 [![Build Status](https://github.com/halirutan/IntelliJ-Key-Promoter-X/actions/workflows/build.yml/badge.svg)](https://github.com/halirutan/IntelliJ-Key-Promoter-X/actions/workflows/build.yml)
-[![Slack](https://img.shields.io/badge/Slack-%23plugin--keypromoter--x-blue)](https://plugins.jetbrains.com/slack)
+[![YouTube](https://img.shields.io/youtube/channel/subscribers/UCiZVdYjf_uu-dyx7UwT-afA)](https://www.youtube.com/@halirutan?sub_confirmation=1&utm_source=key-promoter-x&utm_medium=github&utm_campaign=github_subscribe_cta)
 [![Banner](doc/img/kpxBanner.png)](https://github.com/sponsors/halirutan)
+
+For more IntelliJ tips, shortcuts, and developer workflow videos, subscribe
+on [YouTube](https://www.youtube.com/@halirutan?sub_confirmation=1&utm_source=key-promoter-x&utm_medium=github&utm_campaign=github_subscribe_cta).
 
 ---
 

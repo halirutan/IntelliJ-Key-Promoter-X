@@ -47,14 +47,14 @@ public class KeyPromoterNotification {
   public static void showStartupNotification() {
     final Notification notification = getKeyPromoterNotificationGroup().createNotification(KeyPromoterBundle.message(
                 "kp.notification.group"),
-            KeyPromoterBundle.message("kp.notification.startup"),
+            KeyPromoterBundle.message("kp.notification.startupYT"),
             NotificationType.INFORMATION)
         .setImportant(true)
         .setImportantSuggestion(true)
         .setIcon(KeyPromoterIcons.KP_ICON)
         .addAction(new BrowseNotificationAction(
-            KeyPromoterBundle.message("kp.notification.startup.link.name"),
-            KeyPromoterBundle.message("kp.notification.startup.link"))
+            KeyPromoterBundle.message("kp.notification.startup.link.nameYT"),
+            KeyPromoterBundle.message("kp.notification.startup.linkYT"))
         );
     notification.notify(null);
   }
