@@ -2,12 +2,12 @@ import org.jetbrains.changelog.Changelog
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 plugins {
-    id("org.jetbrains.intellij.platform") version "2.16.0"
+    id("org.jetbrains.intellij.platform") version "2.17.0"
     id("org.jetbrains.changelog") version "2.5.0"
 }
 
 group = "de.halirutan.keypromoterx"
-version = "2026.1.1"
+version = "2026.1.2"
 
 val repoURL = "https://github.com/halirutan/IntelliJ-Key-Promoter-X"
 
@@ -22,10 +22,6 @@ dependencies {
     intellijPlatform {
         intellijIdea("2026.1")
         testFramework(TestFrameworkType.Platform)
-        // Pinned: unpinned resolves to latest. >=1.385 races on parallel verify
-        // (ClosedFileSystemException); <1.385 can't read 2026.x layout (false fails).
-        // 1.401 = last known-good.
-        pluginVerifier("1.401")
     }
 }
 
