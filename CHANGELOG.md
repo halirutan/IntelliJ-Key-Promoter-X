@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2026.1.2] - 2026-07-05
+
 - Rework UI components to use plain Java instead of UI Designer
 - Refactor settings UI to match modern look
 - Improve wording in plugin description
@@ -156,14 +158,15 @@
 - Include "Organization" requirement for plugins
 - Make compatible with 2020.1 EAP products
 
-[Unreleased]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/2026.1.1...HEAD
-[2026.1.1]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/2026.1.0...2026.1.1
-[2026.1.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/2024.2.2...2026.1.0
-[2024.2.2]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/2024.1.0...2024.2.2
-[2024.1.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/2023.3.0...2024.1.0
-[2023.3.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/2023.2.0...2023.3.0
-[2023.2.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/2022.3.1...2023.2.0
-[2022.3.1]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/2019.3.0...2022.3.1
-[2020.1.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/commits/2020.1.0
-[2019.3.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/2019.2.0...2019.3.0
-[2019.2.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/2020.1.0...2019.2.0
+[Unreleased]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2026.1.2...HEAD
+[2026.1.2]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2026.1.1...v2026.1.2
+[2026.1.1]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2026.1.0...v2026.1.1
+[2026.1.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2024.2.2...v2026.1.0
+[2024.2.2]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2024.1.0...v2024.2.2
+[2024.1.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2023.3.0...v2024.1.0
+[2023.3.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2023.2.0...v2023.3.0
+[2023.2.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2022.3.1...v2023.2.0
+[2022.3.1]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2019.3.0...v2022.3.1
+[2020.1.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/commits/v2020.1.0
+[2019.3.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2019.2.0...v2019.3.0
+[2019.2.0]: https://github.com/halirutan/IntelliJ-Key-Promoter-X/compare/v2020.1.0...v2019.2.0
