@@ -23,6 +23,7 @@
 package de.halirutan.keypromoterx;
 
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.options.BaseConfigurable;
 import com.intellij.openapi.options.SearchableConfigurable;
@@ -59,7 +60,7 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
   private JCheckBox myDisabledInDistractionFreeMode;
   private JCheckBox myHardMode;
 
-  private KeyPromoterSettings keyPromoterSettings = ApplicationManager.getApplication().getService(KeyPromoterSettings.class);
+  private boolean settingsReady;
 
   @NotNull
   public String getId() {
@@ -115,17 +116,38 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
 
   public JComponent createComponent() {
     if (myConfigPanel == null) {
-      myConfigPanel = buildUi();
+      JPanel placeholder = new JPanel(new BorderLayout());
+      JLabel status = new JLabel(KeyPromoterBundle.message("kp.services.loading"));
+      placeholder.add(status, BorderLayout.NORTH);
+      myConfigPanel = placeholder;
+      KeyPromoterServiceInitialization initialization = KeyPromoterServiceInitialization.getInstance();
+      ModalityState modality = ModalityState.current();
+      initialization.whenReady().thenAccept(ready -> ApplicationManager.getApplication().invokeLater(() -> {
+        if (initialization.isDisposed() || ApplicationManager.getApplication().isDisposed() || myConfigPanel != placeholder) {
+          return;
+        }
+        if (!ready) {
+          status.setText(KeyPromoterBundle.message("kp.services.failed"));
+          return;
+        }
+        placeholder.removeAll();
+        placeholder.add(buildUi(), BorderLayout.CENTER);
+        settingsReady = true;
+        reset();
+        placeholder.revalidate();
+        placeholder.repaint();
+      }, modality, expired -> initialization.isDisposed() || ApplicationManager.getApplication().isDisposed()
+          || myConfigPanel != placeholder));
     }
     return myConfigPanel;
   }
 
   public KeyPromoterSettings getSettings() {
-    return keyPromoterSettings;
+    return ApplicationManager.getApplication().getService(KeyPromoterSettings.class);
   }
 
   public void setSettings(KeyPromoterSettings settings) {
-    keyPromoterSettings = settings;
+    getSettings().loadState(settings);
   }
 
   public KeyPromoterConfiguration getState() {
@@ -138,9 +160,10 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
 
   @SuppressWarnings("RedundantIfStatement")
   public boolean isModified() {
-    if (myConfigPanel == null) {
+    if (!settingsReady) {
       return false;
     }
+    KeyPromoterSettings keyPromoterSettings = getSettings();
     if (myMenus.isSelected() != keyPromoterSettings.isMenusEnabled()) return true;
     if (myToolbarButtons.isSelected() != keyPromoterSettings.isToolbarButtonsEnabled()) return true;
     if (myToolWindowButtons.isSelected() != keyPromoterSettings.isToolWindowButtonsEnabled()) return true;
@@ -152,16 +175,18 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
     }
     if (!myShowClickCount.getValue().equals(keyPromoterSettings.getShowTipsClickCount())) return true;
     if (myDisabledInPresentationMode.isSelected() != keyPromoterSettings.isDisabledInPresentationMode()) return true;
-    if (myDisabledInDistractionFreeMode.isSelected() != keyPromoterSettings.isDisabledInDistractionFreeMode()) return true;
+    if (myDisabledInDistractionFreeMode.isSelected() != keyPromoterSettings.isDisabledInDistractionFreeMode())
+      return true;
     if (myHardMode.isSelected() != keyPromoterSettings.isHardMode()) return true;
 
     return false;
   }
 
   public void apply() {
-    if (myConfigPanel == null) {
+    if (!settingsReady) {
       return;
     }
+    KeyPromoterSettings keyPromoterSettings = getSettings();
     keyPromoterSettings.setMenusEnabled(myMenus.isSelected());
     keyPromoterSettings.setToolbarButtonsEnabled(myToolbarButtons.isSelected());
     keyPromoterSettings.setToolWindowButtonsEnabled(myToolWindowButtons.isSelected());
@@ -172,14 +197,15 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
     keyPromoterSettings.setDisabledInDistractionFreeMode(myDisabledInDistractionFreeMode.isSelected());
     keyPromoterSettings.setHardMode(myHardMode.isSelected());
     keyPromoterSettings
-            .setProposeToCreateShortcutCount(Integer.parseInt(myProposeToCreateShortcutCount.getValue().toString()));
+        .setProposeToCreateShortcutCount(Integer.parseInt(myProposeToCreateShortcutCount.getValue().toString()));
     keyPromoterSettings.setShowTipsClickCount(Integer.parseInt(myShowClickCount.getValue().toString()));
   }
 
   public void reset() {
-    if (myConfigPanel == null) {
+    if (!settingsReady) {
       return;
     }
+    KeyPromoterSettings keyPromoterSettings = getSettings();
     myMenus.setSelected(keyPromoterSettings.isMenusEnabled());
     myToolbarButtons.setSelected(keyPromoterSettings.isToolbarButtonsEnabled());
     myToolWindowButtons.setSelected(keyPromoterSettings.isToolWindowButtonsEnabled());
@@ -195,6 +221,7 @@ public class KeyPromoterConfiguration extends BaseConfigurable implements Search
 
   @Override
   public void disposeUIResources() {
+    settingsReady = false;
     myConfigPanel = null;
     myMenus = null;
     myToolbarButtons = null;

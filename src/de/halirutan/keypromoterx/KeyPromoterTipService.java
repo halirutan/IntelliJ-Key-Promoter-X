@@ -57,6 +57,9 @@ public final class KeyPromoterTipService {
    *               The method does nothing for actions of type {@code ActionType.Unknown}.
    */
   public void showTip(KeyPromoterAction action, ActionType type) {
+    if (KeyPromoterServiceInitialization.getInstance().shouldSkipObservation()) {
+      return;
+    }
     KeyPromoterStatistics statsService = ApplicationManager.getApplication().getService(KeyPromoterStatistics.class);
     KeyPromoterSettings keyPromoterSettings = ApplicationManager.getApplication().getService(KeyPromoterSettings.class);
 

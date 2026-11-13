@@ -61,6 +61,10 @@ public class KeyPromoterActionListener implements AnActionListener {
       return;
     }
 
+    if (KeyPromoterServiceInitialization.getInstance().shouldSkipObservation()) {
+      return;
+    }
+
     final String place = event.getPlace();
     KeyPromoterAction kpAction;
     KeyPromoterSettings keyPromoterSettings = ApplicationManager.getApplication().getService(KeyPromoterSettings.class);

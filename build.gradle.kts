@@ -2,12 +2,12 @@ import org.jetbrains.changelog.Changelog
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 plugins {
-    id("org.jetbrains.intellij.platform") version "2.17.0"
+    id("org.jetbrains.intellij.platform") version "2.20.1"
     id("org.jetbrains.changelog") version "2.5.0"
 }
 
 group = "de.halirutan.keypromoterx"
-version = "2026.1.2"
+version = "2026.3"
 
 val repoURL = "https://github.com/halirutan/IntelliJ-Key-Promoter-X"
 
@@ -19,6 +19,7 @@ repositories {
 }
 
 dependencies {
+    testImplementation("junit:junit:4.13.2")
     intellijPlatform {
         intellijIdea("2026.1")
         testFramework(TestFrameworkType.Platform)
@@ -29,6 +30,9 @@ sourceSets {
     main {
         java.srcDir("src")
         resources.srcDir("resources")
+    }
+    test {
+        java.srcDir("testSrc")
     }
 }
 
@@ -75,11 +79,11 @@ intellijPlatform {
 }
 
 // Run config for Rider
-val runRider by intellijPlatformTesting.runIde.registering {
-    localPath = project.layout.dir(project.provider {
-        file("/home/patrick/.local/share/JetBrains/Toolbox/apps/rider")
-    })
-}
+//val runRider = register("runRider") {
+//    localPath = project.layout.dir(project.provider {
+//        file("/home/patrick/.local/share/JetBrains/Toolbox/apps/rider")
+//    })
+//}
 
 
 changelog {
