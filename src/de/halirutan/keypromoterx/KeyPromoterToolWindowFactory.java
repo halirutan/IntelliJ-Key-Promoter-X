@@ -22,6 +22,8 @@
 
 package de.halirutan.keypromoterx;
 
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
@@ -32,6 +34,7 @@ import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Core class to create the Key Promoter X tool-window. Nothing interesting here except of template code.
@@ -42,12 +45,31 @@ public class KeyPromoterToolWindowFactory implements ToolWindowFactory, DumbAwar
 
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
-        KeyPromoterToolWindowPanel toolWindowBuilder = new KeyPromoterToolWindowPanel();
         ContentFactory contentFactory = ContentFactory.getInstance();
-        JBScrollPane toolWindowContent = new JBScrollPane(toolWindowBuilder.getContent());
-        toolWindowContent.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        Content content = contentFactory.createContent(toolWindowContent, "", false);
-        content.setPreferredFocusableComponent(toolWindowBuilder.getPreferredFocusableComponent());
+        JPanel placeholder = new JPanel(new BorderLayout());
+        JLabel status = new JLabel(KeyPromoterBundle.message("kp.services.loading"));
+        placeholder.add(status, BorderLayout.NORTH);
+        Content content = contentFactory.createContent(placeholder, "", false);
         toolWindow.getContentManager().addContent(content);
+
+        KeyPromoterServiceInitialization initialization = KeyPromoterServiceInitialization.getInstance();
+        ModalityState modality = ModalityState.current();
+        initialization.whenReady().thenAccept(ready -> ApplicationManager.getApplication().invokeLater(() -> {
+            if (initialization.isDisposed() || ApplicationManager.getApplication().isDisposed() || project.isDisposed()
+                || toolWindow.isDisposed() || content.getManager() == null) {
+                return;
+            }
+            if (!ready) {
+                status.setText(KeyPromoterBundle.message("kp.services.failed"));
+                return;
+            }
+            KeyPromoterToolWindowPanel toolWindowBuilder = new KeyPromoterToolWindowPanel();
+            JBScrollPane toolWindowContent = new JBScrollPane(toolWindowBuilder.getContent());
+            toolWindowContent.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+            content.setComponent(toolWindowContent);
+            content.setPreferredFocusableComponent(toolWindowBuilder.getPreferredFocusableComponent());
+        }, modality, expired -> initialization.isDisposed() || ApplicationManager.getApplication().isDisposed()
+            || project.isDisposed() || toolWindow.isDisposed()
+            || content.getManager() == null));
     }
 }

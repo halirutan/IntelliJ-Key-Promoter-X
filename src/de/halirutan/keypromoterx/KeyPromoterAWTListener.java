@@ -83,6 +83,9 @@ public class KeyPromoterAWTListener implements AppLifecycleListener, AWTEventLis
    */
   private void handleMouseEvent(AWTEvent e) {
     if (e.getSource() instanceof StripeButton) {
+      if (KeyPromoterServiceInitialization.getInstance().shouldSkipObservation()) {
+        return;
+      }
       KeyPromoterSettings keyPromoterSettings = ApplicationManager.getApplication().getService(KeyPromoterSettings.class);
       if (keyPromoterSettings.isToolWindowButtonsEnabled()) {
         KeyPromoterAction action = new KeyPromoterAction(e);

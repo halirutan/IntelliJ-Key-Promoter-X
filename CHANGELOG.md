@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Initialize settings and statistics in the background, skipping observations until ready to avoid blocking IDE actions
+- Show loading states when opening settings or the statistics tool window before initialization finishes
 - Rework UI components to use plain Java instead of UI Designer
 - Refactor settings UI to match modern look
 - Improve wording in plugin description

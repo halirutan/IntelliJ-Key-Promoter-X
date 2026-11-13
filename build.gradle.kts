@@ -19,6 +19,7 @@ repositories {
 }
 
 dependencies {
+    testImplementation("junit:junit:4.13.2")
     intellijPlatform {
         intellijIdea("2026.1")
         testFramework(TestFrameworkType.Platform)
@@ -29,6 +30,9 @@ sourceSets {
     main {
         java.srcDir("src")
         resources.srcDir("resources")
+    }
+    test {
+        java.srcDir("testSrc")
     }
 }
 
